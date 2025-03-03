@@ -241,6 +241,8 @@ rec {
   # As can be seen in the source code of evalModules, the builtins function functionArgs is used to determine which arguments from config._module.args should be passed:
   # https://github.com/NixOS/nixpkgs/blob/1c8c4f744c62c744f3118d740fdabd719d1cac00/lib/modules.nix#L537
   #
+  # I tried using functors with setFunctionArgs, but it seems home-manager.users.${settings.username} does not accept them.
+  #
   # TLDR: Without including pkgs in the attribute set deconstruction, args won't contain pkgs.
   wrapModuleWithPkgs = module: { pkgs, ... }@args: import module args;
 
