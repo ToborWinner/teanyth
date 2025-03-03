@@ -114,7 +114,7 @@ This allows me to run the following to quickly test a change to the user
 environment:
 
 ```bash
-home-manager switch --flake tobor#nixos-asahi
+home-manager switch --flake .#nixos-asahi
 ```
 
 which I can later finalize by fully rebuilding.
