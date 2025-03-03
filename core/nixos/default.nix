@@ -1,0 +1,4 @@
+[
+  ./info.nix
+  ./sensitive.nix
+]
