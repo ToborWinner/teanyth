@@ -5,6 +5,7 @@
   settings,
   sharedInfo,
   hostname,
+  options,
   ...
 }:
 
@@ -46,6 +47,7 @@
         sharedInfo
         hostname
         ;
+      osOptions = options;
     };
 
     pers.home-manager.imports = lib.flatten [

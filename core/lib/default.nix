@@ -301,4 +301,6 @@ rec {
       modules = flatten (mapAttrsToList mapFunc contents);
     in
     if hasDefault then folder else modules;
+
+  docs = import ./docs.nix lib;
 }
