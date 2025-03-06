@@ -190,7 +190,7 @@ rec {
         pers = listToAttrs (
           map ({ name, path }: nameValuePair name (final.callPackage path { })) (list lib)
         );
-      } (additional prev)
+      } (additional final)
     );
   };
 

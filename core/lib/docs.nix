@@ -16,7 +16,10 @@ with lib;
         nixpkgs.config.allowUnsupportedSystem = true;
       };
     }).options,
+  # Allow failing evaluation of default
   allowBroken ? false,
+  # Assume all values either have a defaultText or a default
+  assumeDefault ? true,
   transformOption ? id,
 }:
 
@@ -72,6 +75,7 @@ let
       value = removeAttrs o [
         "name"
         "visibleInternal"
+        "loc"
       ];
     }) optionsList
   );
@@ -128,9 +132,14 @@ let
                   if evaluated.success then
                     evaluated.value
                   else
-                    "There was an error in the evaluation of this default.";
+                    literalMD "There was an error in the evaluation of this default.";
+
+                default = if allowBroken then assumeBroken else assumeWorking;
               in
-              if allowBroken then assumeBroken else assumeWorking;
+              if !assumeDefault -> (opt ? "defaultText" || opt ? "default") then
+                default
+              else
+                literalMD "No default provided.";
           }
           // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) {
             inherit (opt) relatedPackages;

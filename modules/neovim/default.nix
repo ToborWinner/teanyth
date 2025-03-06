@@ -15,6 +15,7 @@ let
           ignoreDefault = true;
         }
         ++ extraModules;
+      extraSpecialArgs.pers = lib.pers;
     };
 in
 (makeConfig [ ]).neovim.overrideAttrs (

@@ -40,6 +40,7 @@ in
     defaultTheme = mkOption {
       type = types.str;
       default = head (attrNames cfg.theme);
+      defaultText = literalExpression "head (attrNames cfg.theme)";
       description = "The default theme (theme to activate if there is no other specified option)";
     };
 
