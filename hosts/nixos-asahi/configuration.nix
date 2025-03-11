@@ -97,4 +97,13 @@
   nix.settings.auto-optimise-store = true;
   nixpkgs.config.allowUnfree = true;
   system.stateVersion = "24.11";
+
+  # networking.networkmanager.package =
+  #   lib.warnIf (pkgs.networkmanager.version != "1.50.2")
+  #     "You updated to a version of nixpkgs-unstable with a new NetworkManager. Try out if it works!"
+  #     (
+  #       pkgs.callPackage (inputs.nixpkgs-stable + "/pkgs/tools/networking/networkmanager") {
+  #         libsoup = pkgs.libsoup_2_4;
+  #       }
+  #     );
 }

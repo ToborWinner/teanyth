@@ -24,6 +24,11 @@ in
   config = mkIf cfg.enable {
     users.mutableUsers = false;
 
+    virtualisation.vmVariant.users.users.${settings.username} = {
+      hashedPasswordFile = mkVMOverride null;
+      password = mkVMOverride "password";
+    };
+
     users.users.${settings.username} = {
       isNormalUser = true;
       description = settings.username;

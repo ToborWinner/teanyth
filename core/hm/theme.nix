@@ -9,6 +9,8 @@
 
 with lib;
 
+# TODO: Remove the need for extendModules in flake. Might be possible due to the type attrsOf submodule being mergeable.
+
 # TODO: Proper uninstall procedure (right now all files are just left there, including current-theme)
 # Something similar to home-manager's uninstall = true can be done.
 

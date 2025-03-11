@@ -36,6 +36,8 @@ in
 
     pers.wayland.enable = true;
 
+    pers.hyprland.monitor = mkIf osConfig.pers.virtualisation.isVmVariant (mkForce ",preferred,auto,1");
+
     home.sessionVariables = mkIf cfg.asahiSupport {
       WLR_DRM_DEVICES = "/dev/dri/card0";
       WLR_NO_HARDWARE_CURSORS = "1";
@@ -179,6 +181,7 @@ in
 
             "$mod, R, submap, resize"
             "$mod, N, submap, counting"
+            "$mod&CTRL&SHIFT, P, submap, passthru"
           ]
           ++ (
             # workspaces
@@ -265,6 +268,11 @@ in
           ) 10
         )}
         bind = , escape, submap, reset
+        submap = reset
+
+        # Passthru
+        submap = passthru
+        bind = $mod&CTRL&SHIFT, p, submap, reset
         submap = reset
       '';
     };

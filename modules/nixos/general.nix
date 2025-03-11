@@ -3,7 +3,6 @@
   config,
   inputs,
   settings,
-  flake,
   ...
 }:
 
@@ -19,7 +18,7 @@
     nix.registry = rec {
       nixpkgs.flake = inputs.nixpkgs;
       n = nixpkgs; # Abbreviation
-      ${settings.username}.flake = flake;
+      ${settings.username}.flake = inputs.self;
     };
     nix.channel.enable = false; # Disable nix-channel, we use flakes for declarative inputs
 

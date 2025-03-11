@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  settings,
   inputs,
   osConfig,
   ...
@@ -25,9 +24,6 @@
   };
 
   config = lib.mkIf config.pers.general.enable {
-    home.username = settings.username;
-    home.homeDirectory = "/home/${settings.username}";
-
     programs.home-manager.enable = true; # Let Home Manager install and manage itself.
 
     home.packages = lib.mkIf (!config.pers.isStandalone) [

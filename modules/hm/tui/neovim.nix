@@ -3,6 +3,7 @@
   config,
   pkgs,
   osOptions,
+  osConfig,
   options,
   ...
 }:
@@ -43,7 +44,12 @@
               transformOption =
                 option:
                 let
-                  name = "hm" + (lib.removePrefix "home-manager.users.${config.home.username}" option.name);
+                  prefixToRemove =
+                    if osConfig.pers.virtualisation.isVmVariant then
+                      "virtualisation.vmVariant.home-manager.users.${config.home.username}"
+                    else
+                      "home-manager.users.${config.home.username}";
+                  name = "hm" + (lib.removePrefix prefixToRemove option.name);
                   optionToUse =
                     if
                       name == "hm.programs.google-chrome-beta.package" || name == "hm.programs.google-chrome-dev.package"
