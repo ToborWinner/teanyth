@@ -40,7 +40,9 @@ rec {
     patchForTheme (nixosSystem {
       specialArgs = {
         inherit sharedInfo;
-        inputs = inputs // { self = flake; };
+        inputs = inputs // {
+          self = flake;
+        };
         settings = {
           inherit hostname username dotfilesDir;
         } // extra;
@@ -208,8 +210,6 @@ rec {
 
   gtkCSSFromWallust = import ./gtk-wallust.nix lib;
 
-  foldlRecursiveUpdate = foldl' recursiveUpdate { };
-
   mkRice =
     args: settings:
     let
@@ -219,7 +219,7 @@ rec {
       options.pers.rice.rices.${settings.name}.enable = mkEnableOption "${settings.name} rice";
 
       config = mkIf args.config.pers.rice.rices.${settings.name}.enable (
-        foldlRecursiveUpdate (
+        mkMerge (
           (singleton {
             pers.rice.themesFromWallpapers = settings.themesFromWallpapers or false;
             pers.rice.wallpapers = settings.wallpapers or [ ];
@@ -243,10 +243,13 @@ rec {
   # https://github.com/NixOS/nixpkgs/blob/1c8c4f744c62c744f3118d740fdabd719d1cac00/lib/modules.nix#L537
   #
   # TLDR: Without including pkgs in the attribute set deconstruction, args won't contain pkgs.
-  wrapModuleWithPkgs = modulePath: let
-    module = import modulePath;
-    functor = setFunctionArgs module ((functionArgs module) // { pkgs = false; });
-  in setDefaultModuleLocation modulePath functor;
+  wrapModuleWithPkgs =
+    modulePath:
+    let
+      module = import modulePath;
+      functor = setFunctionArgs module ((functionArgs module) // { pkgs = false; });
+    in
+    setDefaultModuleLocation modulePath functor;
 
   mkIfElse =
     cond: yes: no:
