@@ -24,9 +24,7 @@
   };
 
   config = lib.mkIf config.pers.general.enable {
-    programs.home-manager.enable = true; # Let Home Manager install and manage itself.
-
-    home.packages = lib.mkIf (!config.pers.isStandalone) [
+    home.packages = [
       inputs.home-manager.packages.${osConfig.nixpkgs.hostPlatform.system}.home-manager
     ];
 

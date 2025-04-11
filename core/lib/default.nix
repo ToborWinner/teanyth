@@ -27,6 +27,8 @@ let
   );
 in
 rec {
+  inherit flake;
+
   # Create a nixos configuration attribute set for nixosConfigurations
   makeConfig =
     {
@@ -35,34 +37,62 @@ rec {
       username ? sharedInfo.username,
       dotfilesDir ? "/home/${username}/teanyth",
       extra ? { },
+      reduced ? false,
       ...
     }:
-    patchForTheme (nixosSystem {
-      specialArgs = {
-        inherit sharedInfo;
-        inputs = inputs // {
-          self = flake;
+    overridablePatchedNixosSystem (
+      {
+        specialArgs = {
+          inherit sharedInfo;
+          inputs = inputs // {
+            self = flake;
+          };
+          settings = {
+            inherit hostname username dotfilesDir;
+          } // extra;
         };
-        settings = {
-          inherit hostname username dotfilesDir;
-        } // extra;
-      };
-      modules =
-        [
-          ../../hosts/${hostname}/configuration.nix
-          (inputs.sensitive + "/nixos.nix")
-          {
-            nixpkgs.overlays = singleton flake.overlays.default;
-            nixpkgs.hostPlatform = system;
-          }
-        ]
-        ++ (import ../../modules/nixos lib)
-        ++ (import ../nixos);
-    });
+        modules =
+          [
+            ../../hosts/${hostname}/configuration.nix
+            (inputs.sensitive + "/nixos.nix")
+            {
+              nixpkgs.overlays = singleton flake.overlays.default;
+              nixpkgs.hostPlatform = system;
+            }
+          ]
+          ++ (import ../../modules/nixos lib)
+          ++ (import ../nixos);
+      }
+      // (lib.optionalAttrs reduced {
+        baseModules = reduce-modules.useReducedImports (import ../../hosts/${hostname}/reduced.nix) (
+          nixpkgs + "/nixos/modules"
+        ) (import reduce-modules.baseModulesPath);
+      })
+    );
 
   # Create the content of nixosConfigurations
   makeNixosConfigurations =
     configs: mapAttrs (hostname: settings: makeConfig (settings // { inherit hostname; })) configs;
+
+  /**
+    Make a function have its arguments overridable with `result.override argsToUpdate`. Simpler version of lib.makeOverridable.
+  */
+  makeSimpleOverridable =
+    f:
+    let
+      result = mirrorFunctionArgs f (args: (f args) // { override = newArgs: result (args // newArgs); });
+    in
+    result;
+
+  /**
+    A version of nixosSystem that can be overridden through `result.override argsToUpdate`.
+  */
+  overridableNixosSystem = makeSimpleOverridable nixosSystem;
+
+  /**
+    A version of nixosSystem wrapped by patchForTheme that can be overridden through `result.override argsToUpdate`.
+  */
+  overridablePatchedNixosSystem = makeSimpleOverridable (args: patchForTheme (nixosSystem args));
 
   # Create a single host's settings for deploying in deploy-rs
   makeDeploy =
@@ -143,17 +173,51 @@ rec {
   # Get home-manager configs from nixosConfigurations
   extractHomeManagerConfigs =
     let
+      # From https://github.com/nix-community/home-manager/blob/79461936709b12e17adb9c91dd02d1c66d577f09/modules/default.nix#L14
+      collectFailed = cfg: map (x: x.message) (lib.filter (x: !x.assertion) cfg.assertions);
+
+      # Modified from https://github.com/nix-community/home-manager/blob/79461936709b12e17adb9c91dd02d1c66d577f09/modules/default.nix#L16
+      showWarnings =
+        res:
+        let
+          f = w: x: builtins.trace "[1;31mwarning: ${w}[0m" x;
+        in
+        lib.fold f res res.warnings;
+
+      # Modified from https://github.com/nix-community/home-manager/blob/79461936709b12e17adb9c91dd02d1c66d577f09/modules/default.nix#L38
+      moduleChecks =
+        raw:
+        showWarnings (
+          let
+            failed = collectFailed raw;
+            failedStr = lib.concatStringsSep "\n" (map (x: "- ${x}") failed);
+          in
+          if failed == [ ] then
+            raw
+          else
+            throw ''
+
+              Failed assertions:
+              ${failedStr}''
+        );
+
       # These are not all attributes provided by a normal home-manager configuration, but they should be enough.
       # Based on https://github.com/nix-community/home-manager/blob/83bd3a26ac0526ae04fa74df46738bb44b89dcdd/modules/default.nix#L49
-      makeHmConfig = hmConfig: rec {
-        inherit (hmConfig.home) activationPackage; # Used when switching
-        activation-script = activationPackage; # Backwards compatibility
+      makeHmConfig =
+        hmConfig:
+        let
+          # Check is done here to keep it as lazy as possible. Only when one of the below values is requested is it evaluated.
+          checked = moduleChecks hmConfig;
+        in
+        rec {
+          inherit (checked.home) activationPackage; # Used when switching
+          activation-script = activationPackage; # Backwards compatibility
 
-        config = hmConfig; # home-manager switch accesses config.news.json.output at the end
+          config = checked; # home-manager switch accesses config.news.json.output at the end
 
-        newsDisplay = hmConfig.news.display;
-        newsEntries = sort (a: b: a.time > b.time) (filter (a: a.condition) hmConfig.news.entries);
-      };
+          newsDisplay = checked.news.display;
+          newsEntries = sort (a: b: a.time > b.time) (filter (a: a.condition) checked.news.entries);
+        };
 
       makeHmConfigs =
         hostname: nixos:
@@ -193,6 +257,7 @@ rec {
         pers = listToAttrs (
           map ({ name, path }: nameValuePair name (final.callPackage path { })) (list lib)
         );
+        inherit lib;
       } (additional final)
     );
   };
@@ -307,5 +372,33 @@ rec {
     in
     if hasDefault then folder else modules;
 
+  /**
+    Like mapAttrsRecursiveCond except the condition function also gets passed the path.
+
+    # Type
+    mapAttrsRecursiveCond' :: ([String] -> AttrSet -> Bool) -> ([String] -> a -> b) -> AttrSet -> AttrSet
+  */
+  mapAttrsRecursiveCond' =
+    cond: f: set:
+    let
+      recurse =
+        path:
+        mapAttrs (
+          name: value:
+          if isAttrs value && cond (path ++ [ name ]) value then
+            recurse (path ++ [ name ]) value
+          else
+            f (path ++ [ name ]) value
+        );
+    in
+    recurse [ ] set;
+
   docs = import ./docs.nix lib;
+
+  reduce-modules = import ./reduce-modules.nix {
+    inherit lib;
+    baseModulesPath = nixpkgs + "/nixos/modules/module-list.nix";
+  };
+
+  import-flake = import ./import-flake.nix;
 }

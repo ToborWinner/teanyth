@@ -4,7 +4,6 @@
   inputs = {
     # --- NixOS / Nixpkgs ---
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-24.11";
 
     # --- Hardware ---
     apple-silicon = {
@@ -97,6 +96,7 @@
       configs = {
         nixos-asahi = {
           system = "aarch64-linux";
+          reduced = true; # Use a reduced base module list
         };
         rpi3 = {
           system = "aarch64-linux";

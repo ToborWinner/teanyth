@@ -29,9 +29,7 @@
   };
 
   config = lib.mkMerge [
-    {
-      virtualisation.vmVariant.pers.impermanence.enable = lib.mkVMOverride false;
-    }
+    { virtualisation.vmVariant.pers.impermanence.enable = lib.mkVMOverride false; }
     (lib.mkIf config.pers.impermanence.enable {
       boot.initrd.postResumeCommands = lib.mkAfter ''
         mkdir /btrfs_tmp
@@ -105,6 +103,7 @@
             ".local/share/mpd"
             ".config/wordtui"
             ".config/raspberry"
+            ".config/Element"
             ".config/vesktop/sessionData"
             ".mozilla"
             # Maybe .cargo

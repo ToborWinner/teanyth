@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 
 with lib;
 
@@ -26,6 +26,18 @@ with lib;
       type = types.nullOr types.str;
       description = "Keyboard options to use";
       default = null;
+    };
+
+    ifd = mkOption {
+      type = types.attrsOf types.anything;
+      description = "Import from derivation";
+      default = { };
+    };
+
+    getIFD = mkOption {
+      type = types.functionTo types.anything;
+      description = "Function that takes a name as input and returns the output of the IFD";
+      default = name: config.pers.info.ifd.${name};
     };
   };
 }

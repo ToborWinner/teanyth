@@ -24,6 +24,9 @@
           file = "share/zsh-vi-mode/zsh-vi-mode.plugin.zsh";
         }
       ];
+      initExtra = ''
+        unsetopt HIST_SAVE_BY_COPY
+      '';
     };
   };
 }

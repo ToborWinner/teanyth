@@ -89,11 +89,9 @@ in
 
     pers.theme =
       let
-        mkTheme = path: {
+        mkTheme = name: path: {
           configuration.pers = {
-            rice.currentTheme = mkIf (cfg.colorBackend == "wallust") (
-              import ./wallust.nix { inherit lib pkgs path; }
-            );
+            rice.currentTheme = config.pers.info.getIFD "${name}-current-theme";
             info.startupWallpaper =
               if config.pers.info.wallpaperNeedsPreloading then
                 path
@@ -107,7 +105,18 @@ in
         };
       in
       mkIf cfg.themesFromWallpapers (
-        listToAttrs (map (wp: nameValuePair wp.name (mkTheme "${wp.path}")) cfg.wallpapers)
+        listToAttrs (map (wp: nameValuePair wp.name (mkTheme wp.name "${wp.path}")) cfg.wallpapers)
+      );
+
+    pers.info.ifd =
+      let
+        mkThemeIfd =
+          path: mkIf (cfg.colorBackend == "wallust") (import ./wallust.nix { inherit lib pkgs path; });
+      in
+      mkIf cfg.themesFromWallpapers (
+        listToAttrs (
+          map (wp: nameValuePair "${wp.name}-current-theme" (mkThemeIfd "${wp.path}")) cfg.wallpapers
+        )
       );
 
     pers.info.loadWallpapers = mkIf cfg.themesFromWallpapers (map (wp: "${wp.path}") cfg.wallpapers);

@@ -1,7 +1,4 @@
-{
-  vimUtils,
-  ...
-}:
+{ vimUtils, ... }:
 
 vimUtils.buildVimPlugin {
   name = "nix-options-nvim";

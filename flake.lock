@@ -278,11 +278,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1739779167,
-        "narHash": "sha256-2KGYDLwub/V5yeFk20DvSoq5BTtNGPoRddT1mz0f6O0=",
+        "lastModified": 1742439507,
+        "narHash": "sha256-ORd+m6Na+BRj9QxghjCw5JAc5noWnDhiejDfKYBIVig=",
         "owner": "eatmynerds",
         "repo": "lobster-rs",
-        "rev": "e7ee62618993a6a3d04d1804ec3204d50aa619cb",
+        "rev": "6078969d9f26c22b387409a4254cdc0259b72053",
         "type": "github"
       },
       "original": {
@@ -432,22 +432,6 @@
         "url": "https://github.com/NixOS/nixpkgs/archive/072a6db25e947df2f31aab9eccd0ab75d5b2da11.tar.gz"
       }
     },
-    "nixpkgs-stable": {
-      "locked": {
-        "lastModified": 1741600792,
-        "narHash": "sha256-yfDy6chHcM7pXpMF4wycuuV+ILSTG486Z/vLx/Bdi6Y=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "ebe2788eafd539477f83775ef93c3c7e244421d3",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-24.11",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs-wayland": {
       "inputs": {
         "flake-compat": "flake-compat_4",
@@ -578,7 +562,6 @@
         "nixos-aarch64-widevine": "nixos-aarch64-widevine",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_3",
-        "nixpkgs-stable": "nixpkgs-stable",
         "nixpkgs-wayland": "nixpkgs-wayland",
         "nvf": "nvf",
         "raspberry": "raspberry",

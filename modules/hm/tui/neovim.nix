@@ -61,16 +61,15 @@
                     else
                       option;
                 in
-                optionToUse
-                // {
-                  inherit name;
-                };
+                optionToUse // { inherit name; };
             };
 
-        ctagsPath = pkgs.writeText "ctags" ''
-          ${nixosDocs.optionsCTAGS}
-          ${hmDocs.optionsCTAGS}
-        '';
+        # ctagsPath = pkgs.writeText "ctags" ''
+        #   ${nixosDocs.optionsCTAGS}
+        #   ${hmDocs.optionsCTAGS}
+        # '';
+        # TODO: Fix. Cause? Reduced module list
+        ctagsPath = "abc";
 
         jsonNixosPath = pkgs.writeText "nixos-options.json" nixosDocs.optionsJSON;
         hmNixosPath = pkgs.writeText "hm-options.json" hmDocs.optionsJSON;
@@ -79,11 +78,11 @@
         (pkgs.pers.neovim.passthru.extend [
           {
             pers.nix-options-nvim.keybinds = [
-              {
-                name = "NixOS";
-                key = "n";
-                filepath = jsonNixosPath;
-              }
+              # {
+              #   name = "NixOS";
+              #   key = "n";
+              #   filepath = jsonNixosPath;
+              # }
               {
                 name = "home-manager";
                 key = "h";
