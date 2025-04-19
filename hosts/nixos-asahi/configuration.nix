@@ -3,6 +3,7 @@
   pkgs,
   inputs,
   config,
+  settings,
   ...
 }:
 
@@ -99,6 +100,24 @@
   nixpkgs.config.allowUnfree = true;
   system.stateVersion = "24.11";
   documentation.nixos.enable = false;
+
+  # TODO: Make proper configuration for this
+  sops.secrets =
+    let
+      allowUser = {
+        owner = config.users.users.${settings.username}.name;
+        inherit (config.users.users.${settings.username}) group;
+      };
+    in
+    {
+      main-user = {
+        neededForUsers = true;
+      };
+      icloud-mail = allowUser;
+      outlook-mail = allowUser;
+      groq-api-key = allowUser;
+      github-2fa = allowUser;
+    };
 
   boot.binfmt.emulatedSystems = [
     "x86_64-linux"

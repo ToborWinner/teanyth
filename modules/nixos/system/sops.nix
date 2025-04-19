@@ -44,23 +44,9 @@ in
 
         age.keyFile = "/persist/secrets/hosts/${settings.hostname}";
 
-        secrets =
-          let
-            allowUser = {
-              owner = config.users.users.${settings.username}.name;
-              inherit (config.users.users.${settings.username}) group;
-            };
-          in
-          {
-            main-user = {
-              neededForUsers = true;
-            };
-            icloud-mail = allowUser;
-            outlook-mail = allowUser;
-            groq-api-key = allowUser;
-            github-2fa = allowUser;
-            ssh-hostkey = mkIf config.pers.openssh.enable { path = "/etc/ssh/ssh_host_ed25519_key"; };
-          };
+        secrets = {
+          ssh-hostkey = mkIf config.pers.openssh.enable { path = "/etc/ssh/ssh_host_ed25519_key"; };
+        };
       };
     })
   ];
