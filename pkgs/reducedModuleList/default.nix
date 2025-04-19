@@ -18,9 +18,7 @@ runCommand "reduced-module-list.nix"
 
     inherit parameters;
 
-    passAsFile = [
-      "parameterArgs"
-    ] ++ (lib.optional (builtins.isString parameters) "parameters");
+    passAsFile = [ "parameterArgs" ] ++ (lib.optional (builtins.isString parameters) "parameters");
   }
   ''
     export NIX_STATE_DIR=$TMPDIR/state

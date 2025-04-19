@@ -11,6 +11,11 @@
 
   options.pers.impermanence = {
     enable = lib.mkEnableOption "impermanence";
+    configureUser = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Whether to configure the user's impermanent directories and files automatically.";
+    };
     daysToKeep = lib.mkOption {
       type = lib.types.ints.positive;
       description = "The amount of days to keep old roots around.";
@@ -89,7 +94,7 @@
         files = [ "/etc/machine-id" ];
         # TODO: Do this in home-manager (mostly to access hm config) and
         # add those based on pers options in home-manager and try to minimize stuff like .mozilla
-        users.${settings.username} = {
+        users.${settings.username} = lib.mkIf config.pers.impermanence.configureUser {
           directories = [
             "Downloads"
             "Documents"

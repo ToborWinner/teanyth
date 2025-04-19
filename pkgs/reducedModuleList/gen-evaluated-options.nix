@@ -1,10 +1,7 @@
 /**
   This file is evaluated in a derivation that parses its traces.
 */
-{
-  parameters,
-  args,
-}:
+{ parameters, args }:
 let
   evaluator = parameters args;
 
@@ -104,12 +101,7 @@ let
 
   configlessKeys = builtins.concatMap (m: if checkModule m then [ m.key ] else [ ]) modules;
 
-  wrapped = wrap configuration.options (
-    configuration.config
-    // {
-      inherit (configuration) _module;
-    }
-  );
+  wrapped = wrap configuration.options (configuration.config // { inherit (configuration) _module; });
 
   wrappedModules = lib.modules.collectModules evaluator.modulesPath evaluator.baseModules (
     {
@@ -239,9 +231,7 @@ let
             description = "Alias of {option}`${lib.showOption to}`.";
             apply = x: use (toOf config);
           }
-          // lib.optionalAttrs (toType != null) {
-            type = toType;
-          }
+          // lib.optionalAttrs (toType != null) { type = toType; }
         );
         config = lib.mkIf condition (
           if withPriority then

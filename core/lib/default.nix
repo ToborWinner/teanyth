@@ -262,7 +262,7 @@ rec {
     );
   };
 
-  makePackages = genAttrs supportedSystems (
+  makeLegacyPackages = genAttrs supportedSystems (
     system:
     let
       pkgs = import nixpkgs {
@@ -271,6 +271,34 @@ rec {
       };
     in
     pkgs.pers
+  );
+
+  makePackages = genAttrs supportedSystems (
+    system:
+    let
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = singleton flake.overlays.default;
+      };
+    in
+    filterAttrs (_: isDerivation) pkgs.pers
+  );
+
+  makeApps = genAttrs supportedSystems (
+    system:
+    mapAttrs' (
+      n: v:
+      nameValuePair "install-${n}" {
+        type = "app";
+        program = toString (
+          v.config.system.build.make-install-remote (
+            import nixpkgs {
+              inherit system;
+            }
+          )
+        );
+      }
+    ) (filterAttrs (_: v: v.config.system.build ? make-install-remote) flake.nixosConfigurations)
   );
 
   gtkCSSFromWallust = import ./gtk-wallust.nix lib;
@@ -308,6 +336,7 @@ rec {
   # https://github.com/NixOS/nixpkgs/blob/1c8c4f744c62c744f3118d740fdabd719d1cac00/lib/modules.nix#L537
   #
   # TLDR: Without including pkgs in the attribute set deconstruction, args won't contain pkgs.
+  # TODO: For the theme system just re-create the functionality of applyModuleArgs rather than this bad fix that is specific to pkgs.
   wrapModuleWithPkgs =
     modulePath:
     let

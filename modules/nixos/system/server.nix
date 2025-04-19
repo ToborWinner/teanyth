@@ -43,6 +43,13 @@
     # If the user is in @wheel they are trusted by default.
     nix.settings.trusted-users = [ "@wheel" ];
 
+    # Automatic garbage collection
+    nix.gc = {
+      persistent = false;
+      automatic = true;
+      options = "--delete-older-than 2d";
+    };
+
     # No mutable users by default
     users.mutableUsers = false;
 
@@ -82,14 +89,6 @@
         AllowSuspend=no
         AllowHibernation=no
       '';
-    };
-
-    services.openssh = {
-      # require public key authentication for better security
-      settings.PasswordAuthentication = false;
-      settings.KbdInteractiveAuthentication = false;
-      # Prevent root login via ssh by default
-      settings.PermitRootLogin = lib.mkDefault "no";
     };
 
     security.sudo = {

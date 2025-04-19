@@ -19,6 +19,7 @@
   pers = {
     tty.enable = true;
     server.enable = true;
+    openssh.enable = true;
     networkmanager.enable = true;
     git.enable = true;
     basic.enable = true;
@@ -44,9 +45,6 @@
 
   # TODO: Temporary until sops setup on rpi
   users.users.${settings.username}.hashedPassword = config.sensitive.temporaryPasswordRpi;
-
-  # Enable ssh login
-  services.openssh.enable = true;
 
   # Audio
   services.pipewire = {

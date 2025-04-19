@@ -12,6 +12,10 @@
     };
     nixos-aarch64-widevine.url = "github:epetousis/nixos-aarch64-widevine";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # --- Core System ---
     home-manager = {
@@ -24,13 +28,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     sensitive = {
-      url = "git+ssh://git@github.com/ToborWinner/sensitive";
+      url = "git+ssh://git@github.com/ToborWinner/sensitive?ref=main&shallow=1";
       flake = false;
     };
 
     # --- Servers ---
     deploy-rs = {
       url = "github:serokell/deploy-rs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixos-anywhere = {
+      url = "github:nix-community/nixos-anywhere";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -96,11 +104,15 @@
       configs = {
         nixos-asahi = {
           system = "aarch64-linux";
-          reduced = true; # Use a reduced base module list
+          reduced = false; # Use a reduced base module list
         };
         rpi3 = {
           system = "aarch64-linux";
           deployable = true; # Allow deploying through deploy-rs
+        };
+        purity = {
+          system = "x86_64-linux";
+          deployable = true;
         };
       };
     in
@@ -109,7 +121,7 @@
         default = pkgs.mkShell { packages = [ pkgs.deploy-rs ]; };
         secrets = pkgs.mkShell {
           shellHook = ''
-            alias sops='sudo SOPS_AGE_KEY_FILE=/persist/secrets/sops.txt EDITOR=${lib.getExe pkgs.vim} ${lib.getExe pkgs.sops}'
+            alias sops='sudo SOPS_AGE_KEY_FILE=/persist/secrets/master EDITOR=${lib.getExe pkgs.vim} ${lib.getExe pkgs.sops}'
           '';
         };
       });
@@ -124,6 +136,8 @@
         };
       });
       packages = lib.pers.makePackages;
+      legacyPackages = lib.pers.makeLegacyPackages;
+      apps = lib.pers.makeApps;
       templates = import ./templates;
       formatter = lib.pers.makeFormatter;
       checks = lib.recursiveUpdate (lib.pers.makeDeployChecks configs) lib.pers.makeFormatterChecks;

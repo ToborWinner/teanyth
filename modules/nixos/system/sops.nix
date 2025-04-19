@@ -39,10 +39,10 @@ in
       };
 
       sops = {
-        defaultSopsFile = inputs.sensitive + "/secrets/secrets.yaml";
+        defaultSopsFile = inputs.sensitive + "/secrets/hosts/${settings.hostname}.yaml";
         defaultSopsFormat = "yaml";
 
-        age.keyFile = "/persist/secrets/sops.txt";
+        age.keyFile = "/persist/secrets/hosts/${settings.hostname}";
 
         secrets =
           let
@@ -59,6 +59,7 @@ in
             outlook-mail = allowUser;
             groq-api-key = allowUser;
             github-2fa = allowUser;
+            ssh-hostkey = mkIf config.pers.openssh.enable { path = "/etc/ssh/ssh_host_ed25519_key"; };
           };
       };
     })

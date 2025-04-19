@@ -78,11 +78,11 @@
         (pkgs.pers.neovim.passthru.extend [
           {
             pers.nix-options-nvim.keybinds = [
-              # {
-              #   name = "NixOS";
-              #   key = "n";
-              #   filepath = jsonNixosPath;
-              # }
+              {
+                name = "NixOS";
+                key = "n";
+                filepath = jsonNixosPath;
+              }
               {
                 name = "home-manager";
                 key = "h";

@@ -1,7 +1,4 @@
-{
-  file,
-  nixpkgs,
-}:
+{ file, nixpkgs }:
 let
   lib = import (nixpkgs + "/lib");
   evalConfig = import (nixpkgs + "/nixos/lib/eval-config.nix");

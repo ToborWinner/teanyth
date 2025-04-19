@@ -14,7 +14,6 @@
       curl
       fastfetch
       tree
-      brightnessctl
       vim
       ripgrep
     ];

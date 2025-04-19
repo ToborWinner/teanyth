@@ -99,4 +99,8 @@
   nixpkgs.config.allowUnfree = true;
   system.stateVersion = "24.11";
   documentation.nixos.enable = false;
+
+  boot.binfmt.emulatedSystems = [
+    "x86_64-linux"
+  ];
 }

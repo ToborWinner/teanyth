@@ -127,13 +127,7 @@ in
   */
   removeAttributes =
     mainAttrs:
-    applyToModule (
-      m:
-      m
-      // {
-        config = removeModuleDefinitionsRecursive m.config mainAttrs;
-      }
-    ) (x: x);
+    applyToModule (m: m // { config = removeModuleDefinitionsRecursive m.config mainAttrs; }) (x: x);
 
   /**
     Import a Module and map its imports.
@@ -141,15 +135,7 @@ in
     # Type
     mapImports :: ([Module] -> [Module]) -> Module -> Attrs;
   */
-  mapImports =
-    f:
-    applyToModule (
-      m:
-      m
-      // {
-        imports = f m.imports;
-      }
-    ) (x: x);
+  mapImports = f: applyToModule (m: m // { imports = f m.imports; }) (x: x);
 
   /**
     Import a Module and recursively remove specific attributes from config (which must be defined top-level). In addition, map the imports using the provided map function.
@@ -207,15 +193,14 @@ in
   */
   makeReducedNixos =
     system: hostname:
-    lib.pers.flake.packages.${system}.reducedModuleList {
+    lib.pers.flake.legacyPackages.${system}.reducedModuleList {
       parameters = ../nixos/reduced.nix;
       args = {
         name = hostname;
         flakedata = lib.pers.import-flake.flakeArguments lib.pers.flake;
         ifd =
-          (lib.pers.flake.nixosConfigurations.${hostname}.override {
-            baseModules = import baseModulesPath;
-          }).config.pers.info.ifd;
+          (lib.pers.flake.nixosConfigurations.${hostname}.override { baseModules = import baseModulesPath; })
+          .config.pers.info.ifd;
         importFlakePath = lib.pers.import-flake.selfPath;
       };
     };
@@ -228,7 +213,7 @@ in
   */
   makeReducedNixosFromFile =
     system: file:
-    lib.pers.flake.packages.${system}.reducedModuleList {
+    lib.pers.flake.legacyPackages.${system}.reducedModuleList {
       parameters = ../nixos/reduced-file.nix;
       args = {
         nixpkgs = toString lib.pers.flake.inputs.nixpkgs;
@@ -277,16 +262,15 @@ in
   */
   makeReducedHomeManager =
     system: hostname: user:
-    lib.pers.flake.packages.${system}.reducedModuleList {
+    lib.pers.flake.legacyPackages.${system}.reducedModuleList {
       parameters = ../hm/reduced.nix;
       args = {
         inherit user;
         name = hostname;
         flakedata = lib.pers.import-flake.flakeArguments lib.pers.flake;
         ifd =
-          (lib.pers.flake.nixosConfigurations.${hostname}.override {
-            baseModules = import baseModulesPath;
-          }).config.pers.info.ifd;
+          (lib.pers.flake.nixosConfigurations.${hostname}.override { baseModules = import baseModulesPath; })
+          .config.pers.info.ifd;
         importFlakePath = lib.pers.import-flake.selfPath;
       };
     };
