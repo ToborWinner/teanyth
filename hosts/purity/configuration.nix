@@ -8,6 +8,7 @@
   imports = [
     inputs.disko.nixosModules.disko
     ./disko.nix
+    ./hardware-configuration.nix
   ];
 
   pers = {
@@ -25,12 +26,6 @@
     };
     sops.enable = true;
     nixos-anywhere.enable = true;
-  };
-
-  hardware.enableRedistributableFirmware = true;
-  boot.loader.grub = {
-    efiSupport = true;
-    efiInstallAsRemovable = true;
   };
 
   networking.hostName = settings.hostname;
