@@ -35,7 +35,7 @@ with lib;
     };
 
     getSecretFilePath = mkOption {
-      type = with types; nullOr (functionTo str);
+      type = with types; nullOr (functionTo (nullOr str));
       description = "Function to get the path to a secret. Should be called with the secret name.";
       default = null;
     };
