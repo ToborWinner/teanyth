@@ -33,7 +33,7 @@ in
         };
       };
 
-      pers.info.getSecretFilePath = secret: config.sops.secrets.${secret}.path;
+      pers.info.getSecretFilePath = secret: config.sops.secrets.${secret}.path or null;
       pers.home-manager.imports = singleton {
         pers.info.getSecretFilePath = config.pers.info.getSecretFilePath;
       };
