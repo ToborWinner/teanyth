@@ -74,7 +74,7 @@ in
             };
           };
           swap = {
-            size = "3G";
+            size = cfg.swapSize;
             content = {
               type = "swap";
               resumeDevice = true;
