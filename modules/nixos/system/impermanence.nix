@@ -129,7 +129,7 @@
                 directory = ".ssh";
                 mode = "0700";
               }
-            ];
+            ] ++ config.pers.impermanence.extraUserDirectories;
             files = [
               (lib.mkIf hmCfg.pers.zsh.enable ".zsh_history")
               (lib.mkIf hmCfg.pers.nixcord.enable ".config/vesktop/state.json")

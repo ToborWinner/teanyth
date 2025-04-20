@@ -30,7 +30,7 @@ in
               };
 
               path = mkOption {
-                type = pathInStore;
+                type = path;
                 description = "The path of the wallpaper.";
               };
             };

@@ -25,7 +25,7 @@ in
             description = "The key for the keymap. The keymap will be <leader>fn<key-specified-here>.";
           };
           filepath = lib.mkOption {
-            type = pathInStore;
+            type = path;
             description = "The path to the JSON file containing the Nix options.";
           };
         };
