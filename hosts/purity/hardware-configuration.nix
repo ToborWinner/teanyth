@@ -1,7 +1,10 @@
 { pkgs, ... }:
 
 {
-  pers.disko.deviceName = "/dev/sda";
+  pers.disko = {
+    deviceName = "/dev/sda";
+    biosSupport = true;
+  };
 
   hardware.enableRedistributableFirmware = true;
 
