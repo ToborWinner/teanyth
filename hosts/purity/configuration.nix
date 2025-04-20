@@ -1,13 +1,10 @@
 {
-  inputs,
   settings,
   ...
 }:
 
 {
   imports = [
-    inputs.disko.nixosModules.disko
-    ./disko.nix
     ./hardware-configuration.nix
   ];
 
@@ -26,6 +23,7 @@
     };
     sops.enable = true;
     nixos-anywhere.enable = true;
+    disko.enable = true;
   };
 
   networking.hostName = settings.hostname;

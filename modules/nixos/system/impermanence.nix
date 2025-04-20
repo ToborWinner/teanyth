@@ -16,6 +16,11 @@
       default = true;
       description = "Whether to configure the user's impermanent directories and files automatically.";
     };
+    extraUserDirectories = lib.mkOption {
+      type = lib.types.listOf lib.types.anything;
+      default = [ ];
+      description = "Additional directories to add to the ones kept if configureUser is true.";
+    };
     daysToKeep = lib.mkOption {
       type = lib.types.ints.positive;
       description = "The amount of days to keep old roots around.";
@@ -36,6 +41,15 @@
   config = lib.mkMerge [
     { virtualisation.vmVariant.pers.impermanence.enable = lib.mkVMOverride false; }
     (lib.mkIf config.pers.impermanence.enable {
+      assertions = [
+        {
+          assertion =
+            config.pers.impermanence.configureUser
+            -> (config.pers.users.enable && config.pers.home-manager.enable);
+          message = "If pers.impermanence.configureUser is set to true, then pers.users.enable and pers.home-manager.enable must also be set to true.";
+        }
+      ];
+
       boot.initrd.postResumeCommands = lib.mkAfter ''
         mkdir /btrfs_tmp
         mount ${config.fileSystems."/".device} /btrfs_tmp
@@ -91,40 +105,36 @@
             mode = "u=rwx,g=rx,o=";
           })
         ];
+
         files = [ "/etc/machine-id" ];
-        # TODO: Do this in home-manager (mostly to access hm config) and
-        # add those based on pers options in home-manager and try to minimize stuff like .mozilla
-        users.${settings.username} = lib.mkIf config.pers.impermanence.configureUser {
-          directories = [
-            "Downloads"
-            "Documents"
-            "Music"
-            "Images"
-            "sensitive"
-            "teanyth"
-            ".local/share/PrismLauncher"
-            ".local/share/direnv"
-            ".local/share/zoxide"
-            ".local/share/mpd"
-            ".config/wordtui"
-            ".config/raspberry"
-            ".config/Element"
-            ".config/vesktop/sessionData"
-            ".mozilla"
-            # Maybe .cargo
-            # { directory = ".gnupg"; mode = "0700"; }
-            {
-              directory = ".ssh";
-              mode = "0700";
-            }
-            # { directory = ".nixops"; mode = "0700"; }
-            # { directory = ".local/share/keyrings"; mode = "0700"; }
-          ];
-          files = [
-            ".zsh_history"
-            ".config/vesktop/state.json"
-          ];
-        };
+
+        users.${settings.username} =
+          let
+            hmCfg = config.home-manager.users.${settings.username};
+          in
+          lib.mkIf config.pers.impermanence.configureUser {
+            directories = [
+              "Downloads"
+              "Documents"
+              "Music"
+              "Images"
+              "sensitive"
+              "teanyth"
+              (lib.mkIf hmCfg.pers.direnv.enable ".local/share/direnv")
+              (lib.mkIf hmCfg.pers.zoxide.enable ".local/share/zoxide")
+              (lib.mkIf hmCfg.pers.mpd.enable ".local/share/mpd")
+              (lib.mkIf hmCfg.pers.nixcord.enable ".config/vesktop/sessionData")
+              (lib.mkIf hmCfg.pers.firefox.enable ".mozilla")
+              {
+                directory = ".ssh";
+                mode = "0700";
+              }
+            ];
+            files = [
+              (lib.mkIf hmCfg.pers.zsh.enable ".zsh_history")
+              (lib.mkIf hmCfg.pers.nixcord.enable ".config/vesktop/state.json")
+            ];
+          };
       };
     })
   ];

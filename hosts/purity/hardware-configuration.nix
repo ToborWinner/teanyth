@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 {
-  disko.devices.disk.main.device = "/dev/sda";
+  pers.disko.deviceName = "/dev/sda";
 
   hardware.enableRedistributableFirmware = true;
 

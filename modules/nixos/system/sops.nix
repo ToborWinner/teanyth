@@ -15,7 +15,11 @@ in
 {
   imports = [ inputs.sops-nix.nixosModules.sops ];
 
-  options.pers.sops.enable = mkEnableOption "sops";
+  options.pers.sops = {
+    enable = mkEnableOption "sops";
+    accounts = mkEnableOption "accounts secrets";
+    user = mkEnableOption "main user password";
+  };
 
   config = mkMerge [
     {
@@ -44,9 +48,29 @@ in
 
         age.keyFile = "/persist/secrets/hosts/${settings.hostname}";
 
-        secrets = {
-          ssh-hostkey = mkIf config.pers.openssh.enable { path = "/etc/ssh/ssh_host_ed25519_key"; };
-        };
+        secrets = mkMerge [
+          (mkIf config.pers.openssh.enable {
+            ssh-hostkey.path = "/etc/ssh/ssh_host_ed25519_key";
+          })
+          (mkIf cfg.accounts (
+            let
+              allowUser = {
+                owner = config.users.users.${settings.username}.name;
+                inherit (config.users.users.${settings.username}) group;
+                sopsFile = inputs.sensitive + "/secrets/accounts.yaml";
+              };
+            in
+            {
+              icloud-mail = allowUser;
+              outlook-mail = allowUser;
+              groq-api-key = allowUser;
+              github-2fa = allowUser;
+            }
+          ))
+          (mkIf cfg.user {
+            main-user.neededForUsers = true;
+          })
+        ];
       };
     })
   ];

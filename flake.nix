@@ -114,6 +114,7 @@
           system = "x86_64-linux";
           deployable = true;
         };
+        aegis.system = "x86_64-linux";
       };
     in
     {
