@@ -13,6 +13,9 @@
     swapSize = "15G";
   };
 
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.grub.efiInstallAsRemovable = true;
+
   boot.initrd.availableKernelModules = [
     "xhci_pci"
     "ahci"
