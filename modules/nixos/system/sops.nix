@@ -19,6 +19,11 @@ in
     enable = mkEnableOption "sops";
     accounts = mkEnableOption "accounts secrets";
     user = mkEnableOption "main user password";
+    extraSecrets = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      description = "List of additional secrets.";
+    };
   };
 
   config = mkMerge [
@@ -70,6 +75,19 @@ in
           (mkIf cfg.user {
             main-user.neededForUsers = true;
           })
+          (mkIf config.pers.jolly.enable {
+            mongodb-root-password = { };
+            mongodb-user-password = { };
+            redis-password = { };
+            jollybot-env-file = { };
+            jollydashboard-env-file = { };
+          })
+          (mkIf (config.pers.jolly.enable && config.pers.jolly.nginx) {
+            ssl-certificate = { };
+            ssl-certificate-key = { };
+            ssl-client-certificate = { };
+          })
+          (builtins.listToAttrs (map (n: lib.nameValuePair n { }) cfg.extraSecrets))
         ];
       };
     })

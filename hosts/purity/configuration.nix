@@ -1,5 +1,6 @@
 {
   settings,
+  config,
   ...
 }:
 
@@ -21,9 +22,27 @@
       amountToKeep = 5;
       daysToKeep = 10;
     };
-    sops.enable = true;
+    sops = {
+      enable = true;
+      extraSecrets = [
+        "high-bridge"
+        "low-bridge"
+      ];
+    };
     nixos-anywhere.enable = true;
     disko.enable = true;
+
+    jolly = {
+      enable = true;
+      nginx = true;
+      openFirewall = true;
+      disableUnits = true;
+    };
+
+    hypixel-bridge.bridges = {
+      high.configFile = config.pers.info.getSecretFilePath "high-bridge";
+      low.configFile = config.pers.info.getSecretFilePath "low-bridge";
+    };
   };
 
   networking.hostName = settings.hostname;

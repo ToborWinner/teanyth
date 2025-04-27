@@ -81,6 +81,17 @@
       url = "github:ToborWinner/discord-counting-tools";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # --- Package source code ---
+    # This is here in flake inputs, which is where it shouldn't be, because it's a pain to work with private repositories in fixed-output fetcher derivations.
+    jollydashboard = {
+      url = "git+ssh://git@github.com/ToborWinner/JollyDashboard?ref=main&shallow=1";
+      flake = false;
+    };
+    jollybot = {
+      url = "git+ssh://git@github.com/ToborWinner/Jolly?ref=main&shallow=1";
+      flake = false;
+    };
   };
 
   outputs =

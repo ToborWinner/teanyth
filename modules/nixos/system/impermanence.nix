@@ -104,7 +104,19 @@
             group = "postgres";
             mode = "u=rwx,g=rx,o=";
           })
-        ];
+          (lib.mkIf config.pers.jolly.enable {
+            directory = "/var/lib/redis/db";
+            user = "redis";
+            group = "redis";
+            mode = "u=rwx,g=,o=";
+          })
+          (lib.mkIf config.pers.jolly.enable {
+            directory = "/var/db/mongodb";
+            user = config.services.mongodb.user;
+            group = config.services.mongodb.user;
+            mode = "u=rwx,g=,o=";
+          })
+        ] ++ config.pers.hypixel-bridge.impermanence;
 
         files = [ "/etc/machine-id" ];
 
