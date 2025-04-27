@@ -35,7 +35,6 @@
       enable = true;
       nginx = true;
       openFirewall = true;
-      disableUnits = true;
     };
 
     hypixel-bridge.bridges = {
