@@ -300,7 +300,7 @@ in
         forceSSL = true;
         http3 = false;
         locations."/".proxyPass = "http://localhost:3000";
-        serverAliases = "www.jollydisc.com";
+        serverAliases = [ "www.jollydisc.com" ];
         sslCertificate = "/run/credentials/nginx.service/ssl-certificate";
         sslCertificateKey = "/run/credentials/nginx.service/ssl-certificate-key";
         extraConfig = ''
