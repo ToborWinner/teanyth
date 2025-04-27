@@ -1,12 +1,7 @@
-{
-  inputs,
-  ...
-}:
+{ inputs, ... }:
 
 {
-  imports = [
-    inputs.nixos-hardware.nixosModules.apple-macbook-pro-12-1
-  ];
+  imports = [ inputs.nixos-hardware.nixosModules.apple-macbook-pro-12-1 ];
 
   pers.disko = {
     deviceName = "/dev/sda";

@@ -1,6 +1,7 @@
 {
   buildNpmPackage,
   jollydashboardsrc ? null,
+  lib,
 }:
 
 buildNpmPackage {
@@ -10,7 +11,7 @@ buildNpmPackage {
   # TODO: Use fetchFromGitHub private version (it supports private fetching). This will require some more advanced setup since I don't want to have to set the USERNAME and PASSWORD environment variables.
   src =
     if jollydashboardsrc == null then
-      throw "Please override the package with a source."
+      lib.warn "Please override the package with a source." ./default.nix
     else
       jollydashboardsrc;
 

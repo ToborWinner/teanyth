@@ -18,9 +18,7 @@ buildNpmPackage rec {
     sha256 = "sha256-jBZNVaDUCINHzfwKvZMRaGj6JCLoM0b/M11eU5zGWEo=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     pixman

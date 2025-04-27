@@ -290,13 +290,7 @@ rec {
       n: v:
       nameValuePair "install-${n}" {
         type = "app";
-        program = toString (
-          v.config.system.build.make-install-remote (
-            import nixpkgs {
-              inherit system;
-            }
-          )
-        );
+        program = toString (v.config.system.build.make-install-remote (import nixpkgs { inherit system; }));
       }
     ) (filterAttrs (_: v: v.config.system.build ? make-install-remote) flake.nixosConfigurations)
   );

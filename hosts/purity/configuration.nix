@@ -6,9 +6,7 @@
 }:
 
 {
-  imports = [
-    ./hardware-configuration.nix
-  ];
+  imports = [ ./hardware-configuration.nix ];
 
   pers = {
     server.enable = true;
@@ -46,11 +44,7 @@
     };
   };
 
-  nixpkgs.config.allowUnfreePredicate =
-    pkg:
-    builtins.elem (lib.getName pkg) [
-      "mongodb-ce"
-    ];
+  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ "mongodb-ce" ];
 
   networking.hostName = settings.hostname;
   nix.settings.auto-optimise-store = true;

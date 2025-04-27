@@ -9,9 +9,7 @@ let
   cfg = config.pers.disko;
 in
 {
-  imports = [
-    inputs.disko.nixosModules.disko
-  ];
+  imports = [ inputs.disko.nixosModules.disko ];
 
   options = {
     pers.disko = {
@@ -33,9 +31,7 @@ in
 
     # Documentation fix for core/lib/docs.nix
     # TODO: Better fix
-    disko.devices = lib.mkOption {
-      visible = "shallow";
-    };
+    disko.devices = lib.mkOption { visible = "shallow"; };
   };
 
   config = lib.mkIf cfg.enable {

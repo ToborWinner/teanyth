@@ -202,11 +202,7 @@ in
 
         EnvironmentFile = config.pers.info.getSecretFilePath "jollybot-env-file";
 
-        ExecStart = lib.getExe (
-          pkgs.pers.jollybot.override {
-            jollybotsrc = inputs.jollybot;
-          }
-        );
+        ExecStart = lib.getExe (pkgs.pers.jollybot.override { jollybotsrc = inputs.jollybot; });
 
         Restart = "always";
         RestartSec = 10;
@@ -268,9 +264,7 @@ in
         EnvironmentFile = config.pers.info.getSecretFilePath "jollydashboard-env-file";
 
         ExecStart = lib.getExe (
-          pkgs.pers.jollydashboard.override {
-            jollydashboardsrc = inputs.jollydashboard;
-          }
+          pkgs.pers.jollydashboard.override { jollydashboardsrc = inputs.jollydashboard; }
         );
 
         Restart = "always";

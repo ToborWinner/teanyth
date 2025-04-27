@@ -54,9 +54,7 @@ in
         age.keyFile = "/persist/secrets/hosts/${settings.hostname}";
 
         secrets = mkMerge [
-          (mkIf config.pers.openssh.enable {
-            ssh-hostkey.path = "/etc/ssh/ssh_host_ed25519_key";
-          })
+          (mkIf config.pers.openssh.enable { ssh-hostkey.path = "/etc/ssh/ssh_host_ed25519_key"; })
           (mkIf cfg.accounts (
             let
               allowUser = {
@@ -72,9 +70,7 @@ in
               github-2fa = allowUser;
             }
           ))
-          (mkIf cfg.user {
-            main-user.neededForUsers = true;
-          })
+          (mkIf cfg.user { main-user.neededForUsers = true; })
           (mkIf config.pers.jolly.enable {
             mongodb-root-password = { };
             mongodb-user-password = { };
