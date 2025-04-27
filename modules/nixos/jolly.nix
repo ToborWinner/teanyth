@@ -95,6 +95,7 @@ in
           dbName = "jollydb";
         in
         ''
+          sleep 2
           initialRootPassword=$(</run/credentials/mongodb-setup.service/root-password)
           userPassword=$(</run/credentials/mongodb-setup.service/user-password)
           ${lib.getExe config.services.mongodb.mongoshPackage} -u root -p "$initialRootPassword" admin <<EOF
