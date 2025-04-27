@@ -823,10 +823,10 @@
     "sensitive": {
       "flake": false,
       "locked": {
-        "lastModified": 1745087385,
-        "narHash": "sha256-cp2W/s4HG2ADASJSrgd9mvYTh3+yB1kvNYcwO3n2smY=",
+        "lastModified": 1745749234,
+        "narHash": "sha256-Ns5rtfHPpzzVApqUboQmUFuHtQ6AknE5gQiGfc4Lvx8=",
         "ref": "main",
-        "rev": "54c727ac62091f7ecffd81cc7a384f559fd434d7",
+        "rev": "f7884b41e5cacd374290254e6bbfe463eb6bf273",
         "shallow": true,
         "type": "git",
         "url": "ssh://git@github.com/ToborWinner/sensitive"
