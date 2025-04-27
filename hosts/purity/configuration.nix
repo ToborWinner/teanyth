@@ -1,6 +1,7 @@
 {
   settings,
   config,
+  lib,
   ...
 }:
 
@@ -44,6 +45,12 @@
       low.configFile = config.pers.info.getSecretFilePath "low-bridge";
     };
   };
+
+  nixpkgs.config.allowUnfreePredicate =
+    pkg:
+    builtins.elem (lib.getName pkg) [
+      "mongodb-ce"
+    ];
 
   networking.hostName = settings.hostname;
   nix.settings.auto-optimise-store = true;

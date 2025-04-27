@@ -315,6 +315,42 @@
         "type": "github"
       }
     },
+    "jollybot": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1745690426,
+        "narHash": "sha256-dJh+P9G7hxsyCBZnghHE8Rzg0jHl/vZObc+QF8PKyyQ=",
+        "ref": "main",
+        "rev": "fd1f23a2d63b5694e320c255802174b372b13519",
+        "shallow": true,
+        "type": "git",
+        "url": "ssh://git@github.com/ToborWinner/Jolly"
+      },
+      "original": {
+        "ref": "main",
+        "shallow": true,
+        "type": "git",
+        "url": "ssh://git@github.com/ToborWinner/Jolly"
+      }
+    },
+    "jollydashboard": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1745514964,
+        "narHash": "sha256-fmPPGy0XMxvOcnpSwT2hmIO6sibTNWckLfb50tLep3w=",
+        "ref": "main",
+        "rev": "829d2487f3b81aa913925797bd3f39679731b1cc",
+        "shallow": true,
+        "type": "git",
+        "url": "ssh://git@github.com/ToborWinner/JollyDashboard"
+      },
+      "original": {
+        "ref": "main",
+        "shallow": true,
+        "type": "git",
+        "url": "ssh://git@github.com/ToborWinner/JollyDashboard"
+      }
+    },
     "lib-aggregate": {
       "inputs": {
         "flake-utils": "flake-utils_2",
@@ -687,6 +723,8 @@
         "firefox-addons": "firefox-addons",
         "home-manager": "home-manager",
         "impermanence": "impermanence",
+        "jollybot": "jollybot",
+        "jollydashboard": "jollydashboard",
         "lobster-rs": "lobster-rs",
         "nixcord": "nixcord",
         "nixos-aarch64-widevine": "nixos-aarch64-widevine",

@@ -3,6 +3,7 @@
   config,
   pkgs,
   inputs,
+  ...
 }:
 
 let
@@ -325,7 +326,7 @@ in
       "ssl-client-certificate:${config.pers.info.getSecretFilePath "ssl-client-certificate"}"
     ];
 
-    networking.allowedTCPPorts = lib.mkIf (cfg.nginx && cfg.openFirewall) [
+    networking.firewall.allowedTCPPorts = lib.mkIf (cfg.nginx && cfg.openFirewall) [
       80
       443
     ];

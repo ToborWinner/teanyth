@@ -1,6 +1,6 @@
 {
   buildNpmPackage,
-  jollybotsrc,
+  jollybotsrc ? null,
   rustc,
   cargo,
   vips,
