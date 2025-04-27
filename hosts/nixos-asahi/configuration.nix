@@ -48,6 +48,7 @@
       accounts = true;
       user = true;
     };
+    tailscale.enable = true;
   };
 
   # Home Manager

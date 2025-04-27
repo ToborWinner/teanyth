@@ -83,6 +83,9 @@ in
             ssl-certificate-key = { };
             ssl-client-certificate = { };
           })
+          (mkIf config.pers.tailscale.enable {
+            tailscale = { };
+          })
           (builtins.listToAttrs (map (n: lib.nameValuePair n { }) cfg.extraSecrets))
         ];
       };

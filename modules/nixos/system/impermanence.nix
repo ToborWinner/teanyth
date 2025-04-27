@@ -116,6 +116,7 @@
             group = config.services.mongodb.user;
             mode = "u=rwx,g=,o=";
           })
+          (lib.mkIf config.pers.tailscale.enable "/var/lib/tailscale")
         ] ++ config.pers.hypixel-bridge.impermanence;
 
         files = [ "/etc/machine-id" ];
