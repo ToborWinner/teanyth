@@ -14,8 +14,8 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "ToborWinner";
     repo = "hypixel-discord-chat-bridge";
-    rev = "570fdb88451522a8dca6c55a23c0e041060b7ead";
-    sha256 = "sha256-jBZNVaDUCINHzfwKvZMRaGj6JCLoM0b/M11eU5zGWEo=";
+    rev = "0a91a33086030ceb786e79019c16389caa27c9fd";
+    sha256 = "sha256-prOtRf5JHqkwfvDEiyOhOV2VgVLdQ5XhJzf2U6/eZrw=";
   };
 
   nativeBuildInputs = [ pkg-config ];
