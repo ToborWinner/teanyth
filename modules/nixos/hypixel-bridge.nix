@@ -76,6 +76,7 @@ in
             RestartSec = 10;
             RestartSteps = 10;
             RestartMaxDelaySec = 3600;
+            KillSignal = "SIGINT";
 
             NoNewPrivileges = true;
             ProtectSystem = "strict";
