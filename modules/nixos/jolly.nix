@@ -10,6 +10,8 @@ let
   cfg = config.pers.jolly;
 in
 {
+  # TODO: Proper reloading of systemd unit with shutting down. ExecReload, KillSignal, KillMode, TimeoutSec.
+
   options.pers.jolly = {
     enable = lib.mkEnableOption "Jolly Discord bot and dashboard";
     nginx = lib.mkEnableOption "nginx for Jolly dashboard";

@@ -23,7 +23,10 @@
       ];
     };
     hyprland.enable = true;
-    postgresql.enable = true;
+    postgresql = {
+      enable = true;
+      development = true;
+    };
     virtualisation.enable = true;
     git.enable = true;
     ssh-agent.enable = true;

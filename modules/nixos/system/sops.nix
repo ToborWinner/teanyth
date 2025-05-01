@@ -86,6 +86,9 @@ in
           (mkIf config.pers.tailscale.enable {
             tailscale = { };
           })
+          (mkIf config.pers.guildbot.enable {
+            guildbot-config = { };
+          })
           (builtins.listToAttrs (map (n: lib.nameValuePair n { }) cfg.extraSecrets))
         ];
       };
