@@ -30,6 +30,7 @@
     };
     nixos-anywhere.enable = true;
     disko.enable = true;
+    tailscale.enable = true;
 
     jolly = {
       enable = true;
