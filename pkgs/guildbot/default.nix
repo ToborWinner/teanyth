@@ -19,8 +19,8 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "ToborWinner";
     repo = "guildbot";
-    rev = "0731a533c9433ee5cd657ba1e4b251d1163682db";
-    hash = "sha256-x3JXbqhwVdbTAY+1Xds2MM+3S8f/KKTavxy020unJiQ=";
+    rev = "9c4ea75dbd803973e04634ea4a425ef3968c86ad";
+    hash = "sha256-oI6eDCv+KUza110IysE7xy9ZRJNQYQDRvTPHp7Gckhk=";
   };
 
   useFetchCargoVendor = true;
