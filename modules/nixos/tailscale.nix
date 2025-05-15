@@ -1,8 +1,4 @@
-{
-  lib,
-  config,
-  ...
-}:
+{ lib, config, ... }:
 
 {
   options.pers.tailscale.enable = lib.mkEnableOption "tailscale";

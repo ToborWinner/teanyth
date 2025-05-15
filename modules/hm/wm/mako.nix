@@ -13,8 +13,10 @@
 
     services.mako = {
       enable = true;
-      defaultTimeout = 3000;
-      icons = true;
+      settings = {
+        default-timeout = 3000;
+        icons = true;
+      };
     };
   };
 }

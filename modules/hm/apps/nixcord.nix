@@ -6,7 +6,7 @@
 }:
 
 {
-  imports = [ inputs.nixcord.homeManagerModules.nixcord ];
+  imports = [ inputs.nixcord.homeModules.nixcord ];
 
   options.pers.nixcord.enable = lib.mkEnableOption "nixcord";
 

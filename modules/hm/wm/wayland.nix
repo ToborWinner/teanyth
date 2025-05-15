@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  osConfig,
   pkgs,
   ...
 }:
@@ -15,11 +14,6 @@ in
   options.pers.wayland.enable = mkEnableOption "wayland";
 
   config = mkIf cfg.enable {
-    assertions = singleton {
-      assertion = osConfig.pers.wayland.enable;
-      message = "Wayland System-level support must be enabled for the home-manager module to be enabled.";
-    };
-
     home.sessionVariables = {
       GDK_BACKEND = "wayland";
       _JAVA_AWT_WM_NONREPARENTING = "1";

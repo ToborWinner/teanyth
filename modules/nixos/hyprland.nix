@@ -9,9 +9,6 @@
       xwayland.enable = true;
     };
 
-    pers = {
-      home-manager.imports = lib.singleton { pers.hyprland.enable = lib.mkDefault true; };
-      wayland.enable = true;
-    };
+    pers.home-manager.imports = lib.singleton { pers.hyprland.enable = lib.mkDefault true; };
   };
 }

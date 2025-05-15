@@ -9,6 +9,12 @@
       transparent = true;
     };
 
+    clipboard = {
+      enable = true;
+      providers.wl-copy.enable = true;
+      registers = "unnamedplus";
+    };
+
     mini.statusline.enable = true;
     telescope = {
       enable = true;
@@ -61,7 +67,6 @@
 
     scrollOffset = 4;
     searchCase = "smart";
-    useSystemClipboard = true;
 
     snippets.luasnip.enable = true;
 

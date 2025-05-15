@@ -86,9 +86,8 @@
 
   # Widevine support
   environment.sessionVariables.MOZ_GMP_PATH = [
-    "${pkgs.widevine-cdm-lacros}/gmp-widevinecdm/system-installed"
+    "${pkgs.pers.firefox-widevine}/gmp-widevinecdm/system-installed"
   ];
-  nixpkgs.overlays = [ inputs.nixos-aarch64-widevine.overlays.default ];
 
   services.udev.extraRules = ''
     SUBSYSTEM=="power_supply", KERNEL=="macsmc-battery", ATTR{charge_control_end_threshold}="90"

@@ -40,9 +40,7 @@
         Group = "guildbot";
         Type = "exec";
 
-        LoadCredential = [
-          "config.json:${config.pers.info.getSecretFilePath "guildbot-config"}"
-        ];
+        LoadCredential = [ "config.json:${config.pers.info.getSecretFilePath "guildbot-config"}" ];
 
         ExecStart = lib.getExe pkgs.pers.guildbot;
 

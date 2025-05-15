@@ -2,6 +2,29 @@
   description = "NixOS Configuration";
 
   inputs = {
+    # --- Dependency Management ---
+    empty-flake.url = "github:ToborWinner/empty-flake";
+    flake-utils = {
+      url = "github:numtide/flake-utils";
+      inputs.systems.follows = "nix-systems";
+    };
+    nix-systems.url = "github:nix-systems/default";
+    nixpkgs-lib.url = "github:nix-community/nixpkgs.lib";
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs-lib";
+    };
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nil = {
+      url = "github:oxalica/nil";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.rust-overlay.follows = "rust-overlay";
+    };
+
     # --- NixOS / Nixpkgs ---
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
@@ -9,8 +32,8 @@
     apple-silicon = {
       url = "github:tpwrules/nixos-apple-silicon";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-compat.follows = "empty-flake";
     };
-    nixos-aarch64-widevine.url = "github:epetousis/nixos-aarch64-widevine";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     disko = {
       url = "github:nix-community/disko";
@@ -36,22 +59,28 @@
     deploy-rs = {
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.utils.follows = "flake-utils";
+      inputs.flake-compat.follows = "empty-flake";
     };
     nixos-anywhere = {
       url = "github:nix-community/nixos-anywhere";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # --- Graphical Environment ---
-    nixpkgs-wayland = {
-      url = "github:nix-community/nixpkgs-wayland";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.disko.follows = "empty-flake";
+      inputs.nixos-stable.follows = "empty-flake";
+      inputs.nixos-images.follows = "empty-flake";
+      inputs.treefmt-nix.follows = "empty-flake";
     };
 
     # --- Applications / Tools ---
     nvf = {
       url = "github:notashelf/nvf";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.flake-utils.follows = "empty-flake";
+      inputs.systems.follows = "nix-systems";
+      inputs.nil.follows = "nil";
+      # mnw is not likely to be a dependency of another flake, so it's not overridden
     };
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
@@ -60,6 +89,7 @@
     raspberry = {
       url = "github:ToborWinner/raspberry";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.rust-overlay.follows = "rust-overlay";
     };
     lobster-rs = {
       url = "github:eatmynerds/lobster-rs";
@@ -72,10 +102,13 @@
     nixcord = {
       url = "github:kaylorben/nixcord";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-compat.follows = "empty-flake";
+      inputs.treefmt-nix.follows = "empty-flake";
     };
     wordtui = {
       url = "github:ToborWinner/wordtui";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.rust-overlay.follows = "rust-overlay";
     };
     discord-counting-tools = {
       url = "github:ToborWinner/discord-counting-tools";

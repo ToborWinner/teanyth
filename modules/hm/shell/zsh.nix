@@ -17,6 +17,8 @@
       enable = true;
       autosuggestion.enable = true;
       syntaxHighlighting.enable = true;
+      enableCompletion = true;
+      defaultKeymap = "viins";
       plugins = [
         {
           name = "vi-mode";
@@ -24,7 +26,7 @@
           file = "share/zsh-vi-mode/zsh-vi-mode.plugin.zsh";
         }
       ];
-      initExtra = ''
+      initContent = ''
         unsetopt HIST_SAVE_BY_COPY
       '';
     };

@@ -45,7 +45,8 @@
         id = 0;
         isDefault = true;
 
-        bookmarks = [
+        bookmarks.force = true;
+        bookmarks.settings = [
           {
             name = "Wikipedia";
             tags = [ "wiki" ];
@@ -142,10 +143,10 @@
           };
         };
 
-        search.default = "Google";
+        search.default = "google";
         search.force = true;
         search.engines = {
-          "Nix Packages" = {
+          nix-packages = {
             urls = [
               {
                 template = "https://search.nixos.org/packages";
@@ -166,14 +167,14 @@
             definedAliases = [ "@np" ];
           };
 
-          "NixOS Wiki" = {
+          nixos-wiki = {
             urls = [ { template = "https://wiki.nixos.org/index.php?search={searchTerms}"; } ];
             icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
             definedAliases = [ "@nw" ];
           };
 
-          Google.metaData.alias = "@g";
-          Wikipedia.metaData.alias = "@w";
+          google.metaData.alias = "@g";
+          wikipedia.metaData.alias = "@w";
         };
       };
     };
