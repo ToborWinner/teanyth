@@ -3,7 +3,6 @@
   lib,
   inputs,
   modulesPath,
-  settings,
   config,
   ...
 }:
@@ -19,6 +18,7 @@
   pers = {
     tty.enable = true;
     server.enable = true;
+    sops.enable = true;
     openssh.enable = true;
     networkmanager.enable = true;
     git.enable = true;
@@ -32,6 +32,7 @@
       ];
     };
     pipewire.enable = true;
+    tailscale.enable = true;
   };
 
   system.stateVersion = "25.05";
@@ -39,12 +40,9 @@
   # System packages
   environment.systemPackages = with pkgs; [ libraspberrypi ];
 
-  services.raspberry.enable = true;
+  services.raspberry.enable = false;
 
   time.timeZone = config.sensitive.timeZone;
-
-  # TODO: Temporary until sops setup on rpi
-  users.users.${settings.username}.hashedPassword = config.sensitive.temporaryPasswordRpi;
 
   # Audio
   services.pipewire = {

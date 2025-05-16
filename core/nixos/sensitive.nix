@@ -26,11 +26,5 @@ with lib;
       description = "Keyboard options to use";
       default = null;
     };
-
-    temporaryPasswordRpi = mkOption {
-      type = types.nullOr types.str;
-      description = "A temporary password for the rpi until I set up sops-nix on it";
-      default = null;
-    };
   };
 }
