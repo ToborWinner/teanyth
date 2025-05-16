@@ -18,7 +18,10 @@
   pers = {
     tty.enable = true;
     server.enable = true;
-    sops.enable = true;
+    sops = {
+      enable = true;
+      user = true;
+    };
     openssh.enable = true;
     networkmanager.enable = true;
     git.enable = true;
