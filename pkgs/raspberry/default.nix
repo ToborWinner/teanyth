@@ -23,9 +23,7 @@ rustPlatform.buildRustPackage {
   useFetchCargoVendor = true;
   cargoHash = "sha256-RyHxaJwI+OmHHIDlfWYFYw071PRW6rbu1G+DR2bc5ZQ=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     openssl
     alsa-lib

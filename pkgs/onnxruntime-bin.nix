@@ -23,13 +23,9 @@ stdenv.mkDerivation {
   dontUnpack = true;
   dontConfigure = true;
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-  ];
+  nativeBuildInputs = [ autoPatchelfHook ];
 
-  buildInputs = [
-    stdenv.cc.cc.lib
-  ];
+  buildInputs = [ stdenv.cc.cc.lib ];
 
   installPhase = ''
     runHook preInstall
