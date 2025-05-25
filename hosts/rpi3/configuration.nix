@@ -1,7 +1,6 @@
 {
   pkgs,
   lib,
-  inputs,
   modulesPath,
   config,
   ...
@@ -12,7 +11,6 @@
     # SD card build instructions and filesystem configuration
     (modulesPath + "/installer/sd-card/sd-image-aarch64.nix")
     ./hardware-configuration.nix
-    inputs.raspberry.nixosModules.raspberry
   ];
 
   pers = {
@@ -36,14 +34,13 @@
     };
     pipewire.enable = true;
     tailscale.enable = true;
+    raspberry.enable = true;
   };
 
   system.stateVersion = "25.05";
 
   # System packages
   environment.systemPackages = with pkgs; [ libraspberrypi ];
-
-  services.raspberry.enable = false;
 
   time.timeZone = config.sensitive.timeZone;
 

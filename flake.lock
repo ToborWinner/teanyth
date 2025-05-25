@@ -456,29 +456,6 @@
         "type": "github"
       }
     },
-    "raspberry": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "rust-overlay": [
-          "rust-overlay"
-        ]
-      },
-      "locked": {
-        "lastModified": 1738617419,
-        "narHash": "sha256-szBAdZPj+eA7sDJqEvlWI/P5nOQcBcPhzWbFbSQRFyQ=",
-        "owner": "ToborWinner",
-        "repo": "raspberry",
-        "rev": "0d68ccb5e1da0db056b9004c2c53e7756aec943f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ToborWinner",
-        "repo": "raspberry",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "apple-silicon": "apple-silicon",
@@ -502,7 +479,6 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-lib": "nixpkgs-lib",
         "nvf": "nvf",
-        "raspberry": "raspberry",
         "rust-overlay": "rust-overlay",
         "sensitive": "sensitive",
         "sops-nix": "sops-nix",

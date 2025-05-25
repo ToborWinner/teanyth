@@ -24,6 +24,8 @@
       extensions.render-markdown-nvim.enable = true;
     };
     lua.enable = true;
+    # TODO: Why in the world is this 7.5gb??
+    haskell.enable = true;
   };
 
   vim.lsp = {

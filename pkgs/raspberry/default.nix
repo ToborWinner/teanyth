@@ -4,9 +4,8 @@
   pkg-config,
   openssl,
   alsa-lib,
-  speechd,
+  speechd-minimal,
   stdenv,
-  onnxruntime,
   fetchFromGitHub,
   pers,
 }:
@@ -30,10 +29,10 @@ rustPlatform.buildRustPackage {
   buildInputs = [
     openssl
     alsa-lib
-    speechd
+    speechd-minimal
     stdenv.cc.cc.lib
     rustPlatform.bindgenHook
-    onnxruntime
+    pers.onnxruntime-bin
     pers.vosk-api-bin
   ];
 

@@ -86,7 +86,7 @@
       reb.enable = true;
       twofa.enable = true;
       neovim.enable = true;
-      tor.enable = false; # TODO: Needs update
+      tor.enable = true;
       zathura.enable = true;
       cava.enable = true;
       btop.enable = true;

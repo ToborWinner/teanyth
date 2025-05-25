@@ -86,11 +86,6 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    raspberry = {
-      url = "github:ToborWinner/raspberry";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.rust-overlay.follows = "rust-overlay";
-    };
     lobster-rs = {
       url = "github:eatmynerds/lobster-rs";
       inputs.nixpkgs.follows = "nixpkgs";

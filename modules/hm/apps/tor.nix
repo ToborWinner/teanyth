@@ -10,7 +10,7 @@
 
   config = lib.mkIf config.pers.tor.enable {
     assertions = lib.singleton {
-      assertion = false;
+      assertion = true;
       message = "Tor nightly build needs to be updated";
     };
 
@@ -22,9 +22,9 @@
         finalAttrs: previousAttrs: {
           src = pkgs.fetchurl {
             urls = [
-              "https://nightlies.tbb.torproject.org/nightly-builds/tor-browser-builds/tbb-nightly.2025.02.22/nightly-linux-aarch64/tor-browser-linux-aarch64-tbb-nightly.2025.02.22.tar.xz"
+              "https://nightlies.tbb.torproject.org/nightly-builds/tor-browser-builds/tbb-nightly.2025.05.16/nightly-linux-aarch64/tor-browser-linux-aarch64-tbb-nightly.2025.05.16.tar.xz"
             ];
-            hash = "sha256-y9kWxIlFNrgIxYdW8vKE3e0TL9mAM4avQqptRkyNFEg=";
+            hash = "sha256-oF1P5qs82G2hTDeUXxRAR7cpbkWMefmjNp+7h86TlkQ=";
           };
           meta.platforms = [ "aarch64-linux" ];
           buildPhase =
