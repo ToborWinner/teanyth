@@ -6,24 +6,15 @@ let
   inherit (flake) inputs;
   inherit (inputs) nixpkgs;
 
-  # nixpkgs with deploy-rs overlay but the nixpkgs package for cache.nixos.org
-  deployPkgsForSystem =
+  deployLibForSystem =
     system:
-    import nixpkgs {
-      inherit system;
-      overlays = [
-        inputs.deploy-rs.overlay
-        (self: super: {
-          deploy-rs = {
-            inherit (import nixpkgs { inherit system; }) deploy-rs;
-            lib = super.deploy-rs.lib;
-          };
-        })
-      ];
-    };
+    let
+      pkgs = inputs.nixpkgs.legacyPackages.${system};
+    in
+    (inputs.deploy-rs.overlay pkgs pkgs).deploy-rs.lib;
 
   treefmtEval = pers.forEachSupportedSystem (
-    pkgs: inputs.treefmt-nix.lib.evalModule pkgs ../../treefmt.nix
+    system: inputs.treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} ../../treefmt.nix
   );
 in
 rec {
@@ -107,9 +98,7 @@ rec {
       sshUser = username;
       profiles.system = {
         user = "root";
-        path =
-          (deployPkgsForSystem system).deploy-rs.lib.activate.nixos
-            flake.nixosConfigurations.${hostname};
+        path = (deployLibForSystem system).activate.nixos flake.nixosConfigurations.${hostname};
       };
     };
 
@@ -121,17 +110,7 @@ rec {
   };
 
   # Create deploy checks for the checks flake output
-  makeDeployChecks =
-    configs:
-    let
-      systems = unique (
-        mapAttrsToList (_: value: value.system) (
-          filterAttrs (_: value: value ? deployable && value.deployable) configs
-        )
-      );
-      checkForSystem = system: (deployPkgsForSystem system).deploy-rs.lib.deployChecks flake.deploy;
-    in
-    genAttrs systems checkForSystem;
+  makeDeployChecks = forEachSupportedSystem (system: (deployPkgsForSystem).deployChecks flake.deploy);
 
   # Patch for the home manager theme system in ./hm/theme.nix. Done here to avoid infinite recursion.
   patchForTheme =
@@ -238,17 +217,7 @@ rec {
     "aarch64-darwin"
   ];
 
-  forEachSupportedSystem =
-    f:
-    nixpkgs.lib.genAttrs supportedSystems (
-      system:
-      f (
-        import nixpkgs {
-          inherit system;
-          overlays = [ flake.overlays.default ];
-        }
-      )
-    );
+  forEachSupportedSystem = f: nixpkgs.lib.genAttrs supportedSystems f;
 
   makeOverlays = list: additional: {
     default = (
@@ -281,7 +250,7 @@ rec {
         overlays = singleton flake.overlays.default;
       };
     in
-    filterAttrs (_: isDerivation) pkgs.pers
+    filterAttrs (_: pkg: isDerivation pkg && pkg.meta.license.free or true) pkgs.pers
   );
 
   makeApps = genAttrs supportedSystems (
@@ -290,7 +259,7 @@ rec {
       n: v:
       nameValuePair "install-${n}" {
         type = "app";
-        program = toString (v.config.system.build.make-install-remote (import nixpkgs { inherit system; }));
+        program = toString (v.config.system.build.make-install-remote nixpkgs.legacyPackages.${system});
       }
     ) (filterAttrs (_: v: v.config.system.build ? make-install-remote) flake.nixosConfigurations)
   );
@@ -359,14 +328,10 @@ rec {
   };
 
   # Make the formatter for `nix fmt`
-  makeFormatter = lib.pers.forEachSupportedSystem (
-    pkgs: treefmtEval.${pkgs.stdenv.hostPlatform.system}.config.build.wrapper
-  );
+  makeFormatter = mapAttrs (_: v: v.config.build.wrapper) treefmtEval;
 
   # Make the formatting checks for `nix flake check`
-  makeFormatterChecks = lib.pers.forEachSupportedSystem (pkgs: {
-    formatting = treefmtEval.${pkgs.stdenv.hostPlatform.system}.config.build.check flake;
-  });
+  makeFormatterChecks = mapAttrs (_: v: v.config.build.check flake) treefmtEval;
 
   /**
     Get a list of nix files in a folder recursively.

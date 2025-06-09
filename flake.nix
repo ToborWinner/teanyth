@@ -30,13 +30,20 @@
 
     # --- Hardware ---
     apple-silicon = {
-      url = "github:tpwrules/nixos-apple-silicon";
+      url = "github:nix-community/nixos-apple-silicon";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-compat.follows = "empty-flake";
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     disko = {
       url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixos-muvm-fex = {
+      url = "github:nrabulinski/nixos-muvm-fex/native-build";
+      inputs.nixos-apple-silicon.follows = "apple-silicon";
+      inputs.nixpkgs-muvm.follows = "empty-flake";
+      inputs.__flake-compat.follows = "empty-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -98,7 +105,7 @@
       url = "github:kaylorben/nixcord";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-compat.follows = "empty-flake";
-      inputs.treefmt-nix.follows = "empty-flake";
+      inputs.flake-parts.follows = "flake-parts";
     };
     wordtui = {
       url = "github:ToborWinner/wordtui";
@@ -157,14 +164,20 @@
       };
     in
     {
-      devShells = lib.pers.forEachSupportedSystem (pkgs: {
-        default = pkgs.mkShell { packages = [ pkgs.deploy-rs ]; };
-        secrets = pkgs.mkShell {
-          shellHook = ''
-            alias sops='sudo SOPS_AGE_KEY_FILE=/persist/secrets/master EDITOR=${lib.getExe pkgs.vim} ${lib.getExe pkgs.sops}'
-          '';
-        };
-      });
+      devShells = lib.pers.forEachSupportedSystem (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        {
+          default = pkgs.mkShell { packages = [ pkgs.deploy-rs ]; };
+          secrets = pkgs.mkShell {
+            shellHook = ''
+              alias sops='sudo SOPS_AGE_KEY_FILE=/persist/secrets/master EDITOR=${lib.getExe pkgs.vim} ${lib.getExe pkgs.sops}'
+            '';
+          };
+        }
+      );
       nixosConfigurations = lib.pers.makeNixosConfigurations configs;
       homeConfigurations = lib.pers.extractHomeManagerConfigs;
       deploy = lib.pers.makeDeployConfig configs;

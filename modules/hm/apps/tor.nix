@@ -10,7 +10,7 @@
 
   config = lib.mkIf config.pers.tor.enable {
     assertions = lib.singleton {
-      assertion = true;
+      assertion = false;
       message = "Tor nightly build needs to be updated";
     };
 

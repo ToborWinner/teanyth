@@ -65,7 +65,6 @@
       inccommand = "split"; # Preview subsitutions live, as you type!
     };
 
-    scrollOffset = 4;
     searchCase = "smart";
 
     snippets.luasnip.enable = true;

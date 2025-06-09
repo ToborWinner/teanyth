@@ -86,7 +86,7 @@
       reb.enable = true;
       twofa.enable = true;
       neovim.enable = true;
-      tor.enable = true;
+      tor.enable = false; # TODO: Needs update
       zathura.enable = true;
       cava.enable = true;
       btop.enable = true;
@@ -115,6 +115,13 @@
   nixpkgs.config.allowUnfree = true;
   system.stateVersion = "24.11";
   documentation.nixos.enable = false;
+
+  # Set to false if you have an x86_64 builder available
+  # Will default to false if your nixpkgs is new enough
+  # Hopefully NixOS cache can help us with this
+  nixpkgs.config.nixos-muvm-fex.mesaDoCross = false;
+  nixpkgs.overlays = [ inputs.nixos-muvm-fex.overlays.default ];
+  environment.systemPackages = [ pkgs.muvm ];
 
   boot.binfmt.emulatedSystems = [ "x86_64-linux" ];
 }
