@@ -91,6 +91,7 @@
       cava.enable = true;
       btop.enable = true;
       mail.enable = false; # When I add an email client other than thunderbird, I'll probably enable it back
+      nix-index-database.enable = true;
 
       rice.enabled = "newconfig";
     };
