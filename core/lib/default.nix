@@ -11,7 +11,14 @@ let
     let
       pkgs = inputs.nixpkgs.legacyPackages.${system};
     in
-    (inputs.deploy-rs.overlay pkgs pkgs).deploy-rs.lib;
+    (inputs.deploy-rs.overlay (
+      pkgs
+      // {
+        deploy-rs = {
+          deploy-rs = pkgs.deploy-rs;
+        };
+      }
+    ) pkgs).deploy-rs.lib;
 
   treefmtEval = pers.forEachSupportedSystem (
     system: inputs.treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} ../../treefmt.nix
