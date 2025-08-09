@@ -11,7 +11,7 @@ let
     let
       pkgs = inputs.nixpkgs.legacyPackages.${system};
     in
-    (inputs.deploy-rs.overlay (
+    (inputs.deploy-rs.overlays.default (
       pkgs
       // {
         deploy-rs = {
