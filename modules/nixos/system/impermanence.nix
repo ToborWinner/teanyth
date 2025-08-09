@@ -136,6 +136,7 @@
               (lib.mkIf hmCfg.pers.direnv.enable ".local/share/direnv")
               (lib.mkIf hmCfg.pers.zoxide.enable ".local/share/zoxide")
               (lib.mkIf hmCfg.pers.mpd.enable ".local/share/mpd")
+              (lib.mkIf hmCfg.pers.neovim.enable ".local/share/jdtls-config")
               (lib.mkIf hmCfg.pers.nixcord.enable ".config/vesktop/sessionData")
               (lib.mkIf hmCfg.pers.firefox.enable ".mozilla")
               {

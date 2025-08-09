@@ -52,6 +52,7 @@
       user = true;
     };
     tailscale.enable = true;
+    distrobox.enable = true;
   };
 
   # Home Manager
@@ -86,7 +87,7 @@
       reb.enable = true;
       twofa.enable = true;
       neovim.enable = true;
-      tor.enable = false; # TODO: Needs update
+      tor.enable = true;
       zathura.enable = true;
       cava.enable = true;
       btop.enable = true;
@@ -116,13 +117,14 @@
   nixpkgs.config.allowUnfree = true;
   system.stateVersion = "24.11";
   documentation.nixos.enable = false;
+  services.avahi.enable = true; # Discover printers and other devices on the network
 
   # Set to false if you have an x86_64 builder available
   # Will default to false if your nixpkgs is new enough
   # Hopefully NixOS cache can help us with this
-  nixpkgs.config.nixos-muvm-fex.mesaDoCross = false;
-  nixpkgs.overlays = [ inputs.nixos-muvm-fex.overlays.default ];
-  environment.systemPackages = [ pkgs.muvm ];
+  # nixpkgs.config.nixos-muvm-fex.mesaDoCross = false;
+  # nixpkgs.overlays = [ inputs.nixos-muvm-fex.overlays.default ];
+  # environment.systemPackages = [ pkgs.muvm ];
 
   boot.binfmt.emulatedSystems = [ "x86_64-linux" ];
 }

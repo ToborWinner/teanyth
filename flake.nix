@@ -18,12 +18,6 @@
       url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nil = {
-      url = "github:oxalica/nil";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-      inputs.rust-overlay.follows = "rust-overlay";
-    };
 
     # --- NixOS / Nixpkgs ---
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -90,7 +84,6 @@
       inputs.flake-parts.follows = "flake-parts";
       inputs.flake-utils.follows = "empty-flake";
       inputs.systems.follows = "nix-systems";
-      inputs.nil.follows = "nil";
       # mnw is not likely to be a dependency of another flake, so it's not overridden
     };
     treefmt-nix = {

@@ -69,10 +69,11 @@
 
     snippets.luasnip.enable = true;
 
-    spellcheck = {
-      enable = true;
-      programmingWordlist.enable = true;
-    };
+    # TODO: Temporarily disabled cause it was causing trouble.
+    # spellcheck = {
+    #   enable = true;
+    #   programmingWordlist.enable = true;
+    # };
 
     tabline.nvimBufferline = {
       enable = true;

@@ -258,6 +258,8 @@ in
         bind = , r, exec, rm ~/.cache/dct/num.txt; mkdir -p ~/.cache/dct
         bind = , c, exec, keybindcount
         bind = , x, exec, keybindcount x
+        bind = , e, exec, keybindcount exp
+        bind = , g, exec, keybindcount egexp
         bind = , l, exec, keybindcount l
         bind = , k, exec, keybindcount classic
         bind = , s, exec, notify-send "Current status: `cat ~/.cache/dct/num.txt`"

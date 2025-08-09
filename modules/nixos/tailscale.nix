@@ -3,8 +3,13 @@
 {
   options.pers.tailscale.enable = lib.mkEnableOption "tailscale";
 
-  config.services.tailscale = {
-    enable = config.pers.tailscale.enable;
-    authKeyFile = config.pers.info.getSecretFilePath "tailscale";
+  config = lib.mkIf config.pers.tailscale.enable {
+    services.tailscale = {
+      enable = true;
+      authKeyFile = config.pers.info.getSecretFilePath "tailscale";
+      extraDaemonFlags = [
+        "--no-logs-no-support"
+      ];
+    };
   };
 }
