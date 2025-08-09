@@ -313,7 +313,7 @@ in
       recommendedOptimisation = true;
       recommendedTlsSettings = true;
       recommendedGzipSettings = true;
-      recommendedZstdSettings = true;
+      # recommendedZstdSettings = true; DEPRECATED
       recommendedProxySettings = true;
     };
 
