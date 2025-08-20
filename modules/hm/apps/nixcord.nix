@@ -56,6 +56,16 @@
           webKeybinds.enable = true;
           webScreenShareFixes.enable = true;
           youtubeAdblock.enable = true;
+          noTrack.enable = true;
+          reverseImageSearch.enable = true;
+          serverInfo.enable = true;
+          # showHiddenChannels = {
+          #   enable = true;
+          #   showMode = "muted";
+          # };
+          unsuppressEmbeds.enable = true;
+          noOnboardingDelay.enable = true;
+          imageZoom.enable = true;
         };
       };
     };

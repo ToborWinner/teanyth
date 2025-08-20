@@ -7,19 +7,21 @@
         ],
         "nixpkgs": [
           "nixpkgs"
-        ]
+        ],
+        "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1751622568,
-        "narHash": "sha256-EE3NBsej517VRa1x+ylAghrvngftxf1KgfHlE9OYyXE=",
+        "lastModified": 1754854879,
+        "narHash": "sha256-8fXTYruAwE6OiIz/99P5qknQYag7ZX985pNT+jhIIrU=",
         "owner": "nix-community",
         "repo": "nixos-apple-silicon",
-        "rev": "eba4b40c816e5aff8951ae231ac237e8aab8ec1d",
+        "rev": "c06a683486a1e7bf0d4b8d50e9312ea4e5248b12",
         "type": "github"
       },
       "original": {
         "owner": "nix-community",
         "repo": "nixos-apple-silicon",
+        "rev": "c06a683486a1e7bf0d4b8d50e9312ea4e5248b12",
         "type": "github"
       }
     },
@@ -525,7 +527,7 @@
         "rust-overlay": "rust-overlay",
         "sensitive": "sensitive",
         "sops-nix": "sops-nix",
-        "treefmt-nix": "treefmt-nix",
+        "treefmt-nix": "treefmt-nix_2",
         "wordtui": "wordtui"
       }
     },
@@ -588,6 +590,27 @@
       }
     },
     "treefmt-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "apple-silicon",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1754847726,
+        "narHash": "sha256-2vX8QjO5lRsDbNYvN9hVHXLU6oMl+V/PsmIiJREG4rE=",
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "rev": "7d81f6fb2e19bf84f1c65135d1060d829fae2408",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "treefmt-nix_2": {
       "inputs": {
         "nixpkgs": [
           "nixpkgs"

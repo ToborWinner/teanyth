@@ -73,7 +73,6 @@
       useExperimentalGPUDriver = true;
       peripheralFirmwareDirectory = inputs.sensitive + "/firmware";
       setupAsahiSound = true;
-      withRust = true;
     };
     graphics = {
       enable = true;
