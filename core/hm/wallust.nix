@@ -12,9 +12,13 @@ with lib;
 let
   generatedJSON = pkgs.runCommand "wallust.json" { } ''
     export XDG_CACHE_HOME=$(pwd)
-    echo "${escapeShellArg path}"
-    ${pkgs.wallust}/bin/wallust run -Ns ${escapeShellArg "${path}"}
-    mv wallust/$(ls -1 wallust) $out
+    cat <<'EOF' > config.toml
+      [templates]
+      colors.template = "${./wallust-template.json}"
+      colors.target = "colors.json"
+    EOF
+    ${pkgs.wallust}/bin/wallust run -s ${escapeShellArg "${path}"} --config-file config.toml
+    mv colors.json $out
   '';
   hex = importJSON generatedJSON;
   hexS = mapAttrs (_: value: removePrefix "#" value) hex;

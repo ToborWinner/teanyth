@@ -70,7 +70,7 @@
   hardware = {
     asahi = {
       enable = true;
-      useExperimentalGPUDriver = true;
+      useExperimentalGPUDriver = false;
       peripheralFirmwareDirectory = inputs.sensitive + "/firmware";
       setupAsahiSound = true;
     };
@@ -82,6 +82,40 @@
       powerOnBoot = true;
     };
   };
+
+  # TODO: Remove this when upgrading
+
+  nixpkgs.overlays = [
+    (final: prev: {
+      aquamarine = prev.aquamarine.overrideAttrs (old: {
+        src = final.fetchFromGitHub {
+          owner = "hyprwm";
+          repo = "aquamarine";
+          rev = "498f46686dcf45589d820ede6a023175d7c8ad74";
+          hash = "sha256-iGLp5IkBm6nYdaoSr0/O4U0Ea2f9DRHuKIc5q9bnhkU=";
+        };
+      });
+
+      hyprutils = prev.hyprutils.overrideAttrs (old: {
+        src = final.fetchFromGitHub {
+          owner = "hyprwm";
+          repo = "hyprutils";
+          rev = "69efb6291c7343e936f2ddce622990ed018b7fdb";
+          hash = "sha256-aWnI+0+qdCgwbbB/TH5RUW+PgC4u+z+xXnIceCxYUO4=";
+        };
+      });
+
+      hyprland = prev.hyprland.overrideAttrs (old: {
+        src = final.fetchFromGitHub {
+          owner = "gulafaran";
+          repo = "hyprland";
+          fetchSubmodules = true;
+          rev = "f08ce4211a2855730797cbade2604db02f59252f";
+          hash = "sha256-tpaosPXe/JBPnFZ7HIDcOtkDU0CjEwgGh8pWOy7cn1E=";
+        };
+      });
+    })
+  ];
 
   # Widevine support
   environment.sessionVariables.MOZ_GMP_PATH = [
