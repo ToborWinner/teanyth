@@ -36,7 +36,10 @@
       startCommand = "Hyprland";
     };
     pipewire.enable = true;
-    networkmanager.enable = true;
+    networkmanager = {
+      enable = true;
+      openconnect = true;
+    };
     users = {
       enable = true;
       extraGroups = [
@@ -93,6 +96,7 @@
       btop.enable = true;
       mail.enable = false; # When I add an email client other than thunderbird, I'll probably enable it back
       nix-index-database.enable = true;
+      tex.enable = true;
 
       rice.enabled = "newconfig";
     };

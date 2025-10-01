@@ -2,11 +2,15 @@
   lib,
   config,
   settings,
+  pkgs,
   ...
 }:
 
 {
-  options.pers.networkmanager.enable = lib.mkEnableOption "networkmanager";
+  options.pers.networkmanager = {
+    enable = lib.mkEnableOption "networkmanager";
+    openconnect = lib.mkEnableOption "vpn support via openconnect";
+  };
 
   config = lib.mkIf config.pers.networkmanager.enable {
     networking = {
@@ -18,6 +22,7 @@
       networkmanager = {
         enable = true;
         wifi.backend = "iwd";
+        plugins = lib.mkIf config.pers.networkmanager.openconnect [ pkgs.networkmanager-openconnect ];
       };
     };
   };

@@ -20,11 +20,12 @@
     };
 
     # --- NixOS / Nixpkgs ---
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/fbcf476f790d8a217c3eab4e12033dc4a0f6d23c";
 
     # --- Hardware ---
+    # b724435db982f31ce966b44cd203d1042358e51c
     apple-silicon = {
-      url = "github:nix-community/nixos-apple-silicon";
+      url = "github:nix-community/nixos-apple-silicon/b724435db982f31ce966b44cd203d1042358e51c";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-compat.follows = "empty-flake";
     };
@@ -82,8 +83,8 @@
       url = "github:notashelf/nvf";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-parts.follows = "flake-parts";
-      inputs.flake-utils.follows = "empty-flake";
       inputs.systems.follows = "nix-systems";
+      inputs.flake-compat.follows = "empty-flake";
       # mnw is not likely to be a dependency of another flake, so it's not overridden
     };
     treefmt-nix = {

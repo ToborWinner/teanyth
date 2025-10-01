@@ -9,6 +9,31 @@ with lib;
 
 let
   cfg = config.pers.rice;
+
+  filteredWallpapers = builtins.filter (w: w.colors == null) cfg.wallpapers;
+
+  colorOpts = {
+    hex = mkOption {
+      description = "The current theme in hex.";
+      internal = true;
+      type = with types; attrsOf str;
+      default = { };
+    };
+
+    hexS = mkOption {
+      description = "The current theme in hex, but without the # prefix.";
+      internal = true;
+      type = with types; attrsOf str;
+      default = { };
+    };
+
+    num = mkOption {
+      description = "The current theme in hex.";
+      internal = true;
+      type = with types; attrsOf ints.unsigned;
+      default = { };
+    };
+  };
 in
 {
   options.pers.rice = {
@@ -33,6 +58,14 @@ in
                 type = path;
                 description = "The path of the wallpaper.";
               };
+
+              colors = mkOption {
+                type = nullOr (submodule {
+                  options = colorOpts;
+                });
+                default = null;
+                description = "The colors to use. They may otherwise be generated automatically.";
+              };
             };
           }
         );
@@ -47,26 +80,7 @@ in
       default = "wallust";
     };
 
-    currentTheme.hex = mkOption {
-      description = "The current theme in hex.";
-      internal = true;
-      type = with types; attrsOf str;
-      default = { };
-    };
-
-    currentTheme.hexS = mkOption {
-      description = "The current theme in hex, but without the # prefix.";
-      internal = true;
-      type = with types; attrsOf str;
-      default = { };
-    };
-
-    currentTheme.num = mkOption {
-      description = "The current theme in hex.";
-      internal = true;
-      type = with types; attrsOf ints.unsigned;
-      default = { };
-    };
+    currentTheme = colorOpts;
   };
 
   config = mkIf (cfg.enabled != null) {
@@ -89,9 +103,10 @@ in
 
     pers.theme =
       let
-        mkTheme = name: path: {
+        mkTheme = name: path: colors: {
           configuration.pers = {
-            rice.currentTheme = config.pers.info.getIFD "${name}-current-theme";
+            rice.currentTheme =
+              if colors != null then colors else config.pers.info.getIFD "${name}-current-theme";
             info.startupWallpaper =
               if config.pers.info.wallpaperNeedsPreloading then
                 path
@@ -101,11 +116,14 @@ in
             extraThemePackageCommands = mkIf (
               !config.pers.info.wallpaperNeedsPreloading
             ) "ln -s ${escapeShellArg path} $out/wallpaper";
+            themeName = name;
           };
         };
       in
       mkIf cfg.themesFromWallpapers (
-        listToAttrs (map (wp: nameValuePair wp.name (mkTheme wp.name "${wp.path}")) cfg.wallpapers)
+        listToAttrs (
+          map (wp: nameValuePair wp.name (mkTheme wp.name "${wp.path}" wp.colors)) cfg.wallpapers
+        )
       );
 
     pers.info.ifd =
@@ -115,7 +133,7 @@ in
       in
       mkIf cfg.themesFromWallpapers (
         listToAttrs (
-          map (wp: nameValuePair "${wp.name}-current-theme" (mkThemeIfd "${wp.path}")) cfg.wallpapers
+          map (wp: nameValuePair "${wp.name}-current-theme" (mkThemeIfd "${wp.path}")) filteredWallpapers
         )
       );
 

@@ -19,7 +19,7 @@
       enable = true;
       settings = {
         default_session = {
-          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd ${lib.escapeShellArg config.pers.greetd.startCommand}";
+          command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd ${lib.escapeShellArg config.pers.greetd.startCommand}";
           user = "greeter";
         };
       };

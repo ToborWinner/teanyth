@@ -119,7 +119,7 @@ in
           touchpad = {
             natural_scroll = true;
             tap-to-click = false;
-            disable_while_typing = true;
+            disable_while_typing = false;
             clickfinger_behavior = "1";
           };
         };
@@ -140,69 +140,68 @@ in
           workspace_swipe = false;
         };
 
-        bind =
-          [
-            (mkIf (config.pers.info.menu != null) "$mod, D, exec, $menu")
-            "$mod, RETURN, exec, $terminal"
-            (mkIf config.pers.tmux.enable "$mod, T, exec, $tmux")
-            (mkIf (config.pers.tmux.enable && config.pers.neovim.enable) "$mod, Y, exec, $notes")
-            "$mod, Q, killactive"
-            (mkIf config.programs.wlogout.enable "$mod, M, exec, wlogout")
-            (mkIf (config.pers.info.fileManager != null) "$mod, E, exec, $fileManager")
-            (mkIf (config.pers.info.music != null) "$mod, A, exec, $music")
-            (mkIf (
-              config.pers.info.wallpaperPickerCommand != null
-            ) "$mod, Z, exec, ${config.pers.info.wallpaperPickerCommand}")
+        bind = [
+          (mkIf (config.pers.info.menu != null) "$mod, D, exec, $menu")
+          "$mod, RETURN, exec, $terminal"
+          (mkIf config.pers.tmux.enable "$mod, T, exec, $tmux")
+          (mkIf (config.pers.tmux.enable && config.pers.neovim.enable) "$mod, Y, exec, $notes")
+          "$mod, Q, killactive"
+          (mkIf config.programs.wlogout.enable "$mod, M, exec, wlogout")
+          (mkIf (config.pers.info.fileManager != null) "$mod, E, exec, $fileManager")
+          (mkIf (config.pers.info.music != null) "$mod, A, exec, $music")
+          (mkIf (
+            config.pers.info.wallpaperPickerCommand != null
+          ) "$mod, Z, exec, ${config.pers.info.wallpaperPickerCommand}")
 
-            "$mod, V, togglefloating"
-            "$mod, P, pin" # Pin a floating window so it's visible in all workspaces
-            "$mod, S, togglesplit"
-            "$mod, F, fullscreen"
-            "$mod, C, centerwindow" # Centers window in floating mode
-            "$mod, U, focusurgentorlast" # Focuses the window marked as urgent
+          "$mod, V, togglefloating"
+          "$mod, P, pin" # Pin a floating window so it's visible in all workspaces
+          "$mod, S, togglesplit"
+          "$mod, F, fullscreen"
+          "$mod, C, centerwindow" # Centers window in floating mode
+          "$mod, U, focusurgentorlast" # Focuses the window marked as urgent
 
-            "$mod, O, exec, grim -g \"$(slurp -w 0)\" - | wl-copy" # Screenshot to clipboard.
-            "$mod&SHIFT, O, exec, grim -g \"$(slurp -w 0)\" - | swappy -f -" # Screenshot to swappy.
-            "$mod&ALT, O, exec, grim -g \"$(slurp -w 0)\" \"$HOME/Images/$(date +'%Y-%m-%dT%H:%M:%S').png\"" # Screenshot to file.
-            "$mod&CTRL, O, exec, grim - | wl-copy" # Screenshot of screen to clipboard.
-            "$mod&CTRL&SHIFT, O, exec, grim - | swappy -f -" # Screenshot of screen to swappy.
+          "$mod, O, exec, grim -g \"$(slurp -w 0)\" - | wl-copy" # Screenshot to clipboard.
+          "$mod&SHIFT, O, exec, grim -g \"$(slurp -w 0)\" - | swappy -f -" # Screenshot to swappy.
+          "$mod&ALT, O, exec, grim -g \"$(slurp -w 0)\" \"$HOME/Images/$(date +'%Y-%m-%dT%H:%M:%S').png\"" # Screenshot to file.
+          "$mod&CTRL, O, exec, grim - | wl-copy" # Screenshot of screen to clipboard.
+          "$mod&CTRL&SHIFT, O, exec, grim - | swappy -f -" # Screenshot of screen to swappy.
 
-            "$mod, H, movefocus, l"
-            "$mod, L, movefocus, r"
-            "$mod, J, movefocus, d"
-            "$mod, K, movefocus, u"
-            "$mod&SHIFT, H, movewindow, l"
-            "$mod&SHIFT, L, movewindow, r"
-            "$mod&SHIFT, J, movewindow, d"
-            "$mod&SHIFT, K, movewindow, u"
+          "$mod, H, movefocus, l"
+          "$mod, L, movefocus, r"
+          "$mod, J, movefocus, d"
+          "$mod, K, movefocus, u"
+          "$mod&SHIFT, H, movewindow, l"
+          "$mod&SHIFT, L, movewindow, r"
+          "$mod&SHIFT, J, movewindow, d"
+          "$mod&SHIFT, K, movewindow, u"
 
-            "$mod, G, setprop, activewindow alpha 0.0 lock"
-            "$mod&SHIFT, G, setprop, activewindow alpha 1.0 lock"
+          "$mod, G, setprop, activewindow alpha 0.0 lock"
+          "$mod&SHIFT, G, setprop, activewindow alpha 1.0 lock"
 
-            "$mod, R, submap, resize"
-            "$mod, N, submap, counting"
-            "$mod&CTRL&SHIFT, P, submap, passthru"
-          ]
-          ++ (
-            # workspaces
-            # binds $mod + [shift +] {1..10} to [move to] workspace {1..10}
-            builtins.concatLists (
-              builtins.genList (
-                x:
-                let
-                  ws =
-                    let
-                      c = (x + 1) / 10;
-                    in
-                    builtins.toString (x + 1 - (c * 10));
-                in
-                [
-                  "$mod, ${ws}, workspace, ${toString (x + 1)}"
-                  "$mod SHIFT, ${ws}, movetoworkspace, ${toString (x + 1)}"
-                ]
-              ) 10
-            )
-          );
+          "$mod, R, submap, resize"
+          "$mod, N, submap, counting"
+          "$mod&CTRL&SHIFT, P, submap, passthru"
+        ]
+        ++ (
+          # workspaces
+          # binds $mod + [shift +] {1..10} to [move to] workspace {1..10}
+          builtins.concatLists (
+            builtins.genList (
+              x:
+              let
+                ws =
+                  let
+                    c = (x + 1) / 10;
+                  in
+                  builtins.toString (x + 1 - (c * 10));
+              in
+              [
+                "$mod, ${ws}, workspace, ${toString (x + 1)}"
+                "$mod SHIFT, ${ws}, movetoworkspace, ${toString (x + 1)}"
+              ]
+            ) 10
+          )
+        );
 
         # Mouse bindings
         bindm = [
@@ -211,13 +210,14 @@ in
         ];
 
         # Binds that work even with an input inhibitor
-        bindl =
-          [ ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle" ]
-          ++ optionals config.pers.mpd.enable [
-            ", XF86AudioPrev, exec, mpc prev"
-            ", XF86AudioNext, exec, mpc next"
-            ", XF86AudioPlay, exec, mpc toggle"
-          ];
+        bindl = [
+          ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+        ]
+        ++ optionals config.pers.mpd.enable [
+          ", XF86AudioPrev, exec, mpc prev"
+          ", XF86AudioNext, exec, mpc next"
+          ", XF86AudioPlay, exec, mpc toggle"
+        ];
 
         # Binds that work with an input inhibitor and press and hold
         bindel =
@@ -246,6 +246,10 @@ in
         binde = , h, resizeactive, -10 0
         binde = , k, resizeactive, 0 -10
         binde = , j, resizeactive, 0 10
+        binde = SHIFT, L, resizeactive, 40 0
+        binde = SHIFT, H, resizeactive, -40 0
+        binde = SHIFT, K, resizeactive, 0 -40
+        binde = SHIFT, J, resizeactive, 0 40
 
         # use reset to go back to the global submap
         bind = , escape, submap, reset 

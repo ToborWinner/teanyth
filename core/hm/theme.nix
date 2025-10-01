@@ -27,6 +27,12 @@ in
       description = "Whether you are inside a theme configuration";
     };
 
+    themeName = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "The name of the current theme configuration or null if in none.";
+    };
+
     extraThemeActivation = mkOption {
       type = types.lines;
       default = "";

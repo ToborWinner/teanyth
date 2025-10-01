@@ -16,6 +16,8 @@
       settings = {
         default-timeout = 3000;
         icons = true;
+        layer = "overlay";
+        max-history = 20;
       };
     };
   };

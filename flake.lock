@@ -11,16 +11,17 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1755574070,
-        "narHash": "sha256-wa+vDgkwdvDf1cN64tXMy5D0aSf092Aa6grU5cB6RCc=",
+        "lastModified": 1755577894,
+        "narHash": "sha256-q6wimNkIOV+KBM6mHFbCZMMfjTJ7kZBZaYzGKJ8/kF8=",
         "owner": "nix-community",
         "repo": "nixos-apple-silicon",
-        "rev": "4db9ae95ac220beab9023235401a6e849bd735b1",
+        "rev": "b724435db982f31ce966b44cd203d1042358e51c",
         "type": "github"
       },
       "original": {
         "owner": "nix-community",
         "repo": "nixos-apple-silicon",
+        "rev": "b724435db982f31ce966b44cd203d1042358e51c",
         "type": "github"
       }
     },
@@ -125,22 +126,6 @@
         "owner": "rycee",
         "repo": "nur-expressions",
         "type": "gitlab"
-      }
-    },
-    "flake-compat": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1751685974,
-        "narHash": "sha256-NKw96t+BgHIYzHUjkTK95FqYRVKB8DHpVhefWSz/kTw=",
-        "ref": "refs/heads/main",
-        "rev": "549f2762aebeff29a2e5ece7a7dc0f955281a1d1",
-        "revCount": 92,
-        "type": "git",
-        "url": "https://git.lix.systems/lix-project/flake-compat.git"
-      },
-      "original": {
-        "type": "git",
-        "url": "https://git.lix.systems/lix-project/flake-compat.git"
       }
     },
     "flake-parts": {
@@ -456,17 +441,17 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1755615617,
-        "narHash": "sha256-HMwfAJBdrr8wXAkbGhtcby1zGFvs+StOp19xNsbqdOg=",
+        "lastModified": 1755186698,
+        "narHash": "sha256-wNO3+Ks2jZJ4nTHMuks+cxAiVBGNuEBXsT29Bz6HASo=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "20075955deac2583bb12f07151c2df830ef346b4",
+        "rev": "fbcf476f790d8a217c3eab4e12033dc4a0f6d23c",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
-        "ref": "nixos-unstable",
         "repo": "nixpkgs",
+        "rev": "fbcf476f790d8a217c3eab4e12033dc4a0f6d23c",
         "type": "github"
       }
     },
@@ -487,7 +472,9 @@
     },
     "nvf": {
       "inputs": {
-        "flake-compat": "flake-compat",
+        "flake-compat": [
+          "empty-flake"
+        ],
         "flake-parts": [
           "flake-parts"
         ],
@@ -567,10 +554,10 @@
     "sensitive": {
       "flake": false,
       "locked": {
-        "lastModified": 1754758171,
-        "narHash": "sha256-8C+4kaSrAyQ+Vt4WSy9aboo5rQCdd9mSUXc2Kxf3Ksk=",
+        "lastModified": 1757684342,
+        "narHash": "sha256-6JkeqQlMHc9QuHJ3Hdden/KTfyEoxCLW81Ip7CSc6HE=",
         "ref": "main",
-        "rev": "abe36ba416bd65952d32e71348948ee180aee168",
+        "rev": "e673d4bc27e54b7c581b1aee97f6f7951427a287",
         "shallow": true,
         "type": "git",
         "url": "ssh://git@github.com/ToborWinner/sensitive"

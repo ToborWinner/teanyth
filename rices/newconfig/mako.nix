@@ -1,0 +1,13 @@
+{ config, lib, ... }:
+{
+  services.mako.settings = lib.mkIf (config.pers.themeName == "mocha-minimal") {
+    background-color = "#1e1e2e";
+    text-color = "#cdd6f4";
+    border-color = "#cba6f7";
+    progress-color = "over #313244";
+
+    "urgency=high" = {
+      border-color = "#fab387";
+    };
+  };
+}

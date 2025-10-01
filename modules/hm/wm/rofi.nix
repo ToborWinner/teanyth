@@ -14,9 +14,18 @@
       message = "Currently, wayland support must be enabled for Rofi-wayland to be enabled.";
     };
 
-    pers.info.menu = "rofi -show drun -show-icons";
+    pers.info.menu = "rofi -show drun -show-icons -modes \"drun,emoji,window,ssh\"";
 
     programs.rofi = {
+      modes = [
+        "drun"
+        "emoji"
+        "window"
+        "ssh"
+      ];
+
+      plugins = [ pkgs.rofi-emoji-wayland ];
+
       enable = true;
       package = pkgs.rofi-wayland;
     };

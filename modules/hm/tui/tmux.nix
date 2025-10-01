@@ -23,6 +23,8 @@ in
 
   # TODO: Refine this module
 
+  # TODO: Fix nvim -c ":ObsidianQuickSwitch" not working (temporarily switched to nvim) and also -c ":Telescope find_files"
+
   config = mkIf cfg.enable {
     home.packages = [ pkgs.sesh ];
 
@@ -121,7 +123,7 @@ in
         ${optionalString config.pers.btop.enable "bind-key \"C-s\" popup -w 80% -h 80% -E -T \"Computer Statistics\" ${getExe config.programs.btop.package}"}
 
         # Notes
-        bind-key "N" new-session -A -s notes 'cd ~/Documents/Vaults/personal && nvim -c ":ObsidianQuickSwitch"'
+        bind-key "N" new-session -A -s notes 'cd ~/Documents/Vaults/personal && nvim'
 
         # Image rendering for image.nvim
         set -gq allow-passthrough on
@@ -135,7 +137,7 @@ in
     home.file = {
       ".config/sesh/sesh.toml".text = ''
         [default_session]
-        startup_command = "nvim -c ':Telescope find_files'"
+        startup_command = "nvim"
       '';
     };
   };

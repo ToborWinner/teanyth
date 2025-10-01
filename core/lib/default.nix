@@ -47,19 +47,19 @@ rec {
           };
           settings = {
             inherit hostname username dotfilesDir;
-          } // extra;
+          }
+          // extra;
         };
-        modules =
-          [
-            ../../hosts/${hostname}/configuration.nix
-            (inputs.sensitive + "/nixos.nix")
-            {
-              nixpkgs.overlays = singleton flake.overlays.default;
-              nixpkgs.hostPlatform = system;
-            }
-          ]
-          ++ (import ../../modules/nixos lib)
-          ++ (import ../nixos);
+        modules = [
+          ../../hosts/${hostname}/configuration.nix
+          (inputs.sensitive + "/nixos.nix")
+          {
+            nixpkgs.overlays = singleton flake.overlays.default;
+            nixpkgs.hostPlatform = system;
+          }
+        ]
+        ++ (import ../../modules/nixos lib)
+        ++ (import ../nixos);
       }
       // (lib.optionalAttrs reduced {
         baseModules = reduce-modules.useReducedImports (import ../../hosts/${hostname}/reduced.nix) (

@@ -23,7 +23,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-Csnvt7UATQjs1zARvpyorGhEjN+Auu+EOp4cLS2bwGI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-LhFnk+xOefeDhDAhkwyxF0tVePJjh6BZPfuytMg6Pb8=";
 
   meta.mainProgram = "guildbot";

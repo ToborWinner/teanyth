@@ -91,8 +91,10 @@
         src = final.fetchFromGitHub {
           owner = "hyprwm";
           repo = "aquamarine";
-          rev = "498f46686dcf45589d820ede6a023175d7c8ad74";
-          hash = "sha256-iGLp5IkBm6nYdaoSr0/O4U0Ea2f9DRHuKIc5q9bnhkU=";
+          # rev = "498f46686dcf45589d820ede6a023175d7c8ad74";
+          rev = "50637ed23e962f0db294d6b0ef534f37b144644b";
+          hash = "sha256-EjaD8+d7AiAV2fGRN4NTMboWDwk8szDfwbzZ8DL1PhQ=";
+          # hash = "sha256-iGLp5IkBm6nYdaoSr0/O4U0Ea2f9DRHuKIc5q9bnhkU=";
         };
       });
 
@@ -100,18 +102,24 @@
         src = final.fetchFromGitHub {
           owner = "hyprwm";
           repo = "hyprutils";
-          rev = "69efb6291c7343e936f2ddce622990ed018b7fdb";
-          hash = "sha256-aWnI+0+qdCgwbbB/TH5RUW+PgC4u+z+xXnIceCxYUO4=";
+          # rev = "69efb6291c7343e936f2ddce622990ed018b7fdb";
+          rev = "b364dcb7391709acb4492e100fe750ca722992e1";
+          hash = "sha256-9QoDVkjLwjiZDR+y4cMWc/FVudRu5jCIG4rn15Afa9w=";
+          # hash = "sha256-aWnI+0+qdCgwbbB/TH5RUW+PgC4u+z+xXnIceCxYUO4=";
         };
       });
 
       hyprland = prev.hyprland.overrideAttrs (old: {
         src = final.fetchFromGitHub {
-          owner = "gulafaran";
+          # owner = "gulafaran";
+          owner = "hyprwm";
           repo = "hyprland";
           fetchSubmodules = true;
-          rev = "f08ce4211a2855730797cbade2604db02f59252f";
-          hash = "sha256-tpaosPXe/JBPnFZ7HIDcOtkDU0CjEwgGh8pWOy7cn1E=";
+          # rev = "43f67a270c5b85b2f33866aff258ca4c0890f6e2"; NOT EVEN FIRST
+          # hash = "sha256-2nXk3XVA/q78qEyu45oo5hQlYc0Fv5JloimO8EgCnSw=";
+          rev = "8968db9b0e42ff0b41e3be78bc24572414dd1399";
+          hash = "sha256-7lQH9AVSvLGWSviRhpAzSfMcLIglRiIvcHkldTC0QiE=";
+          # hash = "sha256-tpaosPXe/JBPnFZ7HIDcOtkDU0CjEwgGh8pWOy7cn1E=";
         };
       });
     })

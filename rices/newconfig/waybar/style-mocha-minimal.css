@@ -1,0 +1,357 @@
+/* Mostly taken from
+* https://github.com/sejjy/mechabar/blob/main/style.css
+*/
+
+/* ---------- COLORS ---------- */
+
+/* catppuccin-mocha */
+
+@define-color rosewater		#f5e0dc;
+@define-color flamingo		#f2cdcd;
+@define-color pink			#f5c2e7;
+@define-color mauve			#cba6f7;
+@define-color red			#f38ba8;
+@define-color maroon		#eba0ac;
+@define-color peach			#fab387;
+@define-color yellow		#f9e2af;
+@define-color green			#a6e3a1;
+@define-color teal			#94e2d5;
+@define-color sky			#89dceb;
+@define-color sapphire		#74c7ec;
+@define-color blue			#89b4fa;
+@define-color lavender		#b4befe;
+@define-color text			#cdd6f4;
+@define-color subtext1		#bac2de;
+@define-color subtext0		#a6adc8;
+@define-color overlay2		#9399b2;
+@define-color overlay1		#7f849c;
+@define-color overlay0		#6c7086;
+@define-color surface2		#585b70;
+@define-color surface1		#45475a;
+@define-color surface0		#313244;
+@define-color base			#1e1e2e;
+@define-color mantle		#181825;
+@define-color crust			#11111b;
+
+/*
+	br - border
+	bg - background
+	fg - foreground
+*/
+
+/* main colors */
+
+@define-color accent		@lavender;
+@define-color main-br		@subtext0;
+@define-color main-bg		@crust;
+@define-color main-fg		@text;
+@define-color hover-bg		@base;
+@define-color hover-fg		alpha(@main-fg, 0.75);
+@define-color outline		shade(@main-bg, 0.5);
+
+/* module colors */
+
+@define-color workspaces	@mantle;
+@define-color temperature	@mantle;
+@define-color memory		@base;
+@define-color cpu			@surface0;
+@define-color time			@surface0;
+@define-color date			@base;
+@define-color tray			@mantle;
+@define-color volume		@mantle;
+@define-color backlight		@base;
+@define-color battery		@surface0;
+
+/* state colors */
+
+@define-color warning		@yellow;
+@define-color critical		@red;
+@define-color charging		@green;
+
+/* ---------- MODULES CENTER ---------- */
+
+/* temperature */
+
+#custom-left_div.2 {
+  color: @temperature;
+}
+#temperature {
+  background-color: @temperature;
+}
+
+/* memory */
+
+#custom-left_div.3 {
+  background-color: @temperature;
+  color: @memory;
+}
+#memory.ram {
+  /* background-color: @memory; */
+  background-color: @cpu;
+}
+
+#memory.swap {
+  /* Took the place of temperature */
+  /* background-color: @temperature; */
+  background-color: @memory;
+}
+
+/* cpu */
+
+#custom-left_div.4 {
+  background-color: @memory;
+  color: @cpu;
+}
+#cpu {
+  background-color: @cpu;
+}
+#custom-left_inv.1 {
+  color: @cpu;
+}
+
+/* distro icon */
+
+#custom-left_div.5,
+#custom-right_div.2 {
+  color: @accent;
+}
+#custom-distro {
+  padding: 0 13px 0 5px;
+  font-size: 23px;
+  background-color: @accent;
+  color: @main-bg;
+}
+
+/* idle inhibitor & time */
+
+#custom-right_inv.1 {
+  color: @time;
+}
+#idle_inhibitor {
+  background-color: @time;
+}
+#clock.time {
+  padding-right: 6px;
+  background-color: @time;
+}
+#custom-right_div.3 {
+  background-color: @date;
+  color: @time;
+}
+
+/* date */
+
+#clock.date {
+  padding-left: 6px;
+  background-color: @date;
+}
+#custom-right_div.4 {
+  background-color: @tray;
+  color: @date;
+}
+
+/* quick settings */
+
+#network {
+  background-color: @tray;
+  padding: 0 6px 0 4px;
+}
+#bluetooth {
+  background-color: @tray;
+  padding: 0 5px;
+}
+#custom-system_update {
+  background-color: @tray;
+  padding: 0 8px 0 2px;
+}
+#custom-right_div.5 {
+  color: @tray;
+}
+
+/* ---------- MODULES LEFT ---------- */
+
+/* theme switcher */
+
+#custom-user {
+  padding-right: 12px;
+  font-weight: normal;
+}
+
+/* workspaces */
+
+#custom-left_div.1,
+#custom-right_div.1 {
+  color: @workspaces;
+}
+#workspaces {
+  padding: 0 1px;
+  background-color: @workspaces;
+}
+#workspaces .active label {
+  /* font-size: 23px; */
+  font-size: 26px;
+  color: @accent;
+}
+
+/* window title & count */
+
+#window {
+  margin-left: 12px;
+}
+#window label {
+  font-weight: normal;
+}
+#windowcount {
+  margin-right: 12px;
+}
+#windowcount label {
+  color: @hover-fg;
+}
+
+/* ---------- MODULES RIGHT ---------- */
+
+/* media info */
+
+#mpris {
+  padding: 0 12px;
+  font-weight: normal;
+}
+
+/* volume */
+
+#custom-left_div.6 {
+  color: @volume;
+}
+#pulseaudio,
+#wireplumber {
+  background-color: @volume;
+}
+
+/* brightness */
+
+#custom-left_div.7 {
+  background-color: @volume;
+  color: @backlight;
+}
+#backlight {
+  background-color: @backlight;
+}
+
+/* battery */
+
+#custom-left_div.8 {
+  background-color: @backlight;
+  color: @battery;
+}
+#battery {
+  background-color: @battery;
+}
+#custom-left_inv.2 {
+  color: @battery;
+}
+
+/* power menu */
+
+#custom-power_menu {
+  border-radius: 16px;
+  padding: 0 19px 0 16px;
+  /* font-size: 20px; */
+  font-size: 24px;
+  color: @accent;
+}
+#custom-power_menu:hover {
+  background-color: @hover-bg;
+}
+
+/* ---------- MAIN ---------- */
+
+* {
+  font-family: "0xProto Nerd Font";
+  font-weight: bold;
+  /* font-size: 16px; */
+  font-size: 24;
+  color: @main-fg;
+}
+
+/* main outline */
+
+window#waybar {
+  background-color: @outline;
+}
+
+/* main background */
+
+window#waybar > box {
+  margin: 4px;
+  background-color: @main-bg;
+}
+
+/* hoverables */
+
+#custom-theme_switcher:hover,
+#idle_inhibitor:hover,
+#clock.date:hover,
+#network:hover,
+#bluetooth:hover,
+#custom-system_update:hover,
+#mpris:hover,
+#pulseaudio:hover,
+#wireplumber:hover {
+  color: @hover-fg;
+}
+
+/* states */
+
+.warning {
+  color: @warning;
+}
+.critical {
+  color: @critical;
+}
+.charging {
+  color: @charging;
+}
+.deactivated,
+.paused,
+#pulseaudio.output.muted,
+#pulseaudio.input.source-muted,
+#wireplumber.muted {
+  color: @hover-fg;
+}
+
+/* dividers */
+
+#custom-left_div,
+#custom-left_inv,
+#custom-right_div,
+#custom-right_inv {
+  /* font-size: 23.1px; */
+  font-size: 28px;
+}
+
+/* buttons */
+
+button {
+  border-radius: 16px;
+  padding: 0 10px;
+}
+button:hover {
+  background-color: @hover-bg;
+  color: @hover-fg;
+}
+
+/* tooltips */
+
+tooltip {
+  border: 2px solid @main-br;
+  border-radius: 10px;
+  background-color: @main-bg;
+}
+tooltip label {
+  margin: 2px 4px;
+  font-weight: normal;
+}
+tooltip decoration {
+  border: none;
+  background-color: transparent;
+}
