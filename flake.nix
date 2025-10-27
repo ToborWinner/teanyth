@@ -20,13 +20,14 @@
     };
 
     # --- NixOS / Nixpkgs ---
+    # TODO: Temporary fix
     nixpkgs.url = "github:NixOS/nixpkgs/fbcf476f790d8a217c3eab4e12033dc4a0f6d23c";
+    # nixpkgs.follows = "apple-silicon/nixpkgs";
 
     # --- Hardware ---
-    # b724435db982f31ce966b44cd203d1042358e51c
     apple-silicon = {
-      url = "github:nix-community/nixos-apple-silicon/b724435db982f31ce966b44cd203d1042358e51c";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:nix-community/nixos-apple-silicon";
+      # inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-compat.follows = "empty-flake";
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";

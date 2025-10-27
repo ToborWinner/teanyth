@@ -253,11 +253,11 @@ return {
 	s({ trig = "sup", snippetType = "autosnippet", condition = tex_utils.in_mathzone }, {
 		t("\\sup "),
 	}),
-	s({ trig = "ge", snippetType = "autosnippet", condition = tex_utils.in_mathzone }, {
-		t("\\geq "),
+	s({ trig = " ge", wordTrig = false, snippetType = "autosnippet", condition = tex_utils.in_mathzone }, {
+		t(" \\geq "),
 	}),
-	s({ trig = "le", snippetType = "autosnippet", condition = tex_utils.in_mathzone }, {
-		t("\\leq "),
+	s({ trig = " le", wordTrig = false, snippetType = "autosnippet", condition = tex_utils.in_mathzone }, {
+		t(" \\leq "),
 	}),
 	s({ trig = "nq", snippetType = "autosnippet", condition = tex_utils.in_mathzone }, {
 		t("\\neq "),

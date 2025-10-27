@@ -12,11 +12,7 @@
     inputs.apple-silicon.nixosModules.apple-silicon-support
   ];
 
-  boot.initrd.availableKernelModules = [ "usb_storage" ];
-  boot.initrd.kernelModules = [ ];
   boot.kernelParams = [ "apple_dcp.show_notch=1" ];
-  boot.kernelModules = [ ];
-  boot.extraModulePackages = [ ];
 
   boot.m1n1CustomLogo = "${pkgs.nixos-icons}/share/icons/hicolor/256x256/apps/nix-snowflake.png";
   boot.loader.grub.useOSProber = false;
@@ -70,7 +66,6 @@
   hardware = {
     asahi = {
       enable = true;
-      useExperimentalGPUDriver = false;
       peripheralFirmwareDirectory = inputs.sensitive + "/firmware";
       setupAsahiSound = true;
     };
@@ -82,48 +77,6 @@
       powerOnBoot = true;
     };
   };
-
-  # TODO: Remove this when upgrading
-
-  nixpkgs.overlays = [
-    (final: prev: {
-      aquamarine = prev.aquamarine.overrideAttrs (old: {
-        src = final.fetchFromGitHub {
-          owner = "hyprwm";
-          repo = "aquamarine";
-          # rev = "498f46686dcf45589d820ede6a023175d7c8ad74";
-          rev = "50637ed23e962f0db294d6b0ef534f37b144644b";
-          hash = "sha256-EjaD8+d7AiAV2fGRN4NTMboWDwk8szDfwbzZ8DL1PhQ=";
-          # hash = "sha256-iGLp5IkBm6nYdaoSr0/O4U0Ea2f9DRHuKIc5q9bnhkU=";
-        };
-      });
-
-      hyprutils = prev.hyprutils.overrideAttrs (old: {
-        src = final.fetchFromGitHub {
-          owner = "hyprwm";
-          repo = "hyprutils";
-          # rev = "69efb6291c7343e936f2ddce622990ed018b7fdb";
-          rev = "b364dcb7391709acb4492e100fe750ca722992e1";
-          hash = "sha256-9QoDVkjLwjiZDR+y4cMWc/FVudRu5jCIG4rn15Afa9w=";
-          # hash = "sha256-aWnI+0+qdCgwbbB/TH5RUW+PgC4u+z+xXnIceCxYUO4=";
-        };
-      });
-
-      hyprland = prev.hyprland.overrideAttrs (old: {
-        src = final.fetchFromGitHub {
-          # owner = "gulafaran";
-          owner = "hyprwm";
-          repo = "hyprland";
-          fetchSubmodules = true;
-          # rev = "43f67a270c5b85b2f33866aff258ca4c0890f6e2"; NOT EVEN FIRST
-          # hash = "sha256-2nXk3XVA/q78qEyu45oo5hQlYc0Fv5JloimO8EgCnSw=";
-          rev = "8968db9b0e42ff0b41e3be78bc24572414dd1399";
-          hash = "sha256-7lQH9AVSvLGWSviRhpAzSfMcLIglRiIvcHkldTC0QiE=";
-          # hash = "sha256-tpaosPXe/JBPnFZ7HIDcOtkDU0CjEwgGh8pWOy7cn1E=";
-        };
-      });
-    })
-  ];
 
   # Widevine support
   environment.sessionVariables.MOZ_GMP_PATH = [
@@ -140,6 +93,15 @@
       memorySize = 3072;
       cores = 4;
     };
+  };
+
+  nix.settings = {
+    extra-substituters = [
+      "https://nixos-apple-silicon.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "nixos-apple-silicon.cachix.org-1:8psDu5SA5dAD7qA0zMy5UT292TxeEPzIz8VVEr2Js20="
+    ];
   };
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking

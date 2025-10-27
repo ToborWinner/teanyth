@@ -19,6 +19,7 @@
       nixpkgs.flake = inputs.nixpkgs;
       n = nixpkgs; # Abbreviation
       ${settings.username}.flake = inputs.self;
+      nixos-apple-silicon.flake = inputs.apple-silicon;
     };
     nix.channel.enable = false; # Disable nix-channel, we use flakes for declarative inputs
     nix.settings.flake-registry = ""; # Disable the global flake registry
