@@ -20,9 +20,7 @@
     };
 
     # --- NixOS / Nixpkgs ---
-    # TODO: Temporary fix
-    nixpkgs.url = "github:NixOS/nixpkgs/fbcf476f790d8a217c3eab4e12033dc4a0f6d23c";
-    # nixpkgs.follows = "apple-silicon/nixpkgs";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     # --- Hardware ---
     apple-silicon = {

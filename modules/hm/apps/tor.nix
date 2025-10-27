@@ -22,9 +22,9 @@
         finalAttrs: previousAttrs: {
           src = pkgs.fetchurl {
             urls = [
-              "https://nightlies.tbb.torproject.org/nightly-builds/tor-browser-builds/tbb-nightly.2025.08.19/nightly-linux-aarch64/tor-browser-linux-aarch64-tbb-nightly.2025.08.19.tar.xz"
+              "https://nightlies.tbb.torproject.org/nightly-builds/tor-browser-builds/tbb-nightly.2025.10.26/nightly-linux-aarch64/tor-browser-linux-aarch64-tbb-nightly.2025.10.26.tar.xz"
             ];
-            hash = "sha256-72PKdPSOhyqQ2IsQmM+wyzmWOSOe7v/f4MgH6J6fBqk=";
+            hash = "sha256-iUu5cyfPdRpuMg+5adLwpbK4cYll6uaEs2FpGl/H5Qc=";
           };
           meta.platforms = [ "aarch64-linux" ];
           buildPhase =

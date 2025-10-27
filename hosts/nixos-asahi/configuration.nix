@@ -123,15 +123,14 @@
   documentation.nixos.enable = false;
   services.avahi.enable = true; # Discover printers and other devices on the network
 
-  # TODO: Switch to commented version when updating nixpkgs
-  # services.logind.settings.Login = {
-  #   HandleSuspendKey = "ignore";
-  #   HandleSuspendKeyLongPress = "ignore";
-  #   HandlePowerKey = "ignore";
-  # };
-  services.logind.powerKey = "ignore";
-  services.logind.suspendKey = "ignore";
-  services.logind.suspendKeyLongPress = "ignore";
+  services.logind.settings.Login = {
+    HandleSuspendKey = "ignore";
+    HandleSuspendKeyLongPress = "ignore";
+    HandlePowerKey = "ignore";
+  };
+  # services.logind.powerKey = "ignore";
+  # services.logind.suspendKey = "ignore";
+  # services.logind.suspendKeyLongPress = "ignore";
 
   # Set to false if you have an x86_64 builder available
   # Will default to false if your nixpkgs is new enough

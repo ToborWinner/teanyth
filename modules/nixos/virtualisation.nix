@@ -32,8 +32,6 @@
           qemu = {
             package = pkgs.qemu;
             swtpm.enable = true;
-            ovmf.enable = true;
-            ovmf.packages = [ pkgs.OVMF.fd ];
           };
         };
         spiceUSBRedirection.enable = true;

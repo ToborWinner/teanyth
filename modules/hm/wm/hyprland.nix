@@ -136,10 +136,6 @@ in
           enable_hyprcursor = true;
         };
 
-        gestures = {
-          workspace_swipe = false;
-        };
-
         bind = [
           (mkIf (config.pers.info.menu != null) "$mod, D, exec, $menu")
           "$mod, RETURN, exec, $terminal"
