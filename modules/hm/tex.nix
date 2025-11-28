@@ -18,6 +18,7 @@
         doublestroke
         pgfplots
         ;
+      inherit (pkgs.pers) personaltexcls;
     })
   ];
 }

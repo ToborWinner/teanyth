@@ -35,7 +35,8 @@ in
       extraGroups = [
         (mkIf config.pers.networkmanager.enable "networkmanager")
         "wheel"
-      ] ++ cfg.extraGroups;
+      ]
+      ++ cfg.extraGroups;
       hashedPasswordFile = mkIf (
         config.pers.info.getSecretFilePath != null && config.pers.info.getSecretFilePath "main-user" != null
       ) (config.pers.info.getSecretFilePath "main-user");

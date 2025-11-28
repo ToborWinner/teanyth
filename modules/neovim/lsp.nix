@@ -1,4 +1,9 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 {
   vim.languages = {
@@ -26,6 +31,7 @@
     lua.enable = true;
     # TODO: Why in the world is this 7.5gb??
     haskell.enable = true;
+    python.enable = true;
   };
 
   vim.lsp = {

@@ -107,8 +107,8 @@ in
           kb_variant = pers.mkIfNotNull config.pers.info.kb_variant;
           kb_options = pers.mkIfNotNull config.pers.info.kb_options;
 
-          repeat_delay = "250";
-          repeat_rate = "20"; # Does not work, along with many of those settinsg because of nixos I think.
+          repeat_delay = "150";
+          repeat_rate = "40"; # Does not work, along with many of those settinsg because of nixos I think.
 
           follow_mouse = "1";
 
