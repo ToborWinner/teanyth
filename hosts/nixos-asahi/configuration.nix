@@ -56,6 +56,7 @@
     };
     tailscale.enable = true;
     distrobox.enable = true;
+    ghidra.enable = true;
   };
 
   # Home Manager

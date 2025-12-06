@@ -92,6 +92,7 @@
           "/var/log"
           (lib.mkIf config.hardware.bluetooth.enable "/var/lib/bluetooth")
           "/var/lib/nixos"
+          "/var/lib/libvirt"
           "/var/lib/systemd/coredump"
           (lib.mkIf config.networking.networkmanager.enable "/etc/NetworkManager/system-connections")
           (lib.mkIf config.networking.wireless.iwd.enable {
@@ -117,7 +118,8 @@
             mode = "u=rwx,g=,o=";
           })
           (lib.mkIf config.pers.tailscale.enable "/var/lib/tailscale")
-        ] ++ config.pers.hypixel-bridge.impermanence;
+        ]
+        ++ config.pers.hypixel-bridge.impermanence;
 
         files = [ "/etc/machine-id" ];
 
@@ -143,7 +145,8 @@
                 directory = ".ssh";
                 mode = "0700";
               }
-            ] ++ config.pers.impermanence.extraUserDirectories;
+            ]
+            ++ config.pers.impermanence.extraUserDirectories;
             files = [
               (lib.mkIf hmCfg.pers.zsh.enable ".zsh_history")
               (lib.mkIf hmCfg.pers.nixcord.enable ".config/vesktop/state.json")

@@ -32,6 +32,7 @@
           qemu = {
             package = pkgs.qemu;
             swtpm.enable = true;
+            vhostUserPackages = with pkgs; [ virtiofsd ];
           };
         };
         spiceUSBRedirection.enable = true;
@@ -43,6 +44,9 @@
         spice-protocol
         virtio-win
         win-spice
+        virtiofsd
+        pers.vm-start
+        pers.vm-stop
       ];
 
       programs.virt-manager.enable = true;
