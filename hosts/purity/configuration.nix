@@ -20,6 +20,14 @@
       configureUser = false;
       amountToKeep = 5;
       daysToKeep = 10;
+      extraSystemDirectories = [
+        {
+          directory = "/var/lib/utilbot";
+          user = settings.username;
+          group = "users";
+          mode = "u=rwx,g=,o=";
+        }
+      ];
     };
     sops = {
       enable = true;

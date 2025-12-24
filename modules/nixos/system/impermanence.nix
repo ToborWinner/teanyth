@@ -21,6 +21,11 @@
       default = [ ];
       description = "Additional directories to add to the ones kept if configureUser is true.";
     };
+    extraSystemDirectories = lib.mkOption {
+      type = lib.types.listOf lib.types.anything;
+      default = [ ];
+      description = "Additional directories to add to the ones kept if impermanence is enabled.";
+    };
     daysToKeep = lib.mkOption {
       type = lib.types.ints.positive;
       description = "The amount of days to keep old roots around.";
@@ -119,7 +124,8 @@
           })
           (lib.mkIf config.pers.tailscale.enable "/var/lib/tailscale")
         ]
-        ++ config.pers.hypixel-bridge.impermanence;
+        ++ config.pers.hypixel-bridge.impermanence
+        ++ config.pers.impermanence.extraSystemDirectories;
 
         files = [ "/etc/machine-id" ];
 
