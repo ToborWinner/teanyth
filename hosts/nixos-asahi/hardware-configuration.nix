@@ -12,7 +12,7 @@
     inputs.apple-silicon.nixosModules.apple-silicon-support
   ];
 
-  boot.kernelParams = [ "apple_dcp.show_notch=1" ];
+  boot.kernelParams = [ "appledrm.show_notch=1" ];
 
   boot.m1n1CustomLogo = "${pkgs.nixos-icons}/share/icons/hicolor/256x256/apps/nix-snowflake.png";
   boot.loader.grub.useOSProber = false;

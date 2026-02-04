@@ -16,7 +16,7 @@
       message = "Pipewire must be enabled for mpd to be enabled.";
     };
 
-    home.packages = with pkgs; [ mpc-cli ];
+    home.packages = with pkgs; [ mpc ];
 
     services.mpd = {
       enable = true;

@@ -98,7 +98,7 @@
       mail.enable = false; # When I add an email client other than thunderbird, I'll probably enable it back
       nix-index-database.enable = true;
       tex.enable = true;
-      opencode.enable = true;
+      # opencode.enable = true;
       generaltools.enable = true;
 
       rice.enabled = "newconfig";
@@ -111,8 +111,9 @@
       calc
       ffmpeg
       libimobiledevice # Connect to iPhone
-      inputs.lobster-rs.packages.${system}.default
-      inputs.wordtui.packages.${system}.default
+      # TODO: Fix later
+      # inputs.lobster-rs.packages.${system}.default
+      # inputs.wordtui.packages.${system}.default
     ];
   };
 

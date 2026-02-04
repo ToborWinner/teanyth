@@ -52,7 +52,8 @@ in
       swappy
 
       # Counting
-      pers.keybindcount
+      # TODO: Fix cause openjdk 23 end of life
+      # pers.keybindcount
     ];
 
     # Screenshots

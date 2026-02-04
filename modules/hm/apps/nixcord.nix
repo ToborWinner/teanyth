@@ -19,6 +19,7 @@
 
       vesktop.settings = {
         discordBranch = "canary";
+        # discordBranch = "stable";
         minimizeToTray = false;
         tray = false;
         splashColor = "rgb(205, 214, 244)";
@@ -56,7 +57,7 @@
           webKeybinds.enable = true;
           webScreenShareFixes.enable = true;
           youtubeAdblock.enable = true;
-          noTrack.enable = true;
+          # noTrack.enable = true;
           reverseImageSearch.enable = true;
           serverInfo.enable = true;
           # showHiddenChannels = {
@@ -66,6 +67,7 @@
           unsuppressEmbeds.enable = true;
           noOnboardingDelay.enable = true;
           imageZoom.enable = true;
+          ClearURLs.enable = true;
         };
       };
     };
