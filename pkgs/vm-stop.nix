@@ -1,7 +1,4 @@
-{
-  writeShellScriptBin,
-  ...
-}:
+{ writeShellScriptBin, ... }:
 
 writeShellScriptBin "vms" ''
   set -e

@@ -1,8 +1,4 @@
-{
-  stdenvNoCC,
-  writeShellScript,
-  ...
-}:
+{ stdenvNoCC, writeShellScript, ... }:
 
 stdenvNoCC.mkDerivation {
   pname = "personaltexcls";

@@ -76,7 +76,8 @@
           inherit modulesPath;
           lib = extendedLib;
           osConfig = config;
-        } // cfg.extraSpecialArgs;
+        }
+        // cfg.extraSpecialArgs;
         modules = [
           (
             { name, ... }:
@@ -93,7 +94,8 @@
               };
             }
           )
-        ] ++ cfg.sharedModules;
+        ]
+        ++ cfg.sharedModules;
       };
     in
     [

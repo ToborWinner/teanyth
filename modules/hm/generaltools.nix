@@ -19,11 +19,7 @@
       rustc
       cargo
       nodejs
-      (pkgs.python3.withPackages (
-        pythonPackages: with pythonPackages; [
-          pwntools
-        ]
-      ))
+      (pkgs.python3.withPackages (pythonPackages: with pythonPackages; [ pwntools ]))
       gef
     ];
 

@@ -7,9 +7,7 @@
     services.tailscale = {
       enable = true;
       authKeyFile = config.pers.info.getSecretFilePath "tailscale";
-      extraDaemonFlags = [
-        "--no-logs-no-support"
-      ];
+      extraDaemonFlags = [ "--no-logs-no-support" ];
     };
   };
 }

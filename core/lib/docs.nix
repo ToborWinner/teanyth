@@ -90,60 +90,59 @@ let
       opt:
       let
         name = showOption opt.loc;
-        docOption =
-          {
-            loc = opt.loc;
-            inherit name;
-            description = opt.description or null;
-            declarations =
-              let
-                positions = opt.declarationPositions; # For now even unknown ones are allowed
-                mapping =
-                  declaration:
-                  throwIfNot (hasPrefix "/nix/store/" declaration.file) ''
-                    The content of options.json seems to depend on the path to nixpkgs, which is bad.
-                    See https://github.com/NixOS/nixpkgs/blob/f0d91fd0d01668b3e948cc52265bd54dd4e19917/nixos/lib/make-options-doc/default.nix#L239 for more information.
-                  '' declaration;
-              in
-              map mapping positions;
-            internal = opt.internal or false;
-            visibleInternal = if (opt ? visible && opt.visible == "shallow") then true else opt.visible or true;
-            visible = opt.visible or true;
-            readOnly = opt.readOnly or false;
-            type = opt.type.description or "unspecified";
-          }
-          // optionalAttrs (opt ? example) {
-            example = builtins.addErrorContext "while evaluating the example of option `${name}`" (
-              renderOptionValue opt.example
-            );
-          }
-          // optionalAttrs (opt ? defaultText || opt ? default) {
-            default =
-              let
-                assumeWorking = builtins.addErrorContext "while evaluating the ${
-                  if opt ? defaultText then "defaultText" else "default value"
-                } of option `${name}`" (renderOptionValue (opt.defaultText or opt.default));
+        docOption = {
+          loc = opt.loc;
+          inherit name;
+          description = opt.description or null;
+          declarations =
+            let
+              positions = opt.declarationPositions; # For now even unknown ones are allowed
+              mapping =
+                declaration:
+                throwIfNot (hasPrefix "/nix/store/" declaration.file) ''
+                  The content of options.json seems to depend on the path to nixpkgs, which is bad.
+                  See https://github.com/NixOS/nixpkgs/blob/f0d91fd0d01668b3e948cc52265bd54dd4e19917/nixos/lib/make-options-doc/default.nix#L239 for more information.
+                '' declaration;
+            in
+            map mapping positions;
+          internal = opt.internal or false;
+          visibleInternal = if (opt ? visible && opt.visible == "shallow") then true else opt.visible or true;
+          visible = opt.visible or true;
+          readOnly = opt.readOnly or false;
+          type = opt.type.description or "unspecified";
+        }
+        // optionalAttrs (opt ? example) {
+          example = builtins.addErrorContext "while evaluating the example of option `${name}`" (
+            renderOptionValue opt.example
+          );
+        }
+        // optionalAttrs (opt ? defaultText || opt ? default) {
+          default =
+            let
+              assumeWorking = builtins.addErrorContext "while evaluating the ${
+                if opt ? defaultText then "defaultText" else "default value"
+              } of option `${name}`" (renderOptionValue (opt.defaultText or opt.default));
 
-                # This is for example for `virtualisation.xen.store.type` on aarch64-linux, as explained at the start of the file.
-                assumeBroken =
-                  let
-                    evaluated = builtins.tryEval (renderOptionValue (opt.defaultText or opt.default));
-                  in
-                  if evaluated.success then
-                    evaluated.value
-                  else
-                    literalMD "There was an error in the evaluation of this default.";
+              # This is for example for `virtualisation.xen.store.type` on aarch64-linux, as explained at the start of the file.
+              assumeBroken =
+                let
+                  evaluated = builtins.tryEval (renderOptionValue (opt.defaultText or opt.default));
+                in
+                if evaluated.success then
+                  evaluated.value
+                else
+                  literalMD "There was an error in the evaluation of this default.";
 
-                default = if allowBroken then assumeBroken else assumeWorking;
-              in
-              if !assumeDefault -> (opt ? "defaultText" || opt ? "default") then
-                default
-              else
-                literalMD "No default provided.";
-          }
-          // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) {
-            inherit (opt) relatedPackages;
-          };
+              default = if allowBroken then assumeBroken else assumeWorking;
+            in
+            if !assumeDefault -> (opt ? "defaultText" || opt ? "default") then
+              default
+            else
+              literalMD "No default provided.";
+        }
+        // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) {
+          inherit (opt) relatedPackages;
+        };
 
         subOptions =
           let

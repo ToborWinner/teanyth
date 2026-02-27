@@ -1,8 +1,6 @@
 { modulesPath, ... }:
 {
-  imports = [
-    (modulesPath + "/profiles/qemu-guest.nix")
-  ];
+  imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
 
   pers.disko = {
     deviceName = "/dev/sda";

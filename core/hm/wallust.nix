@@ -27,7 +27,8 @@ let
   defNum = {
     foreground = 0;
     background = 0;
-  } // (genAttrs (genList (i: "color${toString i}") 16) (_: 0));
+  }
+  // (genAttrs (genList (i: "color${toString i}") 16) (_: 0));
   defHex = mapAttrs (_: v: "#${toString v}") defNum;
   defHexS = mapAttrs (_: v: toString v) defNum;
 in

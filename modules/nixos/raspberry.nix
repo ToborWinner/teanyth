@@ -122,14 +122,13 @@ in
       };
 
       # Add configuration
-      preStart =
-        ''
-          ln -sfn ${voskModel} ${dataDir}/${cfg.voskModelName}
-          mkdir -p /etc/raspberry/intents
-        ''
-        + (lib.concatMapAttrsStringSep "\n" (
-          name: value: "ln -sfn ${value} ${dataDir}/intents/${name}"
-        ) embeddingModel);
+      preStart = ''
+        ln -sfn ${voskModel} ${dataDir}/${cfg.voskModelName}
+        mkdir -p /etc/raspberry/intents
+      ''
+      + (lib.concatMapAttrsStringSep "\n" (
+        name: value: "ln -sfn ${value} ${dataDir}/intents/${name}"
+      ) embeddingModel);
     };
   };
 }

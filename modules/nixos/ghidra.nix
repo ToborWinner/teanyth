@@ -1,8 +1,4 @@
-{
-  lib,
-  config,
-  ...
-}:
+{ lib, config, ... }:
 
 {
   options.pers.ghidra.enable = lib.mkEnableOption "ghidra";

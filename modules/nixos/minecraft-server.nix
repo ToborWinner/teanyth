@@ -23,9 +23,7 @@
       enableReload = true;
       package =
         inputs.nix-minecraft.legacyPackages.${pkgs.stdenv.hostPlatform.system}.fabricServers.fabric-1_21_11.override
-          {
-            loaderVersion = "0.18.4";
-          };
+          { loaderVersion = "0.18.4"; };
 
       symlinks.mods = pkgs.linkFarmFromDrvs "mods" [
         (pkgs.fetchurl {
