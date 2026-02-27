@@ -100,6 +100,7 @@
           "/var/lib/libvirt"
           "/var/lib/systemd/coredump"
           (lib.mkIf config.networking.networkmanager.enable "/etc/NetworkManager/system-connections")
+          (lib.mkIf config.services.minecraft-server.enable "/var/lib/minecraft")
           (lib.mkIf config.networking.wireless.iwd.enable {
             directory = "/var/lib/iwd";
             mode = "0700";

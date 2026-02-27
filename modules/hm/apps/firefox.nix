@@ -143,7 +143,7 @@
           };
         };
 
-        search.default = "google";
+        search.default = "duckduckgo";
         search.force = true;
         search.engines = {
           nix-packages = {
@@ -173,7 +173,8 @@
             definedAliases = [ "@nw" ];
           };
 
-          google.metaData.alias = "@g";
+          # google.metaData.alias = "@g";
+          duckduckgo.metaData.alias = "@g";
           wikipedia.metaData.alias = "@w";
         };
       };

@@ -1,7 +1,6 @@
 {
   lib,
   pkgs,
-  inputs,
   config,
   ...
 }:
@@ -33,7 +32,8 @@
     nh.enable = true;
     greetd = {
       enable = true;
-      startCommand = "Hyprland";
+      # TODO: can we avoid these wrappers?
+      startCommand = "sh -lc 'if uwsm check may-start -i; then exec uwsm start hyprland.desktop; fi'";
     };
     pipewire.enable = true;
     networkmanager = {
@@ -144,4 +144,6 @@
   # environment.systemPackages = [ pkgs.muvm ];
 
   boot.binfmt.emulatedSystems = [ "x86_64-linux" ];
+
+  environment.systemPackages = [ pkgs.firecracker ];
 }

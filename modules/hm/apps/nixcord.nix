@@ -29,7 +29,11 @@
 
       config = {
         frameless = true; # No bar at the top, using window manager
-        transparent = true; # Requires a transparent theme
+        # transparent = true; # Requires a transparent theme
+
+        # autoUpdate = true;
+        # autoUpdateNotification = true;
+        # notifyAboutUpdates = true;
 
         # Example of how to enable a theme for future reference
         # enabledThemes = [ "stylix.theme.css" ];

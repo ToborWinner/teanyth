@@ -21,7 +21,7 @@
     nh.enable = true;
     greetd = {
       enable = true;
-      startCommand = "Hyprland";
+      startCommand = "sh -lc 'if uwsm check may-start -i; then exec uwsm start hyprland.desktop; fi'";
     };
     pipewire.enable = true;
     networkmanager.enable = true;

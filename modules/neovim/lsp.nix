@@ -14,7 +14,7 @@
     nix = {
       enable = true;
       format = {
-        type = "nixfmt";
+        type = [ "nixfmt" ];
       };
     };
     rust.enable = true;

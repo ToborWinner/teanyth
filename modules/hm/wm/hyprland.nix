@@ -45,6 +45,8 @@ in
 
     home.packages = with pkgs; [
       brightnessctl
+      # TODO: hyprpolkitagent. Keep in mind uwsm.
+      # TODO: Figure out uwsm, app slices, performance, whatnot.
 
       # Screenshots
       grim
@@ -67,6 +69,7 @@ in
 
     wayland.windowManager.hyprland = {
       enable = true;
+      systemd.enable = false;
 
       settings = {
         "$mod" = "SUPER";
@@ -138,17 +141,17 @@ in
         };
 
         bind = [
-          (mkIf (config.pers.info.menu != null) "$mod, D, exec, $menu")
+          (mkIf (config.pers.info.menu != null) "$mod, D, exec, uwsm app -- $menu")
           "$mod, RETURN, exec, $terminal"
-          (mkIf config.pers.tmux.enable "$mod, T, exec, $tmux")
-          (mkIf (config.pers.tmux.enable && config.pers.neovim.enable) "$mod, Y, exec, $notes")
+          (mkIf config.pers.tmux.enable "$mod, T, exec, uwsm app -- $tmux")
+          (mkIf (config.pers.tmux.enable && config.pers.neovim.enable) "$mod, Y, exec, uwsm app -- $notes")
           "$mod, Q, killactive"
-          (mkIf config.programs.wlogout.enable "$mod, M, exec, wlogout")
-          (mkIf (config.pers.info.fileManager != null) "$mod, E, exec, $fileManager")
-          (mkIf (config.pers.info.music != null) "$mod, A, exec, $music")
+          (mkIf config.programs.wlogout.enable "$mod, M, exec, uwsm app -- wlogout")
+          (mkIf (config.pers.info.fileManager != null) "$mod, E, exec, uwsm app -- $fileManager")
+          (mkIf (config.pers.info.music != null) "$mod, A, exec, uwsm app -- $music")
           (mkIf (
             config.pers.info.wallpaperPickerCommand != null
-          ) "$mod, Z, exec, ${config.pers.info.wallpaperPickerCommand}")
+          ) "$mod, Z, exec, uwsm app -- ${config.pers.info.wallpaperPickerCommand}")
 
           "$mod, V, togglefloating"
           "$mod, P, pin" # Pin a floating window so it's visible in all workspaces
@@ -230,8 +233,6 @@ in
             ", XF86AudioRaiseVolume, exec, ${wpctlBin} set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"
             ", XF86AudioLowerVolume, exec, ${wpctlBin} set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%-"
           ];
-
-        windowrulev2 = "suppressevent maximize, class:.*";
       };
 
       extraConfig = ''
@@ -277,6 +278,28 @@ in
         submap = passthru
         bind = $mod&CTRL&SHIFT, p, submap, reset
         submap = reset
+
+        # Window rules
+        windowrule {
+            # Ignore maximize requests from all apps. You'll probably like this.
+            name = suppress-maximize-events
+            match:class = .*
+
+            suppress_event = maximize
+        }
+
+        windowrule {
+            # Fix some dragging issues with XWayland
+            name = fix-xwayland-drags
+            match:class = ^$
+            match:title = ^$
+            match:xwayland = true
+            match:float = true
+            match:fullscreen = false
+            match:pin = false
+
+            no_focus = true
+        }
       '';
     };
   };

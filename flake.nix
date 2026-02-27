@@ -94,6 +94,12 @@
       url = "github:eatmynerds/lobster-rs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-minecraft = {
+      url = "github:Infinidoge/nix-minecraft";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-compat.follows = "empty-flake";
+      inputs.systems.follows = "nix-systems";
+    };
     firefox-addons = {
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -154,6 +160,10 @@
           deployable = true; # Allow deploying through deploy-rs
         };
         purity = {
+          system = "x86_64-linux";
+          deployable = true;
+        };
+        night = {
           system = "x86_64-linux";
           deployable = true;
         };

@@ -16,10 +16,10 @@ in
       enable = lib.mkEnableOption "disko";
       biosSupport = lib.mkEnableOption "bios support";
       swapSize = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.nullOr lib.types.str;
         default = "3G";
         example = "3G";
-        description = "Size of the swap partition.";
+        description = "Size of the swap partition. Set to null for no swap partition.";
       };
       deviceName = lib.mkOption {
         type = lib.types.str;
@@ -69,7 +69,7 @@ in
               mountOptions = [ "umask=0077" ];
             };
           };
-          swap = {
+          swap = lib.mkIf (cfg.swapSize != null) {
             size = cfg.swapSize;
             content = {
               type = "swap";
