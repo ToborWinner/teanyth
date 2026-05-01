@@ -34,6 +34,17 @@
     python.enable = true;
   };
 
+  vim.treesitter.grammars = [ pkgs.vimPlugins.nvim-treesitter.builtGrammars.systemverilog ];
+
+  vim.luaConfigRC.verilog_grammar = ''
+    vim.filetype.add({
+      extension = {
+        v = "verilog",
+      },
+    })
+    vim.treesitter.language.register("systemverilog", "verilog")
+  '';
+
   vim.lsp = {
     enable = true;
     formatOnSave = true;

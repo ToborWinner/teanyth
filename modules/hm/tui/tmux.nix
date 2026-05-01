@@ -23,8 +23,6 @@ in
 
   # TODO: Refine this module
 
-  # TODO: Fix nvim -c ":ObsidianQuickSwitch" not working (temporarily switched to nvim) and also -c ":Telescope find_files"
-
   config = mkIf cfg.enable {
     home.packages = [ pkgs.sesh ];
 

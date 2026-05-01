@@ -16,10 +16,6 @@
     };
 
     mini.statusline.enable = true;
-    telescope = {
-      enable = true;
-      mappings.findFiles = "<leader>sf";
-    };
 
     binds.whichKey.enable = true;
 

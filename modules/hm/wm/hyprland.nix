@@ -81,7 +81,7 @@ in
         "$tmux" = mkIf config.pers.tmux.enable "alacritty -e tmux -S /run/user/1000/tmux-1000/default";
         "$notes" =
           mkIf (config.pers.tmux.enable && config.pers.neovim.enable)
-            "alacritty -e tmux -S /run/user/1000/tmux-1000/default new-session -A -s notes 'cd ~/Documents/Vaults/personal && nvim -c \":ObsidianQuickSwitch\"'";
+            "alacritty -e tmux -S /run/user/1000/tmux-1000/default new-session -A -s notes 'cd ~/Documents/Vaults/personal && nvim -c \":Obsidian quick_switch\"'";
         "$fileManager" = pers.mkIfNotNull config.pers.info.fileManager;
         "$menu" = pers.mkIfNotNull config.pers.info.menu;
         "$music" = pers.mkIfNotNull config.pers.info.music;
@@ -181,6 +181,7 @@ in
           "$mod, R, submap, resize"
           "$mod, N, submap, counting"
           "$mod&CTRL&SHIFT, P, submap, passthru"
+          "$mod, BACKSPACE, exec, hyprctl switchxkblayout all next"
         ]
         ++ (
           # workspaces

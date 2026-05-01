@@ -9,6 +9,8 @@
     notes.obsidian = {
       enable = true;
       setupOpts = {
+        legacy_commands = false;
+
         workspaces = [
           {
             name = "personal";
@@ -27,22 +29,23 @@
           time_format = "%H:%M";
         };
 
-        picker = {
-          name = "telescope.nvim";
-          note_mappings = {
-            # Telescope mappings for notes
-            new = "<C-x>"; # New note from query
-            insert_link = "<C-l>"; # Insert link to note
-          };
+        # TODO: Remove comment
+        # picker = {
+        #   name = "telescope.nvim";
+        #   note_mappings = {
+        #     # Telescope mappings for notes
+        #     new = "<C-x>"; # New note from query
+        #     insert_link = "<C-l>"; # Insert link to note
+        #   };
+        #
+        #   tag_mappings = {
+        #     # Telescope mappings for tags
+        #     tag_note = "<C-x>";
+        #     insert_tag = "<C-l>";
+        #   };
+        # };
 
-          tag_mappings = {
-            # Telescope mappings for tags
-            tag_note = "<C-x>";
-            insert_tag = "<C-l>";
-          };
-        };
-
-        search_max_lines = 1000;
+        search.max_lines = 1000;
       };
     };
 
@@ -50,31 +53,31 @@
       {
         mode = [ "n" ];
         key = "<leader>on";
-        action = ":ObsidianNew<CR>";
+        action = ":Obsidian new<CR>";
         desc = "New obsidian note";
       }
       {
         mode = [ "n" ];
         key = "<leader>oo";
-        action = ":ObsidianQuickSwitch<CR>";
+        action = ":Obsidian quick_switch<CR>";
         desc = "Quick switch obsidian note";
       }
       {
         mode = [ "n" ];
         key = "<leader>os";
-        action = ":ObsidianSearch<CR>";
+        action = ":Obsidian search<CR>";
         desc = "Search notes by grep";
       }
       {
         mode = [ "n" ];
         key = "<leader>ob";
-        action = ":ObsidianBacklinks<CR>";
+        action = ":Obsidian backlinks<CR>";
         desc = "View backlinks of current note";
       }
       {
         mode = [ "n" ];
         key = "<leader>or";
-        action = ":ObsidianRename<CR>";
+        action = ":Obsidian rename<CR>";
         desc = "Rename current note";
       }
     ];

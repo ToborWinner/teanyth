@@ -2,11 +2,15 @@
   lib,
   pkgs,
   config,
+  inputs,
   ...
 }:
 
 {
-  imports = [ ./hardware-configuration.nix ];
+  imports = [
+    ./hardware-configuration.nix
+    (inputs.sensitive + "/modules/nixos-asahi.nix")
+  ];
 
   # System
   pers = {
@@ -70,6 +74,7 @@
       rofi.enable = true;
       yazi.enable = true;
       zsh.enable = true;
+      nushell.enable = true;
       starship.enable = true;
       nixcord.enable = true;
       firefox = {
@@ -98,7 +103,7 @@
       mail.enable = false; # When I add an email client other than thunderbird, I'll probably enable it back
       nix-index-database.enable = true;
       tex.enable = true;
-      # opencode.enable = true;
+      opencode.enable = true;
       generaltools.enable = true;
 
       rice.enabled = "newconfig";
@@ -125,6 +130,7 @@
   nixpkgs.config.allowUnfree = true;
   system.stateVersion = "24.11";
   documentation.nixos.enable = false;
+  documentation.dev.enable = true;
   services.avahi.enable = true; # Discover printers and other devices on the network
 
   services.logind.settings.Login = {

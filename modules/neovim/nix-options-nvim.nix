@@ -41,20 +41,22 @@ in
       filepath = options-path;
     };
 
-    vim.lazy.plugins = {
-      vimplugin-nix-options-nvim = {
-        package = pkgs.pers.nix-options-nvim;
-        lazy = true;
-        priority = 1000;
+    # TODO: Make it work without telescope
 
-        keys = map (keybind: {
-          mode = "n";
-          key = "<leader>fn${keybind.key}";
-          action = "function() require(\"nix-options-nvim\").nix_options_picker(\"${keybind.filepath}\") end";
-          lua = true;
-          desc = "${keybind.name} Nix options";
-        }) config.pers.nix-options-nvim.keybinds;
-      };
-    };
+    # vim.lazy.plugins = {
+    #   vimplugin-nix-options-nvim = {
+    #     package = pkgs.pers.nix-options-nvim;
+    #     lazy = true;
+    #     priority = 1000;
+    #
+    #     keys = map (keybind: {
+    #       mode = "n";
+    #       key = "<leader>fn${keybind.key}";
+    #       action = "function() require(\"nix-options-nvim\").nix_options_picker(\"${keybind.filepath}\") end";
+    #       lua = true;
+    #       desc = "${keybind.name} Nix options";
+    #     }) config.pers.nix-options-nvim.keybinds;
+    #   };
+    # };
   };
 }

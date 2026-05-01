@@ -17,7 +17,7 @@
       enable = true;
       autosuggestion.enable = true;
       syntaxHighlighting.enable = true;
-      enableCompletion = true;
+      # enableCompletion = true;
       defaultKeymap = "viins";
       plugins = [
         {
@@ -29,6 +29,9 @@
       initContent = ''
         unsetopt HIST_SAVE_BY_COPY
       '';
+      shellAliases = {
+        info = "info --vi-keys";
+      };
     };
   };
 }

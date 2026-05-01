@@ -1,7 +1,10 @@
-{ settings, ... }:
+{ settings, inputs, ... }:
 
 {
-  imports = [ ./hardware-configuration.nix ];
+  imports = [
+    ./hardware-configuration.nix
+    (inputs.sensitive + "/modules/night.nix")
+  ];
 
   pers = {
     server.enable = true;
@@ -15,6 +18,14 @@
       configureUser = false;
       amountToKeep = 5;
       daysToKeep = 10;
+      extraSystemDirectories = [
+        {
+          directory = "/home/${settings.username}/persist";
+          user = "tobor";
+          group = "users";
+          mode = "u=rwx,g=rw,o=";
+        }
+      ];
     };
     sops = {
       enable = true;
@@ -24,6 +35,7 @@
     disko.enable = true;
     tailscale.enable = true;
     minecraft-server.enable = true;
+    distrobox.enable = true;
   };
 
   networking.hostName = settings.hostname;
