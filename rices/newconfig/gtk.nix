@@ -10,6 +10,7 @@
     enable = true;
     font.name = "JetBrainsMono Nerd Font Mono";
     font.package = pkgs.nerd-fonts.jetbrains-mono;
+    gtk4.theme = config.gtk.theme;
 
     theme = {
       package = pkgs.adw-gtk3;

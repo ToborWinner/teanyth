@@ -48,13 +48,12 @@
           memberCount.enable = true;
           messageLinkEmbeds.enable = true;
           noDevtoolsWarning.enable = true;
-          normalizeMessageLinks.enable = true;
           permissionsViewer.enable = true;
           relationshipNotifier.enable = true;
           translate = {
             enable = true;
             autoTranslate = false;
-            showChatBarButton = true;
+            # showChatBarButton = true;
           };
           validUser.enable = true;
           viewRaw.enable = true;

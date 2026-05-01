@@ -13,6 +13,7 @@
       enable = true;
       userName = "toborwinner";
       userEmail = "102221758+ToborWinner@users.noreply.github.com";
+      signing.format = "ssh";
       extraConfig = {
         init.defaultBranch = "main";
         credential.helper = "";

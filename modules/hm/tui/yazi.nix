@@ -16,6 +16,7 @@
     programs.yazi = {
       enable = true;
       enableZshIntegration = config.pers.zsh.enable;
+      shellWrapperName = "yy";
       settings = {
         manager = {
           show_hidden = true;

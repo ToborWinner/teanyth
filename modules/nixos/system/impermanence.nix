@@ -3,6 +3,7 @@
   config,
   inputs,
   settings,
+  utils,
   ...
 }:
 
@@ -55,36 +56,52 @@
         }
       ];
 
-      boot.initrd.postResumeCommands = lib.mkAfter ''
-        mkdir /btrfs_tmp
-        mount ${config.fileSystems."/".device} /btrfs_tmp
-        if [[ -e /btrfs_tmp/root ]]; then
-            mkdir -p /btrfs_tmp/old_roots
-            timestamp=$(date --date="@$(stat -c %Y /btrfs_tmp/root)" "+%Y-%m-%-d_%H:%M:%S")
-            mv /btrfs_tmp/root "/btrfs_tmp/old_roots/$timestamp"
-        fi
+      # Conversion to systemd taken from https://github.com/nix-community/impermanence/pull/321/changes
+      boot.initrd.systemd = {
+        services.wipe-file-systems = {
+          unitConfig.DefaultDependencies = false;
+          serviceConfig.Type = "oneshot";
+          # This means it's required for boot to succeed. One can use wantedBy if they don't want this
+          requiredBy = [ "initrd.target" ];
+          before = [ "sysroot.mount" ];
+          requires = [ "${utils.escapeSystemdPath config.fileSystems."/".device}.device" ];
+          after = [
+            "${utils.escapeSystemdPath config.fileSystems."/".device}.device"
+            "local-fs-pre.target"
+          ];
 
-        delete_subvolume_recursively() {
-            IFS=$'\n'
-            for i in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
-                delete_subvolume_recursively "/btrfs_tmp/$i"
+          script = ''
+            mkdir /btrfs_tmp
+            mount ${config.fileSystems."/".device} /btrfs_tmp
+            if [[ -e /btrfs_tmp/root ]]; then
+                mkdir -p /btrfs_tmp/old_roots
+                timestamp=$(date --date="@$(stat -c %Y /btrfs_tmp/root)" "+%Y-%m-%-d_%H:%M:%S")
+                mv /btrfs_tmp/root "/btrfs_tmp/old_roots/$timestamp"
+            fi
+
+            delete_subvolume_recursively() {
+                IFS=$'\n'
+                for i in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
+                    delete_subvolume_recursively "/btrfs_tmp/$i"
+                done
+                btrfs subvolume delete "$1"
+            }
+
+            for i in $(find /btrfs_tmp/old_roots/ -maxdepth 1 -mtime +${builtins.toString config.pers.impermanence.daysToKeep}); do
+                delete_subvolume_recursively "$i"
             done
-            btrfs subvolume delete "$1"
-        }
 
-        for i in $(find /btrfs_tmp/old_roots/ -maxdepth 1 -mtime +${builtins.toString config.pers.impermanence.daysToKeep}); do
-            delete_subvolume_recursively "$i"
-        done
+            for i in $(ls -t /btrfs_tmp/old_roots/ | tail -n +${
+              builtins.toString (config.pers.impermanence.amountToKeep + 1)
+            } | awk -v dir="/btrfs_tmp/old_roots/" '{print dir $0}'); do
+                delete_subvolume_recursively "$i"
+            done
 
-        for i in $(ls -t /btrfs_tmp/old_roots/ | tail -n +${
-          builtins.toString (config.pers.impermanence.amountToKeep + 1)
-        } | awk -v dir="/btrfs_tmp/old_roots/" '{print dir $0}'); do
-            delete_subvolume_recursively "$i"
-        done
-
-        btrfs subvolume create /btrfs_tmp/root
-        umount /btrfs_tmp
-      '';
+            btrfs subvolume create /btrfs_tmp/root
+            umount /btrfs_tmp
+          '';
+        };
+      };
 
       fileSystems.${config.pers.impermanence.persistFileSystem}.neededForBoot = true;
 
