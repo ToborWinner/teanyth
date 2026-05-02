@@ -24,7 +24,7 @@
   };
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/7025b786-c4dc-4c54-b53c-d88a1b7c53a0";
+    device = "/dev/disk/by-uuid/d71beebe-2727-4ebd-8044-06224e3ce7b0";
     fsType = "btrfs";
     options = [
       "subvol=root"
@@ -34,7 +34,7 @@
   };
 
   fileSystems."/persist" = {
-    device = "/dev/disk/by-uuid/7025b786-c4dc-4c54-b53c-d88a1b7c53a0";
+    device = "/dev/disk/by-uuid/d71beebe-2727-4ebd-8044-06224e3ce7b0";
     fsType = "btrfs";
     options = [
       "subvol=persist"
@@ -43,7 +43,7 @@
   };
 
   fileSystems."/nix" = {
-    device = "/dev/disk/by-uuid/7025b786-c4dc-4c54-b53c-d88a1b7c53a0";
+    device = "/dev/disk/by-uuid/d71beebe-2727-4ebd-8044-06224e3ce7b0";
     fsType = "btrfs";
     options = [
       "subvol=nix"
@@ -53,7 +53,7 @@
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/745B-19FD";
+    device = "/dev/disk/by-uuid/A4BD-12EB";
     fsType = "vfat";
     options = [
       "fmask=0022"
