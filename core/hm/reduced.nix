@@ -31,8 +31,8 @@ let
             # Avoid evaluating all options because of docs and avoid the IFD done in nvf in mnw
             pers.neovim.enable = lib.mkForce false;
             # TODO: Better way to fix
-            # Avoid IFD done in swww
-            pers.swww.enable = lib.mkForce false;
+            # Avoid IFD done in awww
+            pers.awww.enable = lib.mkForce false;
             pers.hyprpaper.enable = lib.mkForce true;
           }
         ];
