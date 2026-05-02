@@ -14,21 +14,20 @@
       message = "Tor nightly build needs to be updated";
     };
 
-    # WARNING: This is a nightly build, it may not be safe
-    # Nightly builds can be found here: https://nightlies.tbb.torproject.org/nightly-builds/
-    # To re-install, updating to a new nightly build is required
+    # WARNING: This is an alpha build, it may not be safe
+    # TODO: Switch to stable normal package once aarch64 support is released.
     home.packages = [
       (pkgs.tor-browser.overrideAttrs (
         finalAttrs: previousAttrs: {
           src = pkgs.fetchurl {
             urls = [
-              "https://nightlies.tbb.torproject.org/nightly-builds/tor-browser-builds/tbb-nightly.2026.05.01/nightly-linux-aarch64/tor-browser-linux-aarch64-tbb-nightly.2026.05.01.tar.xz"
+              "https://archive.torproject.org/tor-package-archive/torbrowser/16.0a5/tor-browser-linux-aarch64-16.0a5.tar.xz"
             ];
-            hash = "sha256-7eEsiZD183T43SymNSF4yMOaoFghg4Pyf8AdPzFLRVs=";
+            hash = "sha256-9elX8PRDtpWPevgsiNwldmKEb09MbJr4GYMmljIJwkw=";
           };
           meta.platforms = [ "aarch64-linux" ];
           buildPhase =
-            builtins.replaceStrings [ "fontconfig/fonts.conf" ] [ "fonts/fonts.conf" ]
+            builtins.replaceStrings [ "TorBrowser/Data/Tor/torrc-defaults" ] [ "TorBrowser/Tor/torrc-defaults" ]
               previousAttrs.buildPhase;
         }
       ))

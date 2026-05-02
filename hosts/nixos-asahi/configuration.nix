@@ -96,7 +96,7 @@
       reb.enable = true;
       twofa.enable = true;
       neovim.enable = true;
-      tor.enable = false;
+      tor.enable = true;
       zathura.enable = true;
       cava.enable = true;
       btop.enable = true;
@@ -151,5 +151,16 @@
 
   boot.binfmt.emulatedSystems = [ "x86_64-linux" ];
 
-  environment.systemPackages = [ pkgs.firecracker ];
+  environment.systemPackages = [
+    pkgs.firecracker
+    (pkgs.ani-cli.overrideAttrs {
+      version = "4.14";
+      src = pkgs.fetchFromGitHub {
+        owner = "pystardust";
+        repo = "ani-cli";
+        tag = "v4.14";
+        hash = "sha256-OyCKDN89sBz59+3JncMDyNOq8UMqqjara+A0Owo3oko=";
+      };
+    })
+  ];
 }
