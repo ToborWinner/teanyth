@@ -96,7 +96,7 @@
       reb.enable = true;
       twofa.enable = true;
       neovim.enable = true;
-      tor.enable = true;
+      tor.enable = false;
       zathura.enable = true;
       cava.enable = true;
       btop.enable = true;
