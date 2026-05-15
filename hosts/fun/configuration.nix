@@ -2,8 +2,7 @@
 
 {
   imports = [
-    ./hardware-configuration.nix
-    (inputs.sensitive + "/modules/night.nix")
+    (inputs.sensitive + "/modules/fun.nix")
   ];
 
   pers = {
@@ -16,6 +15,7 @@
     impermanence = {
       enable = true;
       configureUser = false;
+      configureWipe = false;
       amountToKeep = 5;
       daysToKeep = 10;
       extraSystemDirectories = [
@@ -32,10 +32,9 @@
       user = true;
     };
     nixos-anywhere.enable = true;
-    disko.enable = true;
     tailscale.enable = true;
-    minecraft-server.enable = true;
     distrobox.enable = true;
+    # No disko because we have a custom setup in sensitive.
   };
 
   networking.hostName = settings.hostname;

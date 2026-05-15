@@ -17,6 +17,11 @@
       default = true;
       description = "Whether to configure the user's impermanent directories and files automatically.";
     };
+    configureWipe = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Whether to configure the automatic wiping every reboot.";
+    };
     extraUserDirectories = lib.mkOption {
       type = lib.types.listOf lib.types.anything;
       default = [ ];
@@ -57,7 +62,7 @@
       ];
 
       # Conversion to systemd taken from https://github.com/nix-community/impermanence/pull/321/changes
-      boot.initrd.systemd = {
+      boot.initrd.systemd = lib.mkIf config.pers.impermanence.configureWipe {
         services.wipe-file-systems = {
           unitConfig.DefaultDependencies = false;
           serviceConfig.Type = "oneshot";
