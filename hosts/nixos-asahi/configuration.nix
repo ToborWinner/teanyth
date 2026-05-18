@@ -152,7 +152,6 @@
   boot.binfmt.emulatedSystems = [ "x86_64-linux" ];
 
   environment.systemPackages = [
-    pkgs.firecracker
     (pkgs.ani-cli.overrideAttrs {
       version = "4.14";
       src = pkgs.fetchFromGitHub {
