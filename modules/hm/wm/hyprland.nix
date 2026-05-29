@@ -8,6 +8,8 @@
 
 with lib;
 
+# TODO: Remove uwsm. Idk why i bothered to add it, it sucks.
+
 let
   cfg = config.pers.hyprland;
 in
@@ -16,7 +18,7 @@ in
     enable = mkEnableOption "hyprland";
     asahiSupport = mkEnableOption "Asahi Hyprland support";
     monitor = mkOption {
-      type = types.nullOr types.str;
+      type = types.nullOr (types.attrsOf (types.either types.int types.str));
       description = "Monitor to use in Hyprland configuration";
       default = null;
     };
@@ -67,241 +69,414 @@ in
       '';
     };
 
-    wayland.windowManager.hyprland = {
-      enable = true;
-      systemd.enable = false;
+    wayland.windowManager.hyprland =
 
-      settings = {
-        "$mod" = "SUPER";
+      let
+        makeBinds = builtins.map (x: {
+          _args = x;
+        });
+      in
 
-        monitor = mkIf (cfg.monitor != null) cfg.monitor;
+      {
+        enable = true;
+        systemd.enable = false;
 
-        # Set variables in config
-        "$terminal" = config.pers.info.terminal;
-        "$tmux" = mkIf config.pers.tmux.enable "alacritty -e tmux -S /run/user/1000/tmux-1000/default";
-        "$notes" =
-          mkIf (config.pers.tmux.enable && config.pers.neovim.enable)
-            "alacritty -e tmux -S /run/user/1000/tmux-1000/default new-session -A -s notes 'cd ~/Documents/Vaults/personal && nvim -c \":Obsidian quick_switch\"'";
-        "$fileManager" = pers.mkIfNotNull config.pers.info.fileManager;
-        "$menu" = pers.mkIfNotNull config.pers.info.menu;
-        "$music" = pers.mkIfNotNull config.pers.info.music;
+        configType = "lua";
 
-        # Startup
-        # exec-once = singleton (mkIf config.programs.waybar.enable "waybar");
+        settings = {
+          monitor = mkIf (cfg.monitor != null) cfg.monitor;
 
-        general = {
-          resize_on_border = false; # Can't resize windows by clicking on borders
-          allow_tearing = false;
-          layout = "dwindle"; # Normal Hyprland layout. Alternative is master.
-        };
+          config = [
+            {
+              general = {
+                resize_on_border = false; # Can't resize windows by clicking on borders
+                allow_tearing = false;
+                layout = "dwindle"; # Normal Hyprland layout. Alternative is master.
+              };
 
-        dwindle = {
-          pseudotile = true;
-          preserve_split = true;
-        };
+              dwindle = {
+                # pseudotile = true; doesn't work when converting to lua
+                preserve_split = true;
+              };
 
-        misc = {
-          force_default_wallpaper = "0";
-          disable_hyprland_logo = true;
-          vfr = true;
-        };
+              misc = {
+                force_default_wallpaper = 0;
+                disable_hyprland_logo = true;
+              };
 
-        input = {
-          kb_layout = pers.mkIfNotNull config.pers.info.kb_layout;
-          kb_variant = pers.mkIfNotNull config.pers.info.kb_variant;
-          kb_options = pers.mkIfNotNull config.pers.info.kb_options;
+              input = {
+                kb_layout = pers.mkIfNotNull config.pers.info.kb_layout;
+                kb_variant = pers.mkIfNotNull config.pers.info.kb_variant;
+                kb_options = pers.mkIfNotNull config.pers.info.kb_options;
 
-          repeat_delay = "150";
-          repeat_rate = "40"; # Does not work, along with many of those settinsg because of nixos I think.
+                repeat_delay = 150;
+                repeat_rate = 40; # Does not work, along with many of those settinsg because of nixos I think.
 
-          follow_mouse = "1";
+                follow_mouse = 1;
 
-          accel_profile = "flat";
+                accel_profile = "flat";
 
-          sensitivity = "1";
+                sensitivity = 1;
 
-          touchpad = {
-            natural_scroll = true;
-            tap-to-click = false;
-            disable_while_typing = false;
-            clickfinger_behavior = "1";
-          };
-        };
+                touchpad = {
+                  natural_scroll = true;
+                  tap_to_click = false;
+                  disable_while_typing = false;
+                  clickfinger_behavior = 1;
+                };
+              };
 
-        device = [
-          {
-            name = "primax-electronics-apple-optical-usb-mouse";
-            sensitivity = "0.6"; # Doubled cause scaling
-          }
-        ];
-
-        cursor = {
-          inactive_timeout = "5";
-          enable_hyprcursor = true;
-        };
-
-        bind = [
-          (mkIf (config.pers.info.menu != null) "$mod, D, exec, uwsm app -- $menu")
-          "$mod, RETURN, exec, $terminal"
-          (mkIf config.pers.tmux.enable "$mod, T, exec, uwsm app -- $tmux")
-          (mkIf (config.pers.tmux.enable && config.pers.neovim.enable) "$mod, Y, exec, uwsm app -- $notes")
-          "$mod, Q, killactive"
-          (mkIf config.programs.wlogout.enable "$mod, M, exec, uwsm app -- wlogout")
-          (mkIf (config.pers.info.fileManager != null) "$mod, E, exec, uwsm app -- $fileManager")
-          (mkIf (config.pers.info.music != null) "$mod, A, exec, uwsm app -- $music")
-          (mkIf (
-            config.pers.info.wallpaperPickerCommand != null
-          ) "$mod, Z, exec, uwsm app -- ${config.pers.info.wallpaperPickerCommand}")
-
-          "$mod, V, togglefloating"
-          "$mod, P, pin" # Pin a floating window so it's visible in all workspaces
-          "$mod, S, togglesplit"
-          "$mod, F, fullscreen"
-          "$mod, C, centerwindow" # Centers window in floating mode
-          "$mod, U, focusurgentorlast" # Focuses the window marked as urgent
-
-          "$mod, O, exec, grim -g \"$(slurp -w 0)\" - | wl-copy" # Screenshot to clipboard.
-          "$mod&SHIFT, O, exec, grim -g \"$(slurp -w 0)\" - | swappy -f -" # Screenshot to swappy.
-          "$mod&ALT, O, exec, grim -g \"$(slurp -w 0)\" \"$HOME/Images/$(date +'%Y-%m-%dT%H:%M:%S').png\"" # Screenshot to file.
-          "$mod&CTRL, O, exec, grim - | wl-copy" # Screenshot of screen to clipboard.
-          "$mod&CTRL&SHIFT, O, exec, grim - | swappy -f -" # Screenshot of screen to swappy.
-
-          "$mod, H, movefocus, l"
-          "$mod, L, movefocus, r"
-          "$mod, J, movefocus, d"
-          "$mod, K, movefocus, u"
-          "$mod&SHIFT, H, movewindow, l"
-          "$mod&SHIFT, L, movewindow, r"
-          "$mod&SHIFT, J, movewindow, d"
-          "$mod&SHIFT, K, movewindow, u"
-
-          "$mod, G, setprop, activewindow alpha 0.0 lock"
-          "$mod&SHIFT, G, setprop, activewindow alpha 1.0 lock"
-
-          "$mod, R, submap, resize"
-          "$mod, N, submap, counting"
-          "$mod&CTRL&SHIFT, P, submap, passthru"
-          "$mod, BACKSPACE, exec, hyprctl switchxkblayout all next"
-        ]
-        ++ (
-          # workspaces
-          # binds $mod + [shift +] {1..10} to [move to] workspace {1..10}
-          builtins.concatLists (
-            builtins.genList (
-              x:
-              let
-                ws =
-                  let
-                    c = (x + 1) / 10;
-                  in
-                  builtins.toString (x + 1 - (c * 10));
-              in
-              [
-                "$mod, ${ws}, workspace, ${toString (x + 1)}"
-                "$mod SHIFT, ${ws}, movetoworkspace, ${toString (x + 1)}"
-              ]
-            ) 10
-          )
-        );
-
-        # Mouse bindings
-        bindm = [
-          "$mod, mouse:272, movewindow"
-          "$mod, mouse:273, resizewindow"
-        ];
-
-        # Binds that work even with an input inhibitor
-        bindl = [
-          ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-        ]
-        ++ optionals config.pers.mpd.enable [
-          ", XF86AudioPrev, exec, mpc prev"
-          ", XF86AudioNext, exec, mpc next"
-          ", XF86AudioPlay, exec, mpc toggle"
-        ];
-
-        # Binds that work with an input inhibitor and press and hold
-        bindel =
-          let
-            brightnessctlBin = getExe pkgs.brightnessctl;
-            wpctlBin = "${osConfig.services.pipewire.wireplumber.package}/bin/wpctl";
-          in
-          [
-            ", XF86MonBrightnessDown, exec, ${brightnessctlBin} set 5%-"
-            ", XF86MonBrightnessUp, exec, ${brightnessctlBin} set 5%+"
-          ]
-          ++ optionals osConfig.services.pipewire.wireplumber.enable [
-            ", XF86AudioRaiseVolume, exec, ${wpctlBin} set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"
-            ", XF86AudioLowerVolume, exec, ${wpctlBin} set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%-"
+              cursor = {
+                inactive_timeout = 5;
+                enable_hyprcursor = true;
+              };
+            }
           ];
+
+          device = [
+            {
+              name = "primax-electronics-apple-optical-usb-mouse";
+              sensitivity = 0.6; # Doubled cause scaling
+            }
+          ];
+
+          bind =
+            let
+              brightnessctlBin = getExe pkgs.brightnessctl;
+              wpctlBin = "${osConfig.services.pipewire.wireplumber.package}/bin/wpctl";
+            in
+            makeBinds (
+              [
+                (mkIf (config.pers.info.menu != null) [
+                  "SUPER + D"
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"${config.pers.info.menu}\")")
+                ])
+                [
+                  "SUPER + RETURN"
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"${config.pers.info.terminal}\")")
+                ]
+                (mkIf config.pers.tmux.enable [
+                  "SUPER + T"
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"alacritty -e tmux -S /run/user/1000/tmux-1000/default\")")
+                ])
+                (mkIf (config.pers.tmux.enable && config.pers.neovim.enable) [
+                  "SUPER + Y"
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"alacritty -e tmux -S /run/user/1000/tmux-1000/default new-session -A -s notes 'cd ~/Documents/Vaults/personal && nvim -c \\\":Obsidian quick_switch\\\"'\")")
+                ])
+                [
+                  "SUPER + Q"
+                  (lib.generators.mkLuaInline "hl.dsp.window.close()")
+                ]
+                (mkIf config.programs.wlogout.enable [
+                  "SUPER + M"
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"wlogout\")")
+                ])
+                (mkIf (config.pers.info.fileManager != null) [
+                  "SUPER + E"
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"${config.pers.info.fileManager}\")")
+                ])
+                (mkIf (config.pers.info.music != null) [
+                  "SUPER + A"
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"${config.pers.info.music}\")")
+                ])
+                (mkIf (config.pers.info.wallpaperPickerCommand != null) [
+                  "SUPER + Z"
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"${config.pers.info.wallpaperPickerCommand}\")")
+                ])
+                [
+                  "SUPER + V"
+                  (lib.generators.mkLuaInline "hl.dsp.window.float({ action = \"toggle\" })")
+                ]
+                [
+                  "SUPER + P"
+                  (lib.generators.mkLuaInline "hl.dsp.window.pin({})")
+                ]
+                [
+                  "SUPER + S"
+                  (lib.generators.mkLuaInline "hl.dsp.layout(\"togglesplit\")")
+                ]
+                [
+                  "SUPER + F"
+                  (lib.generators.mkLuaInline "hl.dsp.window.fullscreen({ action = \"toggle\" })")
+                ]
+                [
+                  "SUPER + C"
+                  (lib.generators.mkLuaInline "hl.dsp.window.center({})")
+                ]
+                [
+                  "SUPER + U"
+                  (lib.generators.mkLuaInline "hl.dsp.focus({ urgent_or_last = true })")
+                ]
+                [
+                  "SUPER + O" # Schreenshot to clipboard
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"grim -g \\\"$(slurp -w 0)\\\" - | wl-copy\")")
+                ]
+                [
+                  "SUPER + SHIFT + O" # Schreenshot to swappy
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"grim -g \\\"$(slurp -w 0)\\\" - | swappy -f -\")")
+                ]
+                [
+                  "SUPER + ALT + O" # Schreenshot to file
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"grim -g \\\"$(slurp -w 0)\\\" \\\"$HOME/Images/$(date +'%Y-%m-%dT%H:%M:%S').png\\\"\")")
+                ]
+                [
+                  "SUPER + CTRL + O" # Screenshot of screen to clipboard
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"grim - | wl-copy\")")
+                ]
+                [
+                  "SUPER + SHIFT + CTRL + O" # Screenshot of screen to swappy
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"grim - | swappy -f -\")")
+                ]
+                [
+                  "SUPER + H"
+                  (lib.generators.mkLuaInline "hl.dsp.focus({ direction = \"left\" })")
+                ]
+                [
+                  "SUPER + J"
+                  (lib.generators.mkLuaInline "hl.dsp.focus({ direction = \"down\" })")
+                ]
+                [
+                  "SUPER + K"
+                  (lib.generators.mkLuaInline "hl.dsp.focus({ direction = \"up\" })")
+                ]
+                [
+                  "SUPER + L"
+                  (lib.generators.mkLuaInline "hl.dsp.focus({ direction = \"right\" })")
+                ]
+                [
+                  "SUPER + SHIFT + H"
+                  (lib.generators.mkLuaInline "hl.dsp.window.move({ direction = \"left\" })")
+                ]
+                [
+                  "SUPER + SHIFT + J"
+                  (lib.generators.mkLuaInline "hl.dsp.window.move({ direction = \"down\" })")
+                ]
+                [
+                  "SUPER + SHIFT + K"
+                  (lib.generators.mkLuaInline "hl.dsp.window.move({ direction = \"up\" })")
+                ]
+                [
+                  "SUPER + SHIFT + L"
+                  (lib.generators.mkLuaInline "hl.dsp.window.move({ direction = \"right\" })")
+                ]
+                [
+                  "SUPER + G"
+                  (lib.generators.mkLuaInline "hl.dsp.window.set_prop({ prop = \"opacity\", value = 0.0 })")
+                ]
+                [
+                  "SUPER + SHIFT + G"
+                  (lib.generators.mkLuaInline "hl.dsp.window.set_prop({ prop = \"opacity\", value = 1.0 })")
+                ]
+                [
+                  "SUPER + N"
+                  (lib.generators.mkLuaInline "hl.dsp.submap(\"counting\")")
+                ]
+                [
+                  "SUPER + CTRL + SHIFT + P"
+                  (lib.generators.mkLuaInline "hl.dsp.submap(\"passthru\")")
+                ]
+                [
+                  "SUPER + ALT + H"
+                  (lib.generators.mkLuaInline "hl.dsp.window.resize({ x = -40, y = 0, relative = true })")
+                  { repeating = true; }
+                ]
+                [
+                  "SUPER + ALT + J"
+                  (lib.generators.mkLuaInline "hl.dsp.window.resize({ x = 0, y = -40, relative = true })")
+                  { repeating = true; }
+                ]
+                [
+                  "SUPER + ALT + K"
+                  (lib.generators.mkLuaInline "hl.dsp.window.resize({ x = 0, y = 40, relative = true })")
+                  { repeating = true; }
+                ]
+                [
+                  "SUPER + ALT + L"
+                  (lib.generators.mkLuaInline "hl.dsp.window.resize({ x = 40, y = 0, relative = true })")
+                  { repeating = true; }
+                ]
+                [
+                  "SUPER + SHIFT + ALT + H"
+                  (lib.generators.mkLuaInline "hl.dsp.window.resize({ x = -10, y = 0, relative = true })")
+                  { repeating = true; }
+                ]
+                [
+                  "SUPER + SHIFT + ALT + J"
+                  (lib.generators.mkLuaInline "hl.dsp.window.resize({ x = 0, y = -10, relative = true })")
+                  { repeating = true; }
+                ]
+                [
+                  "SUPER + SHIFT + ALT + K"
+                  (lib.generators.mkLuaInline "hl.dsp.window.resize({ x = 0, y = 10, relative = true })")
+                  { repeating = true; }
+                ]
+                [
+                  "SUPER + SHIFT + ALT + L"
+                  (lib.generators.mkLuaInline "hl.dsp.window.resize({ x = 10, y = 0, relative = true })")
+                  { repeating = true; }
+                ]
+                [
+                  "SUPER + BACKSPACE"
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"hyprctl switchxkblayout all next\")")
+                ]
+                [
+                  "SUPER + mouse:272"
+                  (lib.generators.mkLuaInline "hl.dsp.window.drag()")
+                  { mouse = true; }
+                ]
+                [
+                  "SUPER + mouse:273"
+                  (lib.generators.mkLuaInline "hl.dsp.window.resize()")
+                  { mouse = true; }
+                ]
+                [
+                  "XF86AudioMute"
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"${wpctlBin} set-mute @DEFAULT_AUDIO_SINK@ toggle\")")
+                  { locked = true; }
+                ]
+                [
+                  "XF86MonBrightnessDown"
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"${brightnessctlBin} set 5%-\")")
+                  {
+                    locked = true;
+                    repeating = true;
+                  }
+                ]
+                [
+                  "XF86MonBrightnessUp"
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"${brightnessctlBin} set 5%+\")")
+                  {
+                    locked = true;
+                    repeating = true;
+                  }
+                ]
+              ]
+              ++ (optionals config.pers.mpd.enable [
+                [
+                  "XF86AudioPrev"
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"mpc prev\")")
+                  { locked = true; }
+                ]
+                [
+                  "XF86AudioNext"
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"mpc next\")")
+                  { locked = true; }
+                ]
+                [
+                  "XF86AudioPlay"
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"mpc toggle\")")
+                  { locked = true; }
+                ]
+              ])
+              ++ (optionals osConfig.services.pipewire.wireplumber.enable [
+                [
+                  "XF86AudioRaiseVolume"
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"${wpctlBin} set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+\")")
+                  {
+                    locked = true;
+                    repeating = true;
+                  }
+                ]
+                [
+                  "XF86AudioLowerVolume"
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"${wpctlBin} set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%-\")")
+                  {
+                    locked = true;
+                    repeating = true;
+                  }
+                ]
+              ])
+              ++ (
+                # workspaces
+                # binds SUPER + [shift +] {1..10} to [move to] workspace {1..10}
+                builtins.concatLists (
+                  builtins.genList (
+                    x:
+                    let
+                      ws =
+                        let
+                          c = (x + 1) / 10;
+                        in
+                        builtins.toString (x + 1 - (c * 10));
+                    in
+                    [
+                      [
+                        "SUPER + ${ws}"
+                        (lib.generators.mkLuaInline "hl.dsp.focus({ workspace = ${toString (x + 1)} })")
+                      ]
+                      [
+                        "SUPER + SHIFT + ${ws}"
+                        (lib.generators.mkLuaInline "hl.dsp.window.move({ workspace = ${toString (x + 1)}, follow = true })")
+                      ]
+                    ]
+                  ) 10
+                )
+              )
+            );
+
+          window_rule = [
+            {
+              # Ignore maximize requests from all apps. You'll probably like this.
+              name = "suppress-maximize-events";
+              match = {
+                class = ".*";
+              };
+              suppress_event = "maximize";
+            }
+            {
+              # Fix some dragging issues with XWayland
+              name = "fix-xwayland-drags";
+              match = {
+                class = "^$";
+                title = "^$";
+                xwayland = true;
+                float = true;
+                fullscreen = false;
+                pin = false;
+              };
+
+              no_focus = true;
+            }
+          ];
+        };
+
+        submaps.passthru.settings = {
+          bind = makeBinds [
+            [
+              "SUPER + CTRL + SHIFT + P"
+              (lib.generators.mkLuaInline "hl.dsp.submap(\"reset\")")
+            ]
+          ];
+        };
+
+        submaps.counting.settings = {
+          # TODO: Finish countig submap
+
+          # # Counting
+          # submap = counting
+          # bind = , r, exec, rm ~/.cache/dct/num.txt; mkdir -p ~/.cache/dct
+          # bind = , c, exec, keybindcount
+          # bind = , x, exec, keybindcount x
+          # bind = , e, exec, keybindcount exp
+          # bind = , g, exec, keybindcount egexp
+          # bind = , l, exec, keybindcount l
+          # bind = , k, exec, keybindcount classic
+          # bind = , s, exec, notify-send "Current status: `cat ~/.cache/dct/num.txt`"
+          # ${builtins.concatStringsSep "\n" (
+          #   builtins.genList (
+          #     index:
+          #     "bind = , ${toString index}, exec, mkdir -p ~/.cache/dct && echo -n '${toString index}' >> ~/.cache/dct/num.txt"
+          #   ) 10
+          # )}
+          # bind = , escape, submap, reset
+          # submap = reset
+          bind = makeBinds [
+            [
+              "SUPER + N"
+              (lib.generators.mkLuaInline "hl.dsp.submap(\"reset\")")
+            ]
+          ];
+        };
       };
-
-      extraConfig = ''
-        # will start a submap called "resize"
-        submap = resize
-
-        # sets repeatable binds for resizing the active window
-        binde = , l, resizeactive, 10 0
-        binde = , h, resizeactive, -10 0
-        binde = , k, resizeactive, 0 -10
-        binde = , j, resizeactive, 0 10
-        binde = SHIFT, L, resizeactive, 40 0
-        binde = SHIFT, H, resizeactive, -40 0
-        binde = SHIFT, K, resizeactive, 0 -40
-        binde = SHIFT, J, resizeactive, 0 40
-
-        # use reset to go back to the global submap
-        bind = , escape, submap, reset 
-
-        # will reset the submap, which will return to the global submap
-        submap = reset
-
-        # Counting
-        submap = counting
-        bind = , r, exec, rm ~/.cache/dct/num.txt; mkdir -p ~/.cache/dct
-        bind = , c, exec, keybindcount
-        bind = , x, exec, keybindcount x
-        bind = , e, exec, keybindcount exp
-        bind = , g, exec, keybindcount egexp
-        bind = , l, exec, keybindcount l
-        bind = , k, exec, keybindcount classic
-        bind = , s, exec, notify-send "Current status: `cat ~/.cache/dct/num.txt`"
-        ${builtins.concatStringsSep "\n" (
-          builtins.genList (
-            index:
-            "bind = , ${toString index}, exec, mkdir -p ~/.cache/dct && echo -n '${toString index}' >> ~/.cache/dct/num.txt"
-          ) 10
-        )}
-        bind = , escape, submap, reset
-        submap = reset
-
-        # Passthru
-        submap = passthru
-        bind = $mod&CTRL&SHIFT, p, submap, reset
-        submap = reset
-
-        # Window rules
-        windowrule {
-            # Ignore maximize requests from all apps. You'll probably like this.
-            name = suppress-maximize-events
-            match:class = .*
-
-            suppress_event = maximize
-        }
-
-        windowrule {
-            # Fix some dragging issues with XWayland
-            name = fix-xwayland-drags
-            match:class = ^$
-            match:title = ^$
-            match:xwayland = true
-            match:float = true
-            match:fullscreen = false
-            match:pin = false
-
-            no_focus = true
-        }
-      '';
-    };
   };
 }

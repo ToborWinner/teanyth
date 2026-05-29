@@ -68,7 +68,12 @@
     pers = {
       hyprland = {
         asahiSupport = true;
-        monitor = "eDP-1,2560x1664@60,auto,1";
+        monitor = {
+          output = "eDP-1";
+          mode = "2560x1664@60";
+          position = "auto";
+          scale = 1;
+        };
       };
       tmux.enable = true;
       rofi.enable = true;

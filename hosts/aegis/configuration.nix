@@ -45,7 +45,12 @@
   # Home Manager
   pers.home-manager.imports = lib.singleton {
     pers = {
-      hyprland.monitor = "eDP-1,2560x1600@60,auto,1";
+      hyprland.monitor = {
+        output = "eDP-1";
+        mode = "2560x1600@60";
+        position = "auto";
+        scale = 1;
+      };
       tmux.enable = true;
       rofi.enable = true;
       yazi.enable = true;
