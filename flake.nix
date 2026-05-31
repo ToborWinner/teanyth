@@ -121,7 +121,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     concord = {
-      url = "github:chojs23/concord";
+      url = "github:ToborWinner/concord/add-notification-icon"; # Fork
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
       inputs.rust-overlay.follows = "rust-overlay";
