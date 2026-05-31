@@ -1,8 +1,6 @@
 { config, ... }:
 
 {
-  pers.alacritty.enable = true;
-
   programs.alacritty = {
     settings = {
       font.size = 20;

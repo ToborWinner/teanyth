@@ -110,6 +110,8 @@
       tex.enable = true;
       opencode.enable = true;
       generaltools.enable = true;
+      concord.enable = true;
+      kitty.enable = true;
 
       rice.enabled = "newconfig";
     };
@@ -164,6 +166,21 @@
         repo = "ani-cli";
         tag = "v4.14";
         hash = "sha256-OyCKDN89sBz59+3JncMDyNOq8UMqqjara+A0Owo3oko=";
+      };
+    })
+  ];
+
+  # TODO: Remove this when it's in nixpkgs. Needed for a GPU issue.
+  nixpkgs.overlays = [
+    (self: super: {
+      aquamarine = super.aquamarine.overrideAttrs {
+        version = "0.12.0";
+        src = super.fetchFromGitHub {
+          owner = "hyprwm";
+          repo = "aquamarine";
+          tag = "v0.12.0";
+          hash = "sha256-TtAhxedbRAl1u6OyT+4eRxZ417G2NMJNoqEbIhjvWo0=";
+        };
       };
     })
   ];

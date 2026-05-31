@@ -3,7 +3,11 @@
 {
   xresources.properties = with config.pers.rice.currentTheme.hex; {
     "*.faceName" = config.gtk.font.name;
-    "*.faceSize" = config.programs.alacritty.settings.font.size;
+    "*.faceSize" =
+      if config.pers.alacritty.enable then
+        config.programs.alacritty.settings.font.size
+      else
+        config.programs.kitty.settings.font_size;
     "*.renderFont" = true;
     "*foreground" = foreground;
     "*background" = background;

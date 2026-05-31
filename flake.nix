@@ -9,6 +9,7 @@
       inputs.systems.follows = "nix-systems";
     };
     nix-systems.url = "github:nix-systems/default";
+    crane.url = "github:ipetkov/crane";
     nixpkgs-lib.url = "github:nix-community/nixpkgs.lib";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
@@ -118,6 +119,13 @@
     discord-counting-tools = {
       url = "github:ToborWinner/discord-counting-tools";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+    concord = {
+      url = "github:chojs23/concord";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.rust-overlay.follows = "rust-overlay";
+      inputs.crane.follows = "crane";
     };
 
     # --- Package source code ---

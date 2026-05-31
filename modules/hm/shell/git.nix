@@ -10,11 +10,9 @@
 
   config = lib.mkIf config.pers.git.enable {
     programs.git = {
-      enable = true;
-      userName = "toborwinner";
-      userEmail = "102221758+ToborWinner@users.noreply.github.com";
-      signing.format = "ssh";
-      extraConfig = {
+      settings = {
+        user.email = "102221758+ToborWinner@users.noreply.github.com";
+        user.name = "toborwinner";
         init.defaultBranch = "main";
         credential.helper = "";
         user.signingkey = "key::${sharedInfo.sshpub} 102221758+ToborWinner@users.noreply.github.com";
@@ -22,6 +20,8 @@
         commit.gpgSign = true;
         tag.gpgSign = true;
       };
+      enable = true;
+      signing.format = "ssh";
     };
   };
 }

@@ -150,7 +150,12 @@
         ++ config.pers.hypixel-bridge.impermanence
         ++ config.pers.impermanence.extraSystemDirectories;
 
-        files = [ "/etc/machine-id" ];
+        files = [
+          "/etc/machine-id"
+          # TODO: https://github.com/NixOS/nixpkgs/issues/501336
+          # this doesn't work because "too many symlinks".
+          # (lib.mkIf config.virtualisation.libvirtd.enable "/var/lib/systemd/credential.secret")
+        ];
 
         users.${settings.username} =
           let
@@ -165,6 +170,7 @@
               "sensitive"
               "teanyth"
               (lib.mkIf hmCfg.pers.direnv.enable ".local/share/direnv")
+              (lib.mkIf hmCfg.pers.concord.enable ".config/concord")
               (lib.mkIf hmCfg.pers.zoxide.enable ".local/share/zoxide")
               (lib.mkIf hmCfg.pers.mpd.enable ".local/share/mpd")
               (lib.mkIf hmCfg.pers.neovim.enable ".local/share/jdtls-config")

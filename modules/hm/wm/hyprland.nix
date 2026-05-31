@@ -41,7 +41,8 @@ in
     pers.hyprland.monitor = mkIf osConfig.pers.virtualisation.isVmVariant (mkForce ",preferred,auto,1");
 
     home.sessionVariables = mkIf cfg.asahiSupport {
-      WLR_DRM_DEVICES = "/dev/dri/card0";
+      # WLR_DRM_DEVICES = "/dev/dri/renderD128"; # Was previously card0
+      # AQ_DRM_DEVICES = "/dev/dri/card1";
       WLR_NO_HARDWARE_CURSORS = "1";
     };
 
@@ -157,11 +158,11 @@ in
                 ]
                 (mkIf config.pers.tmux.enable [
                   "SUPER + T"
-                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"alacritty -e tmux -S /run/user/1000/tmux-1000/default\")")
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"${config.pers.info.terminalCommand "tmux -S /run/user/1000/tmux-1000/default"}\")")
                 ])
                 (mkIf (config.pers.tmux.enable && config.pers.neovim.enable) [
                   "SUPER + Y"
-                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"alacritty -e tmux -S /run/user/1000/tmux-1000/default new-session -A -s notes 'cd ~/Documents/Vaults/personal && nvim -c \\\":Obsidian quick_switch\\\"'\")")
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"${config.pers.info.terminalCommand "tmux -S /run/user/1000/tmux-1000/default new-session -A -s notes 'cd ~/Documents/Vaults/personal && nvim -c \\\":Obsidian quick_switch\\\"'"}\")")
                 ])
                 [
                   "SUPER + Q"

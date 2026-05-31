@@ -21,6 +21,50 @@
         "type": "github"
       }
     },
+    "concord": {
+      "inputs": {
+        "crane": [
+          "crane"
+        ],
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "rust-overlay": [
+          "rust-overlay"
+        ]
+      },
+      "locked": {
+        "lastModified": 1780074241,
+        "narHash": "sha256-0dTJ6MMxQRztJxgNkYxIwgMjoIccUxOzImJAMfWdllo=",
+        "owner": "chojs23",
+        "repo": "concord",
+        "rev": "2436ee52544f51e52b2e45056a25ccf0c5619166",
+        "type": "github"
+      },
+      "original": {
+        "owner": "chojs23",
+        "repo": "concord",
+        "type": "github"
+      }
+    },
+    "crane": {
+      "locked": {
+        "lastModified": 1780099841,
+        "narHash": "sha256-EVZd2RsbpreRUDSi9rBwPY+ZxoyMaiEBbZxxhljbaS4=",
+        "owner": "ipetkov",
+        "repo": "crane",
+        "rev": "0532eb17955225173906d671fb36306bdeb1e2dc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ipetkov",
+        "repo": "crane",
+        "type": "github"
+      }
+    },
     "deploy-rs": {
       "inputs": {
         "flake-compat": [
@@ -635,6 +679,8 @@
     "root": {
       "inputs": {
         "apple-silicon": "apple-silicon",
+        "concord": "concord",
+        "crane": "crane",
         "deploy-rs": "deploy-rs",
         "discord-counting-tools": "discord-counting-tools",
         "disko": "disko",
