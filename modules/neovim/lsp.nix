@@ -23,7 +23,10 @@
     typescript.enable = true;
     css.enable = true;
     html.enable = true;
-    java.enable = true;
+    java = {
+      enable = true;
+      extensions.maven-nvim.enable = true;
+    };
     markdown = {
       enable = true;
       extensions.render-markdown-nvim.enable = true;
@@ -45,126 +48,154 @@
     vim.treesitter.language.register("systemverilog", "verilog")
   '';
 
+  vim.extraPlugins = {
+    nvim-jdtls = {
+      package = pkgs.vimPlugins.nvim-jdtls;
+    };
+  };
+
   vim.lsp = {
     enable = true;
     formatOnSave = true;
     lspkind.enable = true;
 
-    lspconfig.sources.jdtls = lib.mkForce ''
-      lspconfig.jdtls.setup {
-        capabilities = capabilities,
-        on_attach = default_on_attach,
-        init_options = {
-          settings = {
-            java = {
-              configuration = {
-                runtimes = {
-                  {
-                    name = "JavaSE-1.8",
-                    path = "${pkgs.jdk8}",
-                  },
-                },
-              },
-              project = {
-                updateBuildConfiguration = 'disabled',
-                referencedLibraries = {},
-              },
-              import = {
-                gradle = {
-                  enabled = false,
-                },
-                maven = {
-                  enabled = false,
-                },
-              },
-              format = {
-                enabled = true,
-              },
-              contentProvider = {
-                preferred = 'fernflower',
-              },
-              references = {
-                includeDecompiledSources = true,
-              },
-              implementationsCodeLens = {
-                enabled = true,
-              },
-              referencesCodeLens = {
-                enabled = true,
-              },
-            },
-          },
-        },
-          settings = {
-            java = {
-              configuration = {
-                runtimes = {
-                  {
-                    name = "JavaSE-1.8",
-                    path = "${pkgs.jdk8}",
-                  },
-                },
-              },
-              project = {
-                updateBuildConfiguration = 'disabled',
-                referencedLibraries = {},
-              },
-              import = {
-                gradle = {
-                  enabled = false,
-                },
-                maven = {
-                  enabled = false,
-                },
-              },
-              format = {
-                enabled = true,
-              },
-              contentProvider = {
-                preferred = 'fernflower',
-              },
-              references = {
-                includeDecompiledSources = true,
-              },
-              implementationsCodeLens = {
-                enabled = true,
-              },
-              referencesCodeLens = {
-                enabled = true,
-              },
-            },
-          },
-        cmd = ${
-          if lib.lists.isList config.vim.languages.java.lsp.package then
-            lib.nvim.expToLua config.vim.languages.java.lsp.package
-          else
-            let
-              # TODO: Fix -configuration (supposed to be ${jdtls}/config_linux, but it being read-only is promlematic)
-              # Currently I copied it to .local/share/jdtls-config, but that's a terrible solution
-              jdtls = "${config.vim.languages.java.lsp.package}/share/java/jdtls";
-            in
-            ''
-              {
-                "${lib.getExe config.vim.languages.java.lsp.package}",
-                "-Declipse.application=org.eclipse.jdt.ls.core.id1",
-                "-Dosgi.bundles.defaultStartLevel=4",
-                "-Declipse.product=org.eclipse.jdt.ls.core.product",
-                "-Dgradle.autoSync=false",
-                "-Dorg.eclipse.core.resources.refresh.build=false",
-                "-Dlog.protocol=true",
-                "-Dlog.level=ALL",
-                "-Xms1g",
-                "--add-modules=ALL-SYSTEM",
-                "--add-opens", "java.base/java.util=ALL-UNNAMED",
-                "--add-opens", "java.base/java.lang=ALL-UNNAMED",
-                "-jar", vim.fn.glob("${jdtls}/plugins/org.eclipse.equinox.launcher_*.jar"),
-                "-configuration", "/home/tobor/.local/share/jdtls-config",
-                "-data", vim.fn.stdpath("cache") .. "/jdtls/workspace/" .. vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
-              }
-            ''
-        },
-      }
-    '';
+    # https://github.com/NotAShelf/nvf/blob/main/modules/plugins/lsp/presets/jdt-language-server.nix
+    # Disable the normal java lsp set up by nvf
+    presets.jdt-language-server.enable = lib.mkForce false;
+    # https://github.com/NotAShelf/nvf/blob/main/modules/plugins/languages/java.nix
+    # Enable ours. This could be done by setting the lsp servers to "jdtls",
+    # but nvf has an annoying rename in the type that renames jdtls to jdt-language-server
+    presets.jdtls.enable = true;
+    servers.jdtls.filetypes = [ "java" ];
+
+    # servers.jdt-language-server = {
+    #   settings.java = {
+    #     configuration.updateBuildConfiguration = "automatic";
+    #     eclipse.downloadSources = true;
+    #     maven.downloadSources = true;
+    #     references.includeDecompiledSources = true;
+    #     contentProvide.preferred = "fernflower";
+    #   };
+    #   # init_options.extendedClientCapabilities.classFileContentsSupport = true;
+    # };
+
+    # TODO: Not needed anymore / doesn't work i think?
+
+    # lspconfig.sources.jdtls = lib.mkForce ''
+    #   lspconfig.jdtls.setup {
+    #     capabilities = capabilities,
+    #     on_attach = default_on_attach,
+    #     init_options = {
+    #       settings = {
+    #         java = {
+    #           configuration = {
+    #             runtimes = {
+    #               {
+    #                 name = "JavaSE-1.8",
+    #                 path = "${pkgs.jdk8}",
+    #               },
+    #             },
+    #           },
+    #           project = {
+    #             updateBuildConfiguration = 'disabled',
+    #             referencedLibraries = {},
+    #           },
+    #           import = {
+    #             gradle = {
+    #               enabled = false,
+    #             },
+    #             maven = {
+    #               enabled = false,
+    #             },
+    #           },
+    #           format = {
+    #             enabled = true,
+    #           },
+    #           contentProvider = {
+    #             preferred = 'fernflower',
+    #           },
+    #           references = {
+    #             includeDecompiledSources = true,
+    #           },
+    #           implementationsCodeLens = {
+    #             enabled = true,
+    #           },
+    #           referencesCodeLens = {
+    #             enabled = true,
+    #           },
+    #         },
+    #       },
+    #     },
+    #       settings = {
+    #         java = {
+    #           configuration = {
+    #             runtimes = {
+    #               {
+    #                 name = "JavaSE-1.8",
+    #                 path = "${pkgs.jdk8}",
+    #               },
+    #             },
+    #           },
+    #           project = {
+    #             updateBuildConfiguration = 'disabled',
+    #             referencedLibraries = {},
+    #           },
+    #           import = {
+    #             gradle = {
+    #               enabled = false,
+    #             },
+    #             maven = {
+    #               enabled = false,
+    #             },
+    #           },
+    #           format = {
+    #             enabled = true,
+    #           },
+    #           contentProvider = {
+    #             preferred = 'fernflower',
+    #           },
+    #           references = {
+    #             includeDecompiledSources = true,
+    #           },
+    #           implementationsCodeLens = {
+    #             enabled = true,
+    #           },
+    #           referencesCodeLens = {
+    #             enabled = true,
+    #           },
+    #         },
+    #       },
+    #     cmd = ${
+    #       if lib.lists.isList config.vim.languages.java.lsp.package then
+    #         lib.nvim.expToLua config.vim.languages.java.lsp.package
+    #       else
+    #         let
+    #           # TODO: Fix -configuration (supposed to be ${jdtls}/config_linux, but it being read-only is promlematic)
+    #           # Currently I copied it to .local/share/jdtls-config, but that's a terrible solution
+    #           jdtls = "${config.vim.languages.java.lsp.package}/share/java/jdtls";
+    #         in
+    #         ''
+    #           {
+    #             "${lib.getExe config.vim.languages.java.lsp.package}",
+    #             "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+    #             "-Dosgi.bundles.defaultStartLevel=4",
+    #             "-Declipse.product=org.eclipse.jdt.ls.core.product",
+    #             "-Dgradle.autoSync=false",
+    #             "-Dorg.eclipse.core.resources.refresh.build=false",
+    #             "-Dlog.protocol=true",
+    #             "-Dlog.level=ALL",
+    #             "-Xms1g",
+    #             "--add-modules=ALL-SYSTEM",
+    #             "--add-opens", "java.base/java.util=ALL-UNNAMED",
+    #             "--add-opens", "java.base/java.lang=ALL-UNNAMED",
+    #             "-jar", vim.fn.glob("${jdtls}/plugins/org.eclipse.equinox.launcher_*.jar"),
+    #             "-configuration", "/home/tobor/.local/share/jdtls-config",
+    #             "-data", vim.fn.stdpath("cache") .. "/jdtls/workspace/" .. vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
+    #           }
+    #         ''
+    #     },
+    #   }
+    # '';
 
     mappings = {
       goToDefinition = "<leader>cgd";

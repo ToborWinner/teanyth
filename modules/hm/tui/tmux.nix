@@ -126,6 +126,7 @@ in
         # Image rendering for image.nvim
         set -gq allow-passthrough on
         set -g visual-activity off
+        set-option -g focus-events on
 
         # Mouse support (scrolling)
         setw -g mouse on

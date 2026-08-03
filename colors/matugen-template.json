@@ -1,0 +1,21 @@
+{
+  "foreground": "{{base16.base05.dark.hex}}",
+  "background": "{{base16.base00.dark.hex}}",
+  "cursor": "{{base16.base08.dark.hex}}",
+  "color0": "{{base16.base00.dark.hex}}",
+  "color1": "{{base16.base01.dark.hex}}",
+  "color2": "{{base16.base02.dark.hex}}",
+  "color3": "{{base16.base03.dark.hex}}",
+  "color4": "{{base16.base04.dark.hex}}",
+  "color5": "{{base16.base05.dark.hex}}",
+  "color6": "{{base16.base06.dark.hex}}",
+  "color7": "{{base16.base07.dark.hex}}",
+  "color8": "{{base16.base08.dark.hex}}",
+  "color9": "{{base16.base09.dark.hex}}",
+  "color10": "{{base16.base0a.dark.hex}}",
+  "color11": "{{base16.base0b.dark.hex}}",
+  "color12": "{{base16.base0c.dark.hex}}",
+  "color13": "{{base16.base0d.dark.hex}}",
+  "color14": "{{base16.base0e.dark.hex}}",
+  "color15": "{{base16.base0f.dark.hex}}"
+}

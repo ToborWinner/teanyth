@@ -61,6 +61,7 @@
     tailscale.enable = true;
     distrobox.enable = true;
     ghidra.enable = true;
+    logiops.enable = true;
   };
 
   # Home Manager
@@ -105,14 +106,17 @@
       zathura.enable = true;
       cava.enable = true;
       btop.enable = true;
-      mail.enable = false; # When I add an email client other than thunderbird, I'll probably enable it back
+      mail.enable = true;
       nix-index-database.enable = true;
       tex.enable = true;
       opencode.enable = true;
       generaltools.enable = true;
       concord.enable = true;
       kitty.enable = true;
+      wl-kbptr.enable = true;
+      thunderbird.enable = true;
 
+      defaultTheme = "tree_sky";
       rice.enabled = "newconfig";
     };
 
@@ -164,8 +168,8 @@
       src = pkgs.fetchFromGitHub {
         owner = "pystardust";
         repo = "ani-cli";
-        tag = "v4.14";
-        hash = "sha256-OyCKDN89sBz59+3JncMDyNOq8UMqqjara+A0Owo3oko=";
+        rev = "b8032b72901721a1ce859ca2816e8e2c914bc616";
+        hash = "sha256-+fR46bWXJ58LkXFvWAO/LyCd5THi7oMcqmhRoCKBZfM=";
       };
     })
   ];
@@ -184,4 +188,13 @@
       };
     })
   ];
+
+  services.tor = {
+    enable = true;
+    relay.enable = false;
+    client.enable = true;
+    torsocks.enable = true;
+  };
+
+  programs.firejail.enable = true;
 }

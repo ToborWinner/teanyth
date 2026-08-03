@@ -21,7 +21,7 @@
         notes_subdir = "notes";
 
         new_notes_location = "notes_subdir";
-        preferred_link_style = "wiki"; # Or markdown
+        link.style = "wiki"; # or markdown
 
         templates = {
           folder = "templates";

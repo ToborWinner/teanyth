@@ -273,6 +273,14 @@ in
                   (lib.generators.mkLuaInline "hl.dsp.submap(\"counting\")")
                 ]
                 [
+                  "SUPER + B"
+                  (lib.generators.mkLuaInline "hl.dsp.submap(\"cursor\")")
+                ]
+                [
+                  "SUPER + R"
+                  (lib.generators.mkLuaInline "hl.dsp.submap(\"recording\")")
+                ]
+                [
                   "SUPER + CTRL + SHIFT + P"
                   (lib.generators.mkLuaInline "hl.dsp.submap(\"passthru\")")
                 ]
@@ -441,6 +449,82 @@ in
           ];
         };
 
+        submaps.cursor.settings =
+          let
+            wlrctl = lib.getExe pkgs.wlrctl;
+            makePointerBinds = modifier: amount: [
+              [
+                "${modifier}H"
+                (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"${wlrctl} pointer move -${amount} 0\")")
+                {
+                  repeating = true;
+                }
+              ]
+              [
+                "${modifier}J"
+                (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"${wlrctl} pointer move 0 ${amount}\")")
+                {
+                  repeating = true;
+                }
+              ]
+              [
+                "${modifier}K"
+                (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"${wlrctl} pointer move 0 -${amount}\")")
+                {
+                  repeating = true;
+                }
+              ]
+              [
+                "${modifier}L"
+                (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"${wlrctl} pointer move ${amount} 0\")")
+                {
+                  repeating = true;
+                }
+              ]
+            ];
+          in
+          {
+            # Keybinding suggestions taken from https://github.com/moverest/wl-kbptr
+            bind = makeBinds (
+              (makePointerBinds "" "50")
+              ++ (makePointerBinds "SHIFT + " "10")
+              ++ [
+                [
+                  "s"
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"${wlrctl} pointer click left\")")
+                ]
+                [
+                  "d"
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"${wlrctl} pointer click middle\")")
+                ]
+                [
+                  "f"
+                  (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"${wlrctl} pointer click right\")")
+                ]
+                [
+                  "ESCAPE"
+                  (lib.generators.mkLuaInline "hl.dsp.submap(\"reset\")")
+                ]
+              ]
+              ++ (
+                if config.pers.wl-kbptr.enable then
+                  [
+                    [
+                      "T"
+                      (lib.generators.mkLuaInline ''
+                        function()
+                          hl.dispatch(hl.dsp.submap("reset"))
+                          hl.dispatch(hl.dsp.exec_cmd("${lib.getExe config.pers.wl-kbptr.package} && hyprctl dispatch 'hl.dsp.submap(\"cursor\")'"))
+                        end
+                      '')
+                    ]
+                  ]
+                else
+                  [ ]
+              )
+            );
+          };
+
         submaps.passthru.settings = {
           bind = makeBinds [
             [
@@ -449,6 +533,152 @@ in
             ]
           ];
         };
+
+        # For some reason the recording that comes out of wf-recorder has bad colors. I'm unsure why or how to fix it.
+        submaps.recording.settings =
+          let
+            checkStatus = pkgs.writeShellScript "check-recording-status.sh" ''
+              if pgrep -x "wf-recorder" > /dev/null
+              then
+                notify-send "Recording" "Status: Recording is ACTIVE"
+              else
+                notify-send "Recording" "Status: Recording is INACTIVE"
+              fi
+            '';
+            startRec = pkgs.writeShellScript "start-recording.sh" ''
+              if pgrep -x "wf-recorder" > /dev/null
+              then
+                notify-send "Recording" "The screen is already being recorded"
+              else
+                # Voluntarily one could scale it down using -p filter_graph=scale=1920:1080 (with the appropriate scaled down size ofc)
+                # Add -a for audio I think
+                EXTRA_ARGS=()
+
+                if [ "$1" = "select" ]; then
+                  REGION="$(slurp -w 0)" || exit 0
+                  EXTRA_ARGS=(-g "$REGION")
+                fi
+
+                notify-send "Recording" "Screen recording started."
+                CLIP_PATH="$HOME/Videos/clip_$(date +%Y%m%d_%H%M%S).mp4"
+                ${lib.getExe pkgs.wf-recorder} -c libx264 -p preset=ultrafast \
+                -p tune=zerolatency -b 0 -f "$CLIP_PATH" "''${EXTRA_ARGS[@]}" && ln -sf "$CLIP_PATH" $HOME/Videos/latest
+              fi
+            '';
+            stopRec = pkgs.writeShellScript "stop-recording.sh" ''
+              if pgrep -x "wf-recorder" > /dev/null
+              then
+                if pkill wf-recorder; then
+                  notify-send "Recording" "Screen recording stopped and saved."
+                else
+                  notify-send "Recording" "Failed to stop screen recording."
+                fi
+              else
+                notify-send "Recording" "Screen recording is not running."
+              fi
+            '';
+            getFromLink = ''
+              LINK="$HOME/Videos/latest"
+              if [ ! -L "$LINK" ]; then
+                notify-send "Recording" "Error: symlink is not present"
+                exit 1
+              fi
+
+              TARGET=$(readlink -f "$LINK")
+
+              if [ -z "$TARGET" ] || [ ! -f "$TARGET" ]; then
+                notify-send "Recording" "Error: symlink target does not exist or is not a file"
+                exit 1
+              fi
+            '';
+            compressLatest = pkgs.writeShellScript "compress-latest-recording.sh" ''
+              ${getFromLink}
+              DIR=$(dirname "$TARGET")
+              BASE=$(basename "$TARGET")
+              NAME="''${BASE%.*}"
+              OUT="$DIR/''${NAME}_compressed.mp4"
+
+              notify-send "Recording" "Starting compression..."
+
+              if ffmpeg -i "$TARGET" -c:v libx264 -crf 28 -preset slow -c:a copy "$OUT"; then
+                notify-send "Recording" "Compression successful"
+              else
+                notify-send "Recording" "Compression failed"
+                exit 1
+              fi
+
+              ln -sf "$OUT" "$LINK"
+
+              if [ "$1" = "delete" ]; then
+                rm "$TARGET"
+              fi
+            '';
+            yankLatest = pkgs.writeShellScript "yank-latest-recording.sh" ''
+              ${getFromLink}
+              if wl-copy --type video/mp4 < "$TARGET"; then
+                notify-send "Recording" "Copied latest recording"
+              else
+                notify-send "Recording" "Failed to copy latest recording"
+                exit 1
+              fi
+            '';
+            deleteLatest = pkgs.writeShellScript "delete-latest-recording.sh" ''
+              ${getFromLink}
+              rm "$TARGET"
+              rm "$LINK"
+              notify-send "Recording" "Deleted latest recording"
+            '';
+            unlinkLatest = pkgs.writeShellScript "unlink-latest-recording.sh" ''
+              rm $HOME/Videos/latest
+              notify-send "Recording" "Unlinked latest recording"
+            '';
+            renameLatest = pkgs.writeShellScript "rename-latest-recording.sh" (
+              if config.pers.rofi.enable then
+                ''
+                  set -e
+                  ${getFromLink}
+                  DIR=$(dirname "$TARGET")
+                  BASE=$(basename "$TARGET")
+                  NAME="''${BASE%.*}"
+                  NEW_FILENAME=$(rofi -dmenu -p "New filename:" -theme-str "entry { placeholder: \"$NAME\"; }")
+                  OUT="$DIR/''${NEW_FILENAME}.mp4"
+                  mv "$TARGET" "$OUT"
+                  ln -sf "$OUT" "$LINK"
+                  notify-send "Recording" "Renamed latest recording to $NEW_FILENAME.mp4"
+                ''
+              else
+                ''
+                  notify-send "Recording" "This feature requires pers.rofi to be enabled"
+                ''
+            );
+            makeCmd = key: cmd: [
+              key
+              (lib.generators.mkLuaInline ''
+                function()
+                  hl.dispatch(hl.dsp.exec_cmd("${cmd}"))
+                  hl.dispatch(hl.dsp.submap("reset"))
+                end
+              '')
+            ];
+          in
+          {
+            bind = makeBinds [
+              (makeCmd "S" checkStatus)
+              (makeCmd "R" "${startRec} select")
+              (makeCmd "SHIFT + R" startRec)
+              (makeCmd "K" stopRec)
+              (makeCmd "C" compressLatest)
+              (makeCmd "SHIFT + C" "${compressLatest} delete")
+              (makeCmd "Y" yankLatest)
+              (makeCmd "D" deleteLatest)
+              (makeCmd "U" unlinkLatest)
+              (makeCmd "N" renameLatest)
+              [
+                "ESCAPE"
+                (lib.generators.mkLuaInline "hl.dsp.submap(\"reset\")")
+              ]
+            ];
+          };
 
         submaps.counting.settings = {
           # TODO: Finish countig submap

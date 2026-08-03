@@ -11,7 +11,7 @@
   config = lib.mkIf config.pers.yazi.enable {
     pers.info.fileManager = config.pers.info.terminalCommand (lib.getExe config.programs.yazi.package);
 
-    home.packages = with pkgs; [ ueberzugpp ];
+    home.packages = lib.mkIf config.pers.alacritty.enable [ pkgs.ueberzugpp ];
 
     programs.yazi = {
       enable = true;

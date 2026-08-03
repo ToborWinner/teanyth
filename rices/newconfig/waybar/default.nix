@@ -10,7 +10,10 @@ with lib;
 {
   pers.waybar.enable = true;
 
-  home.packages = [ pkgs.nerd-fonts._0xproto ]; # For https://github.com/sejjy/mechabar
+  home.packages = [
+    pkgs.nerd-fonts._0xproto
+    pkgs.hyprpwcenter
+  ]; # For https://github.com/sejjy/mechabar
 
   programs.waybar = {
     style =
@@ -241,6 +244,7 @@ with lib;
               min-length = 7;
               max-length = 7;
               tooltip-format = "Output Device: {desc}";
+              on-click = "${lib.getExe pkgs.hyprpwcenter}";
             };
 
             "pulseaudio#input" = {
@@ -452,6 +456,7 @@ with lib;
                   " "
                 ];
               };
+              on-click = "${lib.getExe pkgs.hyprpwcenter}";
             };
 
             "hyprland/workspaces" = {

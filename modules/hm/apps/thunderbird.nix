@@ -14,10 +14,16 @@
       message = "Mail setup must be enabled for thunderbird to be setup.";
     };
 
-    sensitive.extraAccountSettings.thunderbird.enable = true;
+    # sensitive.extraAccountSettings.thunderbird.enable = true;
 
     programs.thunderbird = {
       enable = true;
+
+      settings = {
+        "general.useragent.override" = "";
+        "privacy.donottrackheader.enabled" = true;
+      };
+
       profiles.${settings.username} = {
         isDefault = true;
       };

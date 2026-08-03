@@ -167,6 +167,7 @@
               "Documents"
               "Music"
               "Images"
+              "Videos"
               "sensitive"
               "teanyth"
               (lib.mkIf hmCfg.pers.direnv.enable ".local/share/direnv")
@@ -176,6 +177,7 @@
               (lib.mkIf hmCfg.pers.neovim.enable ".local/share/jdtls-config")
               (lib.mkIf hmCfg.pers.nixcord.enable ".config/vesktop/sessionData")
               (lib.mkIf hmCfg.pers.firefox.enable ".mozilla")
+              (lib.mkIf hmCfg.pers.thunderbird.enable ".thunderbird")
               {
                 directory = ".ssh";
                 mode = "0700";

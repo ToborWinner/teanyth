@@ -8,10 +8,31 @@ args.lib.pers.mkRice args {
     {
       name = "lake";
       path = ../../wallpapers/lake-sunset.png;
+      # colors = args.lib.pers.importWallustColorsFromJson ../../colors/lake.json;
+    }
+    # {
+    #   name = "trees";
+    #   path = ../../wallpapers/trees.jpg;
+    # }
+    {
+      name = "japan";
+      path = ../../wallpapers/japan.jpg;
+      # colors = args.lib.pers.importWallustColorsFromJson ../../colors/japan.json;
     }
     {
-      name = "trees";
-      path = ../../wallpapers/trees.jpg;
+      name = "sword_sky";
+      path = ../../wallpapers/sword_sky.jpg;
+      # colors = args.lib.pers.importWallustColorsFromJson ../../colors/sword_sky.json;
+    }
+    {
+      name = "night_stars_green";
+      path = ../../wallpapers/night-stars-green.jpg;
+      # colors = args.lib.pers.importWallustColorsFromJson ../../colors/night_stars_green.json;
+    }
+    {
+      name = "tree_sky";
+      path = ../../wallpapers/tree_sky.jpeg;
+      # colors = args.lib.pers.importWallustColorsFromJson ../../colors/tree_sky.json;
     }
     {
       # Generated with nix build --impure --expr '(builtins.getFlake "github:lunik1/nix-wallpaper").packages.${builtins.currentSystem}.default.override { preset = "catppuccin-mocha-rainbow"; width = 2560; height = 1664; logoSize = 35; }'

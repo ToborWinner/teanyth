@@ -297,6 +297,17 @@ rec {
       );
     };
 
+  importWallustColorsFromJson =
+    path:
+    let
+      hex = builtins.fromJSON (builtins.readFile path);
+      hexS = builtins.mapAttrs (_: value: removePrefix "#" value) hex;
+      num = builtins.mapAttrs (_: value: fromHexString value) hexS;
+    in
+    {
+      inherit hex hexS num;
+    };
+
   # This function takes a module path as input and returns the module. This might seem useless, but its objective is to ensure that pkgs is detected as a formal argument. It not being a formal argument was a problem for args: args.lib.pers.mkRice { modules that use args.pkgs }.
   #
   # pkgs here is required as an argument because home-manager adds the pkgs option using config._module.args.pkgs:
