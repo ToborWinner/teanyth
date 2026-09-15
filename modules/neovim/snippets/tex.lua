@@ -33,9 +33,15 @@ tex_utils.in_tikz = function() -- TikZ picture environment detection
 	return tex_utils.in_env("tikzpicture")
 end
 
-local first_capture = f(function(_, snip)
-	return snip.captures[1]
-end)
+-- local first_capture = f(function(_, snip)
+-- 	return snip.captures[1]
+-- end)
+
+local make_first_capture = function()
+	return f(function(_, snip)
+		return snip.captures[1]
+	end)
+end
 
 return {
 	s(
@@ -76,8 +82,8 @@ return {
 		snippetType = "autosnippet",
 		condition = tex_utils.in_mathzone,
 	}, {
-		t("vec{"),
-		first_capture,
+		t("\\vec{"),
+		make_first_capture(),
 		t("}"),
 		i(0),
 	}),
@@ -88,8 +94,8 @@ return {
 		snippetType = "autosnippet",
 		condition = tex_utils.in_mathzone,
 	}, {
-		t("vec{"),
-		first_capture,
+		t("\\vec{"),
+		make_first_capture(),
 		t("}"),
 		i(0),
 	}), -- TODO: Merge these two somehow
@@ -250,6 +256,14 @@ return {
 	s({ trig = "cos", snippetType = "autosnippet", condition = tex_utils.in_mathzone }, {
 		t("\\cos "),
 	}),
+	s(
+		{ trig = "gcd", condition = tex_utils.in_mathzone, snippetType = "autosnippet" },
+		fmta("\\gcd(<>, <>) <>", {
+			i(1),
+			i(2),
+			i(0),
+		})
+	),
 	s({ trig = "sup", snippetType = "autosnippet", condition = tex_utils.in_mathzone }, {
 		t("\\sup "),
 	}),
