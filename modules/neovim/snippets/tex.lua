@@ -253,6 +253,9 @@ return {
 	s({ trig = "sin", snippetType = "autosnippet", condition = tex_utils.in_mathzone }, {
 		t("\\sin "),
 	}),
+	s({ trig = "mid", snippetType = "autosnippet", condition = tex_utils.in_mathzone }, {
+		t("\\mid "),
+	}),
 	s({ trig = "cos", snippetType = "autosnippet", condition = tex_utils.in_mathzone }, {
 		t("\\cos "),
 	}),
