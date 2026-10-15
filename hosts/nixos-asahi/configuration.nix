@@ -174,21 +174,6 @@
     })
   ];
 
-  # TODO: Remove this when it's in nixpkgs. Needed for a GPU issue.
-  nixpkgs.overlays = [
-    (self: super: {
-      aquamarine = super.aquamarine.overrideAttrs {
-        version = "0.12.0";
-        src = super.fetchFromGitHub {
-          owner = "hyprwm";
-          repo = "aquamarine";
-          tag = "v0.12.0";
-          hash = "sha256-TtAhxedbRAl1u6OyT+4eRxZ417G2NMJNoqEbIhjvWo0=";
-        };
-      };
-    })
-  ];
-
   services.tor = {
     enable = true;
     relay.enable = false;
