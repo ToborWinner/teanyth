@@ -76,37 +76,85 @@
           ];
 
           script = ''
+            set -e
+
             mkdir /btrfs_tmp
+            mkdir -p /btrfs_tmp/old_roots
             mount ${config.fileSystems."/".device} /btrfs_tmp
             if [[ -e /btrfs_tmp/root ]]; then
                 mkdir -p /btrfs_tmp/old_roots
-                timestamp=$(date --date="@$(stat -c %Y /btrfs_tmp/root)" "+%Y-%m-%-d_%H:%M:%S")
+                timestamp=$(date --date="@$(stat -c %Y /btrfs_tmp/root)" "+%Y-%m-%d_%H:%M:%S")
                 mv /btrfs_tmp/root "/btrfs_tmp/old_roots/$timestamp"
             fi
 
             delete_subvolume_recursively() {
-                IFS=$'\n'
-                for i in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
-                    delete_subvolume_recursively "/btrfs_tmp/$i"
-                done
-                btrfs subvolume delete "$1"
+                local input="$1"
+                local root="/btrfs_tmp/old_roots"
+                local root_real
+                local target
+
+                if [[ "$input" != "$root/"* ]]; then
+                    echo "Refusing to delete path outside $root: $input" >&2
+                    return 1
+                fi
+
+                if [[ -L "$input" ]]; then
+                    echo "Refusing to delete a symlink: $input" >&2
+                    return 1
+                fi
+
+                root_real=$(realpath -e -- "$root") || {
+                    echo "Cannot resolve $root" >&2
+                    return 1
+                }
+
+                target=$(realpath -e -- "$input") || {
+                    echo "Target does not exist: $input" >&2
+                    return 1
+                }
+
+                if [[ "$target" != "$root_real/"* ]]; then
+                    echo "Refusing to delete path outside $root_real: $target" >&2
+                    return 1
+                fi
+
+                if [[ "$target" == "$root_real" ]]; then
+                    echo "Refusing to delete the old_roots directory itself: $target" >&2
+                    return 1
+                fi
+
+                if [[ "$target" == *persist* ]]; then
+                    echo "Refusing to delete path containing 'persist': $target" >&2
+                    return 1
+                fi
+
+                echo "Recursively deleting subvolume: $target"
+
+                if ! btrfs subvolume delete --recursive --commit-after "$target"; then
+                    echo "Failed to delete subvolume: $target" >&2
+                    return 1
+                fi
             }
 
-            for i in $(find /btrfs_tmp/old_roots/ -maxdepth 1 -mtime +${builtins.toString config.pers.impermanence.daysToKeep}); do
+            for i in $(find /btrfs_tmp/old_roots/ -mindepth 1 -maxdepth 1 -mtime +${builtins.toString config.pers.impermanence.daysToKeep} | sort | head -n -1); do
                 delete_subvolume_recursively "$i"
             done
 
-            for i in $(ls -t /btrfs_tmp/old_roots/ | tail -n +${
-              builtins.toString (config.pers.impermanence.amountToKeep + 1)
-            } | awk -v dir="/btrfs_tmp/old_roots/" '{print dir $0}'); do
-                delete_subvolume_recursively "$i"
-            done
+            if [ -n "$(ls -A /btrfs_tmp/old_roots/)" ]; then
+              for i in $(ls -t /btrfs_tmp/old_roots/ | tail -n +${
+                builtins.toString (config.pers.impermanence.amountToKeep + 1)
+              } | awk -v dir="/btrfs_tmp/old_roots/" '{print dir $0}'); do
+                  delete_subvolume_recursively "$i"
+              done
+            fi
 
             btrfs subvolume create /btrfs_tmp/root
             umount /btrfs_tmp
           '';
         };
       };
+
+      # TODO: Improve the line at for i in $(ls -t /btrfs_tmp/old_roots/ | tail -n +3 | awk -v dir="/btrfs_tmp/old_roots/" '{print dir $0}'); do
 
       fileSystems.${config.pers.impermanence.persistFileSystem}.neededForBoot = true;
 
