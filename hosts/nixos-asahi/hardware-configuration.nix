@@ -24,7 +24,7 @@
   };
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/d71beebe-2727-4ebd-8044-06224e3ce7b0";
+    device = "/dev/disk/by-uuid/a99db0dd-f9f8-4499-8c90-22bb104c8f32";
     fsType = "btrfs";
     options = [
       "subvol=root"
@@ -34,7 +34,7 @@
   };
 
   fileSystems."/persist" = {
-    device = "/dev/disk/by-uuid/d71beebe-2727-4ebd-8044-06224e3ce7b0";
+    device = "/dev/disk/by-uuid/a99db0dd-f9f8-4499-8c90-22bb104c8f32";
     fsType = "btrfs";
     options = [
       "subvol=persist"
@@ -43,7 +43,7 @@
   };
 
   fileSystems."/nix" = {
-    device = "/dev/disk/by-uuid/d71beebe-2727-4ebd-8044-06224e3ce7b0";
+    device = "/dev/disk/by-uuid/a99db0dd-f9f8-4499-8c90-22bb104c8f32";
     fsType = "btrfs";
     options = [
       "subvol=nix"
