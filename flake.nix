@@ -25,7 +25,7 @@
 
     # --- Hardware ---
     apple-silicon = {
-      url = "github:nix-community/nixos-apple-silicon";
+      url = "github:nix-community/nixos-apple-silicon/main";
       # inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-compat.follows = "empty-flake";
     };
