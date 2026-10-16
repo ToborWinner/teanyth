@@ -182,4 +182,18 @@
   };
 
   programs.firejail.enable = true;
+
+  boot.binfmt.preferStaticEmulators = true;
+  # https://github.com/NixOS/nixpkgs/pull/500039
+  # To fix https://github.com/NixOS/nixpkgs/issues/464805
+  boot.binfmt.registrations.x86_64-linux = {
+    preserveArgvZero = true;
+    interpreter = "${
+      pkgs.pkgsStatic.qemu-user.overrideAttrs (prev: {
+        configureFlags = prev.configureFlags ++ [ "--disable-pie" ];
+      })
+    }/bin/qemu-x86_64";
+  };
+
+  virtualisation.containers.registries.search = [ "docker.io" ];
 }
