@@ -64,6 +64,9 @@
 
       # Conversion to systemd taken from https://github.com/nix-community/impermanence/pull/321/changes
       boot.initrd.systemd = lib.mkIf config.pers.impermanence.configureWipe {
+
+        initrdBin = [ pkgs.gawk ];
+
         services.wipe-file-systems = {
           unitConfig.DefaultDependencies = false;
           serviceConfig.Type = "oneshot";
@@ -75,8 +78,6 @@
             "${utils.escapeSystemdPath config.fileSystems."/".device}.device"
             "local-fs-pre.target"
           ];
-
-          boot.initrd.systemd.initrdBin = [ pkgs.gawk ];
 
           script = ''
             set -e
