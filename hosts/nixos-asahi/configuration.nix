@@ -163,15 +163,7 @@
   boot.binfmt.emulatedSystems = [ "x86_64-linux" ];
 
   environment.systemPackages = [
-    (pkgs.ani-cli.overrideAttrs {
-      version = "4.14";
-      src = pkgs.fetchFromGitHub {
-        owner = "pystardust";
-        repo = "ani-cli";
-        rev = "b8032b72901721a1ce859ca2816e8e2c914bc616";
-        hash = "sha256-+fR46bWXJ58LkXFvWAO/LyCd5THi7oMcqmhRoCKBZfM=";
-      };
-    })
+    pkgs.ani-cli
   ];
 
   services.tor = {
@@ -196,4 +188,7 @@
   };
 
   virtualisation.containers.registries.search = [ "docker.io" ];
+
+  # "Temporary" wrapper
+  hardware.asahi.avd.vaapi-support = true;
 }

@@ -49,7 +49,8 @@
               cid = 195; # 0x195 (gesture)
               action = {
                 type = "Keypress";
-                keys = [ "KEY_M" ];
+                # keys = [ "KEY_M" ];
+                keys = [ "KEY_LEFTSHIFT" ];
               };
             }
           ];
