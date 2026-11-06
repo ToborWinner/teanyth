@@ -4,6 +4,7 @@
   inputs,
   settings,
   utils,
+  pkgs,
   ...
 }:
 
@@ -74,6 +75,8 @@
             "${utils.escapeSystemdPath config.fileSystems."/".device}.device"
             "local-fs-pre.target"
           ];
+
+          boot.initrd.systemd.initrdBin = [ pkgs.gawk ];
 
           script = ''
             set -e
